@@ -1,0 +1,1530 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="_ds/cooked-design-system-4c46489c-68c9-4b4a-a72e-016b6ed713f3/tokens/fonts.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&amp;display=swap">
+  <link rel="stylesheet" href="_ds/cooked-design-system-4c46489c-68c9-4b4a-a72e-016b6ed713f3/tokens/fig/fig-tokens.css">
+  <link rel="stylesheet" href="_ds/cooked-design-system-4c46489c-68c9-4b4a-a72e-016b6ed713f3/tokens/semantic.css">
+  <link rel="stylesheet" href="_ds/cooked-design-system-4c46489c-68c9-4b4a-a72e-016b6ed713f3/tokens/base.css">
+  <script src="_ds/cooked-design-system-4c46489c-68c9-4b4a-a72e-016b6ed713f3/_ds_bundle.js"></script>
+  <script src="./image-slot.js"></script>
+  <style>
+    @font-face { font-family:'Young Serif'; src:url('assets/Young-Serif-var.ttf') format('truetype-variations'); font-weight:400 700; font-display:swap; }
+    @media (max-width: 719px) { section[aria-label="Ingredients"] { position: static !important; max-width: none !important; } }
+    html, body { margin:0; padding:0; background: linear-gradient(rgba(252,250,247,0.85), rgba(252,250,247,0.85)), url('assets/graph-paper.jpg') center / 720px auto repeat fixed, #FCFAF7; }
+    body { font-family:'Instrument Sans',system-ui,sans-serif; color:#211F1C; }
+    a { color:#164E70; }
+    a:hover { color:#0F3B57; text-decoration:underline; }
+    input::placeholder, textarea::placeholder { color:#666159; }
+    input:focus-visible, textarea:focus-visible, select:focus-visible, button:focus-visible, [tabindex]:focus-visible { outline:2px solid #1F6590; outline-offset:2px; }
+    #recipe-grid article:hover h2 { text-decoration: underline; text-underline-offset: 3px; }
+    @keyframes cookedFade { from { opacity:0; } to { opacity:1; } }
+    @keyframes cookedSheetUp { from { transform:translateY(100%); } to { transform:translateY(0); } }
+    @keyframes cookedToast { from { opacity:0; transform:translate(-50%,8px); } to { opacity:1; transform:translate(-50%,0); } }
+    @keyframes cookedDealA { from { opacity:0; transform:translateY(16px) rotate(0.6deg) scale(0.96); } to { opacity:1; transform:translateY(0) rotate(0deg) scale(1); } }
+    @keyframes cookedDealB { from { opacity:0; transform:translateY(16px) rotate(-0.6deg) scale(0.96); } to { opacity:1; transform:translateY(0) rotate(0deg) scale(1); } }
+    @keyframes cookedSavePop { 0% { transform:scale(1); } 40% { transform:scale(1.12) rotate(-1.5deg); } 100% { transform:scale(1); } }
+    @keyframes cookedStarPop { 0% { transform:scale(0.6) rotate(-20deg); } 55% { transform:scale(1.25) rotate(8deg); } 100% { transform:scale(1) rotate(0deg); } }
+    @keyframes cookedDetailIn { from { opacity:0; transform:translateY(22px) scale(0.985); } to { opacity:1; transform:translateY(0) scale(1); } }
+    @supports (animation-timeline: view()) {
+      @media (max-width: 699px) {
+        #recipe-grid > article { animation: cookedCardIn linear both !important; animation-timeline: view() !important; animation-range: entry 0% entry 35% !important; }
+      }
+    }
+    @keyframes cookedCardIn { from { opacity:0.55; } to { opacity:1; } }
+    @media (prefers-reduced-motion: reduce) { * { animation-duration:0.01ms !important; } }
+  </style>
+</helmet>
+<div style="min-height:100vh;display:flex;flex-direction:column">
+
+  <!-- GLOBAL HEADER -->
+  <header style="position:sticky;top:0;z-index:20;background:url('assets/paper.jpg') center / 512px auto repeat #D84A1A;background-blend-mode:multiply;box-shadow:0 2px 0 rgba(33,31,28,0.25)">
+    <div style="max-width:1280px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px">
+      <a href="#" onClick="{{ goHome }}" aria-label="Cooked — home" style="display:flex;align-items:center;gap:9px;font-family:'Young Serif',Georgia,serif;font-weight:700;font-size:28px;line-height:1.2;letter-spacing:-0.5px;color:#EFDA6B;text-decoration:none;transform:rotate(-0.4deg)" style-hover="opacity:0.85;text-decoration:none"><img src="assets/logo.svg" alt="Cooked" style="height:42px;display:block"></a>
+      <div style="display:flex;gap:10px;align-items:center">
+        <sc-if value="{{ isEditor }}" hint-placeholder-val="{{ false }}">
+          <button onClick="{{ openAdd }}" style="height:44px;padding:0 16px;border:none;border-radius:8px;background:linear-gradient(rgba(239,218,107,0.55),rgba(239,218,107,0.55)),url('assets/cardboard2.jpg') center / 300px auto repeat rgb(239,218,107);background-blend-mode:normal,multiply,normal;color:#211F1C;font-size:14px;font-weight:600;cursor:pointer;font-family:'Instrument Sans',sans-serif;box-shadow:2px 2px 0 rgba(33,31,28,0.3);transition:transform 0.12s ease, box-shadow 0.12s ease" style-hover="box-shadow:3px 3px 0 rgba(33,31,28,0.35);transform:translate(-1px,-1px)" style-active="box-shadow:none;transform:translate(1px,1px)">+ Add recipe</button>
+          <button onClick="{{ openAccount }}" aria-label="Account menu" style="width:44px;height:44px;border:none;background:transparent;cursor:pointer;padding:4px;display:flex;align-items:center;justify-content:center"><span style="width:36px;height:36px;border-radius:50%;background:linear-gradient(rgba(239,218,107,0.55),rgba(239,218,107,0.55)),url('assets/cardboard2.jpg') center / 300px auto repeat rgb(239,218,107);background-blend-mode:normal,multiply,normal;color:#211F1C;font-size:15px;font-weight:700;display:flex;align-items:center;justify-content:center;box-shadow:1px 1px 0 rgba(33,31,28,0.3)">{{ userInitial }}</span></button>
+        </sc-if>
+        <sc-if value="{{ isPublic }}" hint-placeholder-val="{{ true }}">
+          <button onClick="{{ openLogin }}" style="height:44px;padding:0 16px;border:1px solid rgba(252,250,247,0.55);border-radius:8px;background:transparent;color:#FCFAF7;font-size:14px;font-weight:600;cursor:pointer;font-family:'Instrument Sans',sans-serif;transition:background 0.12s ease, border-color 0.12s ease, transform 0.12s ease" style-hover="background:rgba(252,250,247,0.18);border-color:#FCFAF7;transform:translateY(-1px)" style-active="transform:translateY(1px);background:rgba(252,250,247,0.1)">Log in</button>
+        </sc-if>
+      </div>
+    </div>
+  </header>
+
+  <!-- LIBRARY -->
+  <main data-screen-label="Recipe library" style="max-width:1280px;margin:0 auto;padding:24px 16px 64px 16px;width:100%;box-sizing:border-box;flex:1">
+    <div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:16px">
+      <h1 style="font-family:'Young Serif',Georgia,serif;font-weight:400;font-size:32px;line-height:1.1;letter-spacing:-0.5px;margin:0;color:#211F1C">Recipes</h1>
+      <span aria-live="polite" style="font-size:14px;color:#666159;font-family:'Instrument Sans',sans-serif">{{ countLabel }}</span>
+    </div>
+
+    <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:12px">
+      <div style="position:relative;flex:1 1 260px;min-width:220px">
+        <span aria-hidden="true" style="position:absolute;left:14px;top:9px;font-size:20px;font-weight:700;color:#1F6590">⌕</span>
+        <input type="search" value="{{ query }}" onChange="{{ onQuery }}" placeholder="Search recipes, ingredients, tags" aria-label="Search recipes" style="width:100%;box-sizing:border-box;height:44px;border:1px solid #CCC5BC;border-radius:8px;padding:0 40px;font-size:15px;background:#FFFFFF;color:#211F1C;font-family:'Instrument Sans',sans-serif">
+        <sc-if value="{{ hasQuery }}" hint-placeholder-val="{{ false }}">
+          <button onClick="{{ clearQuery }}" aria-label="Clear search" style="position:absolute;right:2px;top:2px;width:40px;height:40px;border:none;border-radius:8px;background:transparent;color:#666159;font-size:20px;cursor:pointer;line-height:1">×</button>
+        </sc-if>
+      </div>
+      <div style="position:relative">
+        <button onClick="{{ toggleFilter }}" aria-expanded="{{ filterOpenAria }}" style="height:44px;padding:0 16px;border:1px solid #1F6590;border-radius:8px;background:#FFFFFF;font-size:14px;font-weight:600;color:#1F6590;cursor:pointer;white-space:nowrap;font-family:'Instrument Sans',sans-serif;display:flex;align-items:center;gap:8px" style-hover="background:#E6F3FC">Filters<sc-if value="{{ hasFilters }}" hint-placeholder-val="{{ false }}"><span aria-hidden="true" style="min-width:20px;height:20px;border-radius:10px;background:#D84A1A;color:#FFFFFF;font-size:12px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;padding:0 5px">{{ filterCount }}</span></sc-if> <span aria-hidden="true" style="font-size:11px">▾</span></button>
+        <sc-if value="{{ filterPanelOpen }}" hint-placeholder-val="{{ false }}">
+          <div onClick="{{ closeSheet }}" style="position:fixed;inset:0;z-index:24"></div>
+          <div role="dialog" aria-label="Filter recipes" style="position:absolute;top:50px;left:0;z-index:25;width:320px;max-height:440px;background:#FFFFFF;border:1px solid #E6E0D8;border-radius:12px;box-shadow:4px 4px 0 rgba(33,31,28,0.15);padding:16px;display:flex;flex-direction:column;animation:cookedFade 0.15s ease">
+            <div style="display:flex;align-items:baseline;justify-content:space-between">
+              <h2 style="font-family:'Young Serif',Georgia,serif;font-weight:400;font-size:22px;margin:0;color:#211F1C">Filter by tag</h2>
+              <button onClick="{{ clearFilters }}" style="height:36px;border:none;background:transparent;color:#164E70;font-size:13px;font-weight:600;cursor:pointer;text-decoration:underline;font-family:'Instrument Sans',sans-serif">Clear all</button>
+            </div>
+            <p style="font-size:13px;color:#666159;margin:2px 0 8px 0">Recipes match all selected tags.</p>
+            <div style="position:relative;margin-bottom:6px">
+              <input value="{{ tagFilterQuery }}" onChange="{{ onTagFilterQuery }}" aria-label="Find a tag" placeholder="Find a tag" style="width:100%;box-sizing:border-box;height:40px;border:1px solid #CCC5BC;border-radius:8px;padding:0 36px 0 12px;font-size:14px;background:#FFFFFF;color:#211F1C;font-family:'Instrument Sans',sans-serif">
+              <sc-if value="{{ hasTagFilterQuery }}" hint-placeholder-val="{{ false }}">
+                <button onClick="{{ clearTagFilterQuery }}" aria-label="Clear tag search" style="position:absolute;right:2px;top:2px;width:36px;height:36px;border:none;border-radius:8px;background:transparent;color:#666159;font-size:19px;cursor:pointer;line-height:1">×</button>
+              </sc-if>
+            </div>
+            <div style="flex:1;overflow-y:auto">
+              <sc-if value="{{ noSheetTags }}" hint-placeholder-val="{{ false }}">
+                <p style="font-size:14px;color:#666159;margin:12px 0">No tags match “{{ tagFilterQuery }}”.</p>
+              </sc-if>
+              <sc-for list="{{ sheetTags }}" as="t" hint-placeholder-count="6">
+                <label style="display:flex;align-items:center;gap:12px;min-height:44px;border-bottom:1px solid #F5F1EB;font-size:15px;cursor:pointer">
+                  <input type="checkbox" checked="{{ t.selected }}" onChange="{{ t.onToggle }}" style="width:20px;height:20px;accent-color:#1F6590">
+                  <span style="flex:1">{{ t.name }}</span>
+                  <span style="font-size:13px;color:#666159">{{ t.count }}</span>
+                </label>
+              </sc-for>
+            </div>
+            <button onClick="{{ closeSheet }}" style="height:44px;border:none;border-radius:8px;background:#1F6590;color:#FFFFFF;font-size:15px;font-weight:600;cursor:pointer;margin-top:12px;font-family:'Instrument Sans',sans-serif" style-hover="background:#164E70">{{ sheetDoneLabel }}</button>
+          </div>
+        </sc-if>
+      </div>
+      <label style="display:flex;align-items:center;gap:8px;font-size:14px;color:#666159;font-family:'Instrument Sans',sans-serif">Sort
+        <select value="{{ sort }}" onChange="{{ onSort }}" aria-label="Sort recipes" style="height:44px;border:1px solid #CCC5BC;border-radius:8px;background:#FFFFFF;font-size:14px;color:#211F1C;padding:0 10px;font-family:'Instrument Sans',sans-serif">
+          <option value="recent">Recently added</option>
+          <option value="favs">Favourites first</option>
+          <option value="updated">Recently updated</option>
+          <option value="alpha">A to Z</option>
+          <option value="time">Shortest time</option>
+        </select>
+      </label>
+      <sc-if value="{{ showClearFavs }}" hint-placeholder-val="{{ false }}">
+        <button onClick="{{ clearFavs }}" style="height:44px;padding:0 14px;border:1px solid #8C1D29;border-radius:8px;background:#FFFFFF;color:#8C1D29;font-size:14px;font-weight:600;cursor:pointer;font-family:'Instrument Sans',sans-serif" style-hover="background:#FFEDEF">Clear favourites</button>
+      </sc-if>
+    </div>
+
+    <sc-if value="{{ hasFilters }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:16px">
+        <sc-for list="{{ chips }}" as="c" hint-placeholder-count="0">
+          <button onClick="{{ c.onRemove }}" aria-label="Remove filter {{ c.name }}" style="display:flex;align-items:center;gap:8px;min-height:36px;padding:6px 12px;border:none;border-radius:4px;background:linear-gradient(rgba(239,218,107,0.55),rgba(239,218,107,0.55)),url('assets/cardboard2.jpg') center / 300px auto repeat rgb(239,218,107);background-blend-mode:normal,multiply,normal;color:#211F1C;font-size:14px;font-weight:600;cursor:pointer;box-shadow:1px 1px 0 rgba(33,31,28,0.3);font-family:'Instrument Sans',sans-serif" style-hover="box-shadow:2px 2px 0 rgba(33,31,28,0.3)">{{ c.name }} <span aria-hidden="true">×</span></button>
+        </sc-for>
+        <button onClick="{{ clearFilters }}" style="height:36px;padding:0 8px;border:none;background:transparent;color:#164E70;font-size:13px;font-weight:600;cursor:pointer;text-decoration:underline;font-family:'Instrument Sans',sans-serif">Clear all</button>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ noResults }}" hint-placeholder-val="{{ false }}">
+      <div style="max-width:440px;margin:40px auto;background:#FFFFFF;border:1px solid #E6E0D8;border-radius:12px;box-shadow:3px 3px 0 rgba(33,31,28,0.12);padding:32px 24px;text-align:center">
+        <img src="assets/vieja.svg" alt="" aria-hidden="true" style="height:120px;margin:0 auto 12px auto;display:block;transform:rotate(-2deg)">
+        <p style="font-family:'Young Serif',Georgia,serif;font-weight:400;font-size:24px;color:#211F1C;margin:0 0 8px 0">No recipes match</p>
+        <p style="font-size:14px;color:#666159;margin:0 0 16px 0;line-height:1.5">{{ noResultsDetail }}</p>
+        <button onClick="{{ clearEverything }}" style="height:44px;padding:0 18px;border:1px solid #1F6590;border-radius:8px;background:#FFFFFF;color:#1F6590;font-size:14px;font-weight:600;cursor:pointer;font-family:'Instrument Sans',sans-serif" style-hover="background:#E6F3FC">Clear search and filters</button>
+      </div>
+    </sc-if>
+
+    <div id="recipe-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,340px),1fr));gap:24px;align-items:start">
+      <sc-for list="{{ visible }}" as="r" hint-placeholder-count="3">
+        <article onClick="{{ r.open }}" role="link" tabindex="0" aria-label="Open recipe {{ r.title }}" style="background:linear-gradient(rgba(205,225,238,0.78),rgba(205,225,238,0.78)),url('assets/cardboard2.jpg') center / 512px auto repeat rgb(205,225,238);background-blend-mode:normal,multiply,normal;border-radius:3px;box-shadow:0 4px 4px rgba(0,0,0,0.25);overflow:hidden;display:flex;flex-direction:column;cursor:pointer;position:relative;transition:transform 0.18s ease, box-shadow 0.18s ease" style-hover="transform:translateY(-6px) rotate(-0.5deg) scale(1.01);box-shadow:0 14px 16px rgba(0,0,0,0.22)" style-active="transform:scale(0.995);box-shadow:0 2px 3px rgba(0,0,0,0.28)">
+          <div style="margin:18px 16px 0 16px;box-shadow:-2px -2px 2.7px rgba(0,0,0,0.25);cursor:pointer;transform:rotate(-0.3deg);transition:transform 0.18s ease, box-shadow 0.18s ease" style-hover="transform:rotate(0.5deg) scale(1.02);box-shadow:-3px -3px 4px rgba(0,0,0,0.28)">
+            <div style="position:relative;aspect-ratio:4/3;background:#F5F1EB;overflow:hidden;filter:contrast(1.18) saturate(0.92) brightness(0.98)">
+              <image-slot id="{{ r.slotId }}" shape="rect" placeholder="Add photos from the recipe page"></image-slot>
+              <div aria-hidden="true" style="position:absolute;inset:0;pointer-events:none;background:linear-gradient(rgba(11,122,249,0.22),rgba(11,122,249,0.22)),url('assets/photo-grunge.jpg') center / cover;mix-blend-mode:screen;opacity:0.6"></div>
+              <div aria-hidden="true" style="position:absolute;inset:0;background:transparent"></div>
+            </div>
+          </div>
+          <sc-if value="{{ isEditor }}" hint-placeholder-val="{{ false }}">
+            <div style="position:absolute;top:26px;right:24px;z-index:2">
+              <sc-if value="{{ r.fav }}" hint-placeholder-val="{{ false }}">
+                <button onClick="{{ r.onFav }}" aria-label="Remove {{ r.title }} from favourites" style="width:44px;height:44px;border:none;border-radius:50%;background:linear-gradient(rgba(239,218,107,0.55),rgba(239,218,107,0.55)),url('assets/cardboard2.jpg') center / 300px auto repeat rgb(239,218,107);background-blend-mode:normal,multiply,normal;box-shadow:1px 2px 2px rgba(0,0,0,0.3);cursor:pointer;display:flex;align-items:center;justify-content:center;animation:cookedStarPop 0.4s ease"><img src="assets/star.svg" alt="" style="height:22px;display:block"></button>
+              </sc-if>
+              <sc-if value="{{ r.notFav }}" hint-placeholder-val="{{ true }}">
+                <button onClick="{{ r.onFav }}" aria-label="Add {{ r.title }} to favourites" style="width:44px;height:44px;border:none;border-radius:50%;background:rgba(252,250,247,0.85);box-shadow:1px 2px 2px rgba(0,0,0,0.25);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform 0.12s ease" style-hover="transform:scale(1.12) rotate(-6deg)"><img src="assets/star.svg" alt="" style="height:22px;display:block;filter:grayscale(1) opacity(0.4)"></button>
+              </sc-if>
+            </div>
+          </sc-if>
+          <div style="padding:18px 18px 20px 18px;display:flex;flex-direction:column;gap:12px">
+            <h2 style="font-family:'Young Serif',Georgia,serif;font-weight:400;font-size:26px;line-height:1.15;letter-spacing:-0.5px;margin:0;color:#211F1C;cursor:pointer" style-hover="color:#164E70;text-decoration:underline">{{ r.title }}</h2>
+            <p style="font-size:14px;color:#666159;margin:0;font-family:'Instrument Sans',sans-serif">{{ r.timeLabel }}</p>
+            <div style="display:flex;flex-wrap:wrap;gap:8px">
+              <sc-for list="{{ r.tags }}" as="t" hint-placeholder-count="2">
+                <button onClick="{{ t.onFilter }}" aria-label="Filter by tag {{ t.name }}" style="display:inline-flex;align-items:center;padding:5px 10px;border:none;border-radius:4px;background:linear-gradient(rgba(239,218,107,0.55),rgba(239,218,107,0.55)),url('assets/cardboard2.jpg') center / 300px auto repeat rgb(239,218,107);background-blend-mode:normal,multiply,normal;box-shadow:1px 1px 0 rgba(33,31,28,0.3);font-size:13px;font-weight:600;color:#211F1C;font-family:'Instrument Sans',sans-serif;cursor:pointer;transition:transform 0.12s ease, box-shadow 0.12s ease" style-hover="box-shadow:2px 2px 2px rgba(33,31,28,0.35);transform:translate(-1px,-1px) rotate(-1deg)" style-active="box-shadow:none;transform:translate(1px,1px)">{{ t.name }}</button>
+              </sc-for>
+            </div>
+            <div style="border-top:1px solid rgba(41,39,40,0.25);padding-top:12px">
+              <p style="font-size:12px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#666159;margin:0 0 8px 0;font-family:'Instrument Sans',sans-serif">Ingredients</p>
+              <div style="display:grid;grid-template-columns:88px 1fr;row-gap:6px;column-gap:10px;font-size:15px;line-height:1.5;color:#211F1C">
+                <sc-for list="{{ r.ings }}" as="ing" hint-placeholder-count="5">
+                  <sc-if value="{{ ing.isHeading }}" hint-placeholder-val="{{ false }}">
+                    <span style="grid-column:1 / -1;font-weight:700;padding-top:4px;font-family:'Instrument Sans',sans-serif">{{ ing.label }}</span>
+                  </sc-if>
+                  <sc-if value="{{ ing.isRow }}" hint-placeholder-val="{{ true }}">
+                    <span style="color:#4F4B44;font-family:'Instrument Sans',sans-serif">{{ ing.amount }}</span>
+                    <span style="font-family:'Instrument Sans',sans-serif">{{ ing.name }}</span>
+                  </sc-if>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+        </article>
+      </sc-for>
+    </div>
+
+    <sc-if value="{{ hasResults }}" hint-placeholder-val="{{ true }}">
+      <p role="status" style="text-align:center;font-size:13px;color:#666159;margin:32px 0 0 0">You’ve reached the end · {{ countLabel }}</p>
+    </sc-if>
+  </main>
+
+  <!-- FOOTER -->
+  <footer style="border-top:1px solid #E6E0D8;background:rgba(252,250,247,0.8)">
+    <div style="max-width:1280px;margin:0 auto;padding:20px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+      <span style="font-family: &quot;Young Serif&quot;, Georgia, serif; font-size: 18px; color: rgb(102, 97, 89);">Cooked</span>
+      <span style="font-size: 13px; color: rgb(102, 97, 89);"><br></span>
+    </div>
+  </footer>
+
+  <!-- RECIPE DETAIL -->
+  <sc-if value="{{ showDetail }}" hint-placeholder-val="{{ false }}">
+    <div data-screen-label="Recipe detail" style="position:fixed;inset:0;z-index:30;overflow-y:auto;background:linear-gradient(rgba(252,250,247,0.85),rgba(252,250,247,0.85)),url('assets/graph-paper.jpg') center / 720px auto repeat,#FCFAF7;animation:cookedDetailIn 0.28s cubic-bezier(0.2,0.7,0.3,1)">
+      <header style="position:sticky;top:0;z-index:5;background:url('assets/paper.jpg') center / 512px auto repeat #D84A1A;background-blend-mode:multiply;box-shadow:0 2px 0 rgba(33,31,28,0.25)">
+        <div style="max-width:1280px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px">
+          <button onClick="{{ closeDetail }}" style="height:44px;padding:0 12px;border:none;border-radius:8px;background:transparent;color:#FCFAF7;font-size:15px;font-weight:600;cursor:pointer;font-family:'Instrument Sans',sans-serif" style-hover="background:rgba(252,250,247,0.12);text-decoration:underline;text-underline-offset:3px">‹ Back</button>
+          <sc-if value="{{ isPublic }}" hint-placeholder-val="{{ false }}">
+            <button onClick="{{ openLogin }}" style="height:40px;padding:0 16px;border:1px solid rgba(252,250,247,0.55);border-radius:8px;background:transparent;color:#FCFAF7;font-size:14px;font-weight:600;cursor:pointer;font-family:'Instrument Sans',sans-serif" style-hover="background:rgba(252,250,247,0.12)">Log in</button>
+          </sc-if>
+          <sc-if value="{{ isEditor }}" hint-placeholder-val="{{ false }}">
+            <button onClick="{{ openEdit }}" style="height:40px;padding:0 16px;border:none;border-radius:8px;background:linear-gradient(rgba(239,218,107,0.55),rgba(239,218,107,0.55)),url('assets/cardboard2.jpg') center / 300px auto repeat rgb(239,218,107);background-blend-mode:normal,multiply,normal;color:#211F1C;font-size:14px;font-weight:600;cursor:pointer;font-family:'Instrument Sans',sans-serif;box-shadow:2px 2px 0 rgba(33,31,28,0.3);transition:transform 0.12s ease, box-shadow 0.12s ease" style-hover="box-shadow:3px 3px 0 rgba(33,31,28,0.35);transform:translate(-1px,-1px)" style-active="box-shadow:none;transform:translate(1px,1px)">Edit recipe</button>
+          </sc-if>
+        </div>
+      </header>
+      <div style="max-width:1080px;margin:0 auto;padding:24px 16px 64px 16px">
+        <div style="max-width:720px">
+          <div style="display:flex;align-items:flex-start;gap:12px;margin:0 0 14px 0">
+          <div style="background:linear-gradient(rgba(205,225,238,0.78),rgba(205,225,238,0.78)),url('assets/cardboard2.jpg') center / 512px auto repeat rgb(205,225,238);background-blend-mode:normal,multiply,normal;box-shadow:1px 4px 2px rgba(0,0,0,0.25);padding:10px 24px;transform:rotate(-0.4deg)">
+            <h1 style="font-family:'Young Serif',Georgia,serif;font-weight:400;font-size:clamp(34px,5vw,44px);line-height:1.05;letter-spacing:-1px;margin:0;color:rgba(41,39,40,0.85)">{{ d.title }}</h1>
+          </div>
+          <sc-if value="{{ isEditor }}" hint-placeholder-val="{{ false }}">
+            <span style="flex-shrink:0;margin-top:6px">
+              <sc-if value="{{ d.fav }}" hint-placeholder-val="{{ false }}">
+                <button onClick="{{ d.onFav }}" aria-label="Remove from favourites" style="width:48px;height:48px;border:none;border-radius:50%;background:linear-gradient(rgba(239,218,107,0.55),rgba(239,218,107,0.55)),url('assets/cardboard2.jpg') center / 300px auto repeat rgb(239,218,107);background-blend-mode:normal,multiply,normal;box-shadow:1px 2px 2px rgba(0,0,0,0.3);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;animation:cookedStarPop 0.4s ease"><img src="assets/star.svg" alt="" style="height:24px;display:block"></button>
+              </sc-if>
+              <sc-if value="{{ d.notFav }}" hint-placeholder-val="{{ true }}">
+                <button onClick="{{ d.onFav }}" aria-label="Add to favourites" style="width:48px;height:48px;border:none;border-radius:50%;background:rgba(252,250,247,0.85);box-shadow:1px 2px 2px rgba(0,0,0,0.25);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:transform 0.12s ease" style-hover="transform:scale(1.12) rotate(-6deg)"><img src="assets/star.svg" alt="" style="height:24px;display:block;filter:grayscale(1) opacity(0.4)"></button>
+              </sc-if>
+            </span>
+          </sc-if>
+          </div>
+          <p style="font-size:16px;line-height:1.55;color:#4F4B44;margin:0 0 14px 0">{{ d.desc }}</p>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px">
+            <sc-for list="{{ d.tags }}" as="t" hint-placeholder-count="2">
+              <button onClick="{{ t.onFilter }}" aria-label="Show recipes tagged {{ t.name }}" style="display:inline-flex;align-items:center;padding:5px 10px;border:none;border-radius:4px;background:linear-gradient(rgba(239,218,107,0.55),rgba(239,218,107,0.55)),url('assets/cardboard2.jpg') center / 300px auto repeat rgb(239,218,107);background-blend-mode:normal,multiply,normal;box-shadow:1px 1px 0 rgba(33,31,28,0.3);font-size:13px;font-weight:600;color:#211F1C;font-family:'Instrument Sans',sans-serif;cursor:pointer;transition:transform 0.12s ease, box-shadow 0.12s ease" style-hover="box-shadow:2px 2px 2px rgba(33,31,28,0.35);transform:translate(-1px,-1px) rotate(-1deg)" style-active="box-shadow:none;transform:translate(1px,1px)">{{ t.name }}</button>
+            </sc-for>
+          </div>
+        </div>
+        <div style="max-width:760px;box-shadow:-2px -2px 2.7px rgba(0,0,0,0.25);transform:rotate(0.3deg);margin-bottom:20px">
+          <div style="position:relative;aspect-ratio:16/9;max-height:420px;background:#F5F1EB;overflow:hidden;filter:contrast(1.18) saturate(0.92) brightness(0.98)">
+            <image-slot id="{{ d.slotId }}" shape="rect" placeholder="Drop a photo — {{ d.title }}"></image-slot>
+            <div aria-hidden="true" style="position:absolute;inset:0;pointer-events:none;background:linear-gradient(rgba(11,122,249,0.22),rgba(11,122,249,0.22)),url('assets/photo-grunge.jpg') center / cover;mix-blend-mode:screen;opacity:0.6"></div>
+            <sc-if value="{{ isPublic }}" hint-placeholder-val="{{ false }}">
+              <div aria-hidden="true" style="position:absolute;inset:0;background:transparent"></div>
+            </sc-if>
+          </div>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:20px 32px;background:#FFFFFF;border:1px solid #E6E0D8;border-radius:12px;padding:14px 18px;margin-bottom:28px;font-size:14px;color:#211F1C">
+          <div><span style="display:block;font-size:11px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#666159">Prep</span>{{ d.prepLabel }}</div>
+          <div><span style="display:block;font-size:11px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#666159">Cook</span>{{ d.cookLabel }}</div>
+          <div><span style="display:block;font-size:11px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#666159">Total</span>{{ d.totalLabel }}</div>
+          <div><span style="display:block;font-size:11px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#666159">Serves</span>{{ d.servings }}</div>
+          <div><span style="display:block;font-size:11px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#666159">Source</span><a href="{{ d.sourceUrl }}" target="_blank" rel="noreferrer">{{ d.sourceName }}</a></div>
+        </div>
+
+        <div style="display:flex;flex-wrap:wrap;gap:32px;align-items:flex-start">
+          <section aria-label="Ingredients" style="flex:1 1 300px;min-width:280px;max-width:420px;background:#FFFFFF;border:1px solid #E6E0D8;border-radius:12px;padding:18px;position:sticky;top:76px">
+            <h2 style="font-family:'Young Serif',Georgia,serif;font-weight:400;font-size:24px;margin:0 0 12px 0;color:#211F1C">Ingredients</h2>
+            <div style="display:grid;grid-template-columns:88px 1fr;row-gap:8px;column-gap:10px;font-size:16px;line-height:1.5;color:#211F1C">
+              <sc-for list="{{ d.ings }}" as="ing" hint-placeholder-count="6">
+                <sc-if value="{{ ing.isHeading }}" hint-placeholder-val="{{ false }}">
+                  <span style="grid-column:1 / -1;font-weight:700;padding-top:6px">{{ ing.label }}</span>
+                </sc-if>
+                <sc-if value="{{ ing.isRow }}" hint-placeholder-val="{{ true }}">
+                  <span style="color:#4F4B44">{{ ing.amount }}</span>
+                  <span>{{ ing.name }}</span>
+                </sc-if>
+              </sc-for>
+            </div>
+          </section>
+
+          <div style="flex:2 1 380px;min-width:280px">
+            <section aria-label="Method" style="margin-bottom:36px">
+              <h2 style="font-family:'Young Serif',Georgia,serif;font-weight:400;font-size:24px;margin:0 0 16px 0;color:#211F1C">Method</h2>
+              <div style="display:flex;flex-direction:column;gap:18px;max-width:640px">
+                <sc-for list="{{ d.steps }}" as="st" hint-placeholder-count="4">
+                  <sc-if value="{{ st.isHeading }}" hint-placeholder-val="{{ false }}">
+                    <p style="font-weight:700;font-size:15px;color:#211F1C;margin:8px 0 -8px 0">{{ st.label }}</p>
+                  </sc-if>
+                  <sc-if value="{{ st.isStep }}" hint-placeholder-val="{{ true }}">
+                    <div style="display:flex;gap:14px;align-items:flex-start">
+                      <span aria-hidden="true" style="flex-shrink:0;width:32px;height:32px;border-radius:50%;background:#1E31A9;color:#FFFFFF;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center">{{ st.num }}</span>
+                      <div style="flex:1">
+                        <p style="font-size:16px;line-height:1.55;color:#211F1C;margin:4px 0 0 0">{{ st.text }}</p>
+                        <sc-if value="{{ st.hasTimer }}" hint-placeholder-val="{{ false }}">
+                          <p style="font-size:13px;color:#666159;margin:4px 0 0 0">Timer · {{ st.timerLabel }}</p>
+                        </sc-if>
+                      </div>
+                    </div>
+                  </sc-if>
+                </sc-for>
+              </div>
+            </section>
+
+            <section aria-label="Notes">
+              <h2 style="font-family:'Young Serif',Georgia,serif;font-weight:400;font-size:24px;margin:0 0 4px 0;color:#211F1C">Notes</h2>
+              <p style="font-size:13px;color:#666159;margin:0 0 14px 0">Alterations and results from past cooks, oldest first.</p>
+              <sc-if value="{{ d.hasNotes }}" hint-placeholder-val="{{ false }}">
+                <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:16px;max-width:640px">
+                  <sc-for list="{{ d.notes }}" as="n" hint-placeholder-count="1">
+                    <div style="background:{{ n.paperBg }};background-blend-mode:normal,multiply,normal;box-shadow:1px 4px 2px rgba(0,0,0,0.25);padding:12px 18px;transform:rotate({{ n.rot }}deg)">
+                      <p style="font-size:15px;line-height:1.55;color:#211F1C;margin:0 0 8px 0">{{ n.text }}</p>
+                      <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap">
+                        <p style="font-size:13px;color:rgba(41,39,40,0.7);margin:0">{{ n.byline }}</p>
+                        <sc-if value="{{ n.mine }}" hint-placeholder-val="{{ false }}">
+                          <div style="display:flex;gap:4px">
+                            <button onClick="{{ n.onEdit }}" style="height:36px;padding:0 10px;border:none;background:transparent;color:#164E70;font-size:13px;font-weight:600;cursor:pointer;text-decoration:underline;font-family:'Instrument Sans',sans-serif">Edit</button>
+                            <button onClick="{{ n.onDelete }}" style="height:36px;padding:0 10px;border:none;background:transparent;color:#8C1D29;font-size:13px;font-weight:600;cursor:pointer;text-decoration:underline;font-family:'Instrument Sans',sans-serif">Delete</button>
+                          </div>
+                        </sc-if>
+                      </div>
+                    </div>
+                  </sc-for>
+                </div>
+              </sc-if>
+              <sc-if value="{{ d.noNotes }}" hint-placeholder-val="{{ true }}">
+                <p style="font-size:14px;color:#666159;margin:0 0 16px 0">No notes yet.</p>
+              </sc-if>
+              <sc-if value="{{ isEditor }}" hint-placeholder-val="{{ false }}">
+                <div style="background:#FFF9ED;border:1px solid #F7EBAF;border-radius:12px;padding:14px 16px;max-width:640px">
+                  <label for="note-input" style="display:block;font-size:13px;font-weight:600;color:#211F1C;margin-bottom:6px">{{ noteFormLabel }}</label>
+                  <textarea id="note-input" value="{{ noteText }}" onChange="{{ onNoteText }}" rows="3" placeholder="e.g. Swapped honey for maple syrup — worked well" style="width:100%;box-sizing:border-box;border:1px solid #CCC5BC;border-radius:8px;padding:10px 12px;font-size:15px;line-height:1.5;font-family:'Instrument Sans',sans-serif;background:#FFFFFF;color:#211F1C;resize:vertical"></textarea>
+                  <div style="display:flex;gap:8px;margin-top:10px">
+                    <button onClick="{{ saveNote }}" style="height:44px;padding:0 16px;border:none;border-radius:8px;background:#1F6590;color:#FFFFFF;font-size:14px;font-weight:600;cursor:pointer;font-family:'Instrument Sans',sans-serif" style-hover="background:#164E70">{{ noteSaveLabel }}</button>
+                    <sc-if value="{{ isEditingNote }}" hint-placeholder-val="{{ false }}">
+                      <button onClick="{{ cancelNoteEdit }}" style="height:44px;padding:0 14px;border:1px solid #1F6590;border-radius:8px;background:#FFFFFF;color:#1F6590;font-size:14px;font-weight:600;cursor:pointer;font-family:'Instrument Sans',sans-serif">Cancel</button>
+                    </sc-if>
+                  </div>
+                </div>
+              </sc-if>
+              <sc-if value="{{ isPublic }}" hint-placeholder-val="{{ true }}">
+                <p style="font-size:13px;color:#666159;margin:8px 0 0 0;max-width:640px">Notes are added by Cooked editors. <a href="#" onClick="{{ openLogin }}">Log in</a> if you have editing access.</p>
+              </sc-if>
+            </section>
+          </div>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- ADD / EDIT FORM -->
+  <sc-if value="{{ showForm }}" hint-placeholder-val="{{ false }}">
+    <div data-screen-label="Add or edit recipe" style="position: fixed; inset: 0; z-index: 35; overflow-y: auto; background: linear-gradient(rgba(252,250,247,0.85),rgba(252,250,247,0.85)),url('assets/graph-paper.jpg') center / 720px auto repeat,#FCFAF7; animation: cookedFade 0.18s ease; left: -17px; top: 8px">
+      <header style="position:sticky;top:0;z-index:5;background:url('assets/paper.jpg') center / 512px auto repeat #D84A1A;background-blend-mode:multiply;box-shadow:0 2px 0 rgba(33,31,28,0.25)">
+        <div style="max-width:1280px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px">
+          <button onClick="{{ cancelForm }}" style="height:44px;padding:0 12px;border:none;border-radius:8px;background:transparent;color:#FCFAF7;font-size:15px;font-weight:600;cursor:pointer;font-family:'Instrument Sans',sans-serif" style-hover="background:rgba(252,250,247,0.12)">Cancel</button>
+          <p style="font-size:16px;font-weight:700;color:#FCFAF7;margin:0">{{ f.heading }}</p>
+          <sc-if value="{{ saveFlash }}" hint-placeholder-val="{{ false }}">
+            <button style="height:40px;padding:0 18px;border:none;border-radius:8px;background:#3E8E4E;color:#FFFFFF;font-size:14px;font-weight:700;font-family:'Instrument Sans',sans-serif;box-shadow:2px 2px 0 rgba(33,31,28,0.3);animation:cookedSavePop 0.45s ease">✓ Saved</button>
+          </sc-if>
+          <sc-if value="{{ notSaveFlash }}" hint-placeholder-val="{{ true }}">
+            <button onClick="{{ saveForm }}" style="height:40px;padding:0 18px;border:none;border-radius:8px;background:linear-gradient(rgba(239,218,107,0.55),rgba(239,218,107,0.55)),url('assets/cardboard2.jpg') center / 300px auto repeat rgb(239,218,107);background-blend-mode:normal,multiply,normal;color:#211F1C;font-size:14px;font-weight:600;cursor:pointer;font-family:'Instrument Sans',sans-serif;box-shadow:2px 2px 0 rgba(33,31,28,0.3);transition:transform 0.12s ease, box-shadow 0.12s ease" style-hover="box-shadow:3px 3px 0 rgba(33,31,28,0.35);transform:translate(-1px,-1px)" style-active="box-shadow:none;transform:translate(1px,1px)">Save</button>
+          </sc-if>
+        </div>
+      </header>
+      <div style="max-width:720px;margin:0 auto;padding:24px 16px 64px 16px">
+        <sc-if value="{{ f.hasErrors }}" hint-placeholder-val="{{ false }}">
+          <div role="alert" style="background:#FFEDEF;border:1px solid #EBA9AF;border-radius:12px;color:#211F1C;padding:14px 16px;margin-bottom:16px">
+            <p style="font-size:14px;font-weight:700;color:#8C1D29;margin:0 0 6px 0">Fix the following to save:</p>
+            <ul style="margin:0;padding-left:18px;font-size:14px;line-height:1.6">
+              <sc-for list="{{ f.errors }}" as="er" hint-placeholder-count="1"><li>{{ er.msg }}</li></sc-for>
+            </ul>
+          </div>
+        </sc-if>
+
+        <div style="background:#FFFFFF;border:1px solid #E6E0D8;border-radius:12px;padding:20px;margin-bottom:16px">
+          <h2 style="font-size:13px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#666159;margin:0 0 12px 0">Basics</h2>
+          <label for="f-title" style="display:block;font-size:13px;font-weight:600;margin-bottom:4px">Title <span style="color:#8C1D29">*</span></label>
+          <input id="f-title" value="{{ f.title }}" onChange="{{ f.onTitle }}" style="width:100%;box-sizing:border-box;height:44px;border:1px solid #CCC5BC;border-radius:8px;padding:0 12px;font-size:16px;background:#FFFFFF;color:#211F1C;margin-bottom:12px;font-family:'Instrument Sans',sans-serif">
+          <label for="f-desc" style="display:block;font-size:13px;font-weight:600;margin-bottom:4px">Description</label>
+          <textarea id="f-desc" value="{{ f.desc }}" onChange="{{ f.onDesc }}" rows="3" style="width:100%;box-sizing:border-box;border:1px solid #CCC5BC;border-radius:8px;padding:10px 12px;font-size:16px;line-height:1.5;background:#FFFFFF;color:#211F1C;font-family:'Instrument Sans',sans-serif;resize:vertical"></textarea>
+        </div>
+
+        <div style="background:#FFFFFF;border:1px solid #E6E0D8;border-radius:12px;padding:20px;margin-bottom:16px">
+          <h2 style="font-size:13px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#666159;margin:0 0 12px 0">Image &amp; source</h2>
+          <div style="position:relative;aspect-ratio:4/3;max-width:420px;background:#F5F1EB;border:1px dashed #CCC5BC;border-radius:8px;overflow:hidden;margin-bottom:12px">
+            <image-slot id="{{ f.slotId }}" shape="rect" placeholder="Drop a recipe photo"></image-slot>
+          </div>
+          <label for="f-srcname" style="display:block;font-size:13px;font-weight:600;margin-bottom:4px">Source name</label>
+          <input id="f-srcname" value="{{ f.sourceName }}" onChange="{{ f.onSourceName }}" placeholder="e.g. Ottolenghi Simple, p. 122" style="width:100%;box-sizing:border-box;height:44px;border:1px solid #CCC5BC;border-radius:8px;padding:0 12px;font-size:16px;background:#FFFFFF;color:#211F1C;margin-bottom:12px;font-family:'Instrument Sans',sans-serif">
+          <label for="f-srcurl" style="display:block;font-size:13px;font-weight:600;margin-bottom:4px">Source URL</label>
+          <input id="f-srcurl" value="{{ f.sourceUrl }}" onChange="{{ f.onSourceUrl }}" placeholder="https://" style="width:100%;box-sizing:border-box;height:44px;border:1px solid #CCC5BC;border-radius:8px;padding:0 12px;font-size:16px;background:#FFFFFF;color:#211F1C;font-family:'Instrument Sans',sans-serif">
+        </div>
+
+        <div style="background:#FFFFFF;border:1px solid #E6E0D8;border-radius:12px;padding:20px;margin-bottom:16px">
+          <h2 style="font-size:13px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#666159;margin:0 0 12px 0">Timing &amp; servings</h2>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px">
+            <div><label for="f-prep" style="display:block;font-size:13px;font-weight:600;margin-bottom:4px">Prep (min)</label><input id="f-prep" type="number" min="0" value="{{ f.prep }}" onChange="{{ f.onPrep }}" style="width:100%;box-sizing:border-box;height:44px;border:1px solid #CCC5BC;border-radius:8px;padding:0 10px;font-size:16px;background:#FFFFFF;color:#211F1C;font-family:'Instrument Sans',sans-serif"></div>
+            <div><label for="f-cook" style="display:block;font-size:13px;font-weight:600;margin-bottom:4px">Cook (min)</label><input id="f-cook" type="number" min="0" value="{{ f.cook }}" onChange="{{ f.onCook }}" style="width:100%;box-sizing:border-box;height:44px;border:1px solid #CCC5BC;border-radius:8px;padding:0 10px;font-size:16px;background:#FFFFFF;color:#211F1C;font-family:'Instrument Sans',sans-serif"></div>
+            <div><label for="f-serv" style="display:block;font-size:13px;font-weight:600;margin-bottom:4px">Serves</label><input id="f-serv" type="number" min="1" value="{{ f.servings }}" onChange="{{ f.onServings }}" style="width:100%;box-sizing:border-box;height:44px;border:1px solid #CCC5BC;border-radius:8px;padding:0 10px;font-size:16px;background:#FFFFFF;color:#211F1C;font-family:'Instrument Sans',sans-serif"></div>
+          </div>
+        </div>
+
+        <div style="background:#FFFFFF;border:1px solid #E6E0D8;border-radius:12px;padding:20px;margin-bottom:16px">
+          <h2 style="font-size:13px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#666159;margin:0 0 4px 0">Ingredients <span style="color:#8C1D29">*</span></h2>
+          
+          <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:12px">
+            <sc-for list="{{ f.ingRows }}" as="ir" hint-placeholder-count="3">
+              <sc-if value="{{ ir.isHeading }}" hint-placeholder-val="{{ false }}">
+                <div style="display:flex;gap:6px;align-items:center">
+                  <input value="{{ ir.label }}" onChange="{{ ir.onLabel }}" aria-label="Section heading" placeholder="Section heading" style="flex:1;box-sizing:border-box;height:44px;border:1px dashed #A8A297;border-radius:8px;padding:0 10px;font-size:14px;font-weight:700;background:#FFF9ED;color:#211F1C;font-family:'Instrument Sans',sans-serif">
+                  <button onClick="{{ ir.onRemove }}" aria-label="Remove section heading" style="width:44px;height:44px;border:1px solid #E6E0D8;border-radius:8px;background:#FFFFFF;color:#8C1D29;font-size:17px;cursor:pointer">×</button>
+                </div>
+              </sc-if>
+              <sc-if value="{{ ir.isRow }}" hint-placeholder-val="{{ true }}">
+                <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+                  <input value="{{ ir.q }}" onChange="{{ ir.onQ }}" aria-label="Quantity" placeholder="2" style="width:52px;box-sizing:border-box;height:44px;border:1px solid #CCC5BC;border-radius:8px;padding:0 8px;font-size:14px;background:#FFFFFF;color:#211F1C;font-family:'Instrument Sans',sans-serif">
+                  <input value="{{ ir.u }}" onChange="{{ ir.onU }}" aria-label="Unit" placeholder="tbsp" style="width:64px;box-sizing:border-box;height:44px;border:1px solid #CCC5BC;border-radius:8px;padding:0 8px;font-size:14px;background:#FFFFFF;color:#211F1C;font-family:'Instrument Sans',sans-serif">
+                  <input value="{{ ir.n }}" onChange="{{ ir.onN }}" aria-label="Ingredient name" placeholder="olive oil" style="flex:1;min-width:140px;box-sizing:border-box;height:44px;border:1px solid #CCC5BC;border-radius:8px;padding:0 10px;font-size:14px;background:#FFFFFF;color:#211F1C;font-family:'Instrument Sans',sans-serif">
+                  <div style="display:flex;gap:6px">
+                    <button onClick="{{ ir.onUp }}" aria-label="Move ingredient up" style="width:40px;height:44px;border:1px solid #CCC5BC;border-radius:8px;background:#FFFFFF;color:#1F6590;font-size:14px;cursor:pointer">↑</button>
+                    <button onClick="{{ ir.onDown }}" aria-label="Move ingredient down" style="width:40px;height:44px;border:1px solid #CCC5BC;border-radius:8px;background:#FFFFFF;color:#1F6590;font-size:14px;cursor:pointer">↓</button>
+                    <button onClick="{{ ir.onRemove }}" aria-label="Remove ingredient" style="width:40px;height:44px;border:1px solid #CCC5BC;border-radius:8px;background:#FFFFFF;color:#8C1D29;font-size:17px;cursor:pointer">×</button>
+                  </div>
+                </div>
+              </sc-if>
+            </sc-for>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button onClick="{{ f.addIngredient }}" style="height:44px;padding:0 14px;border:1px solid #1F6590;border-radius:8px;background:#FFFFFF;color:#1F6590;font-size:14px;font-weight:600;cursor:pointer;font-family:'Instrument Sans',sans-serif" style-hover="background:#E6F3FC">+ Ingredient</button>
+            <button onClick="{{ f.addIngHeading }}" style="height:44px;padding:0 14px;border:1px solid #CCC5BC;border-radius:8px;background:#FFFFFF;color:#4F4B44;font-size:14px;font-weight:600;cursor:pointer;font-family:'Instrument Sans',sans-serif">+ Section heading</button>
+          </div>
+        </div>
+
+        <div style="background:#FFFFFF;border:1px solid #E6E0D8;border-radius:12px;padding:20px;margin-bottom:16px">
+          <h2 style="font-size:13px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#666159;margin:0 0 4px 0">Instructions</h2>
+          
+          <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:12px">
+            <sc-for list="{{ f.stepRows }}" as="sr" hint-placeholder-count="2">
+              <div style="background:#FCFAF7;border:1px solid #E6E0D8;border-radius:8px;padding:12px">
+                <div style="display:flex;gap:6px;align-items:center;margin-bottom:8px;flex-wrap:wrap">
+                  <span style="width:32px;height:32px;border-radius:50%;background:#1E31A9;color:#FFFFFF;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">{{ sr.num }}</span>
+                  <input value="{{ sr.section }}" onChange="{{ sr.onSection }}" aria-label="Section heading (optional)" placeholder="Section heading (optional)" style="flex:1;min-width:140px;box-sizing:border-box;height:40px;border:1px dashed #A8A297;border-radius:8px;padding:0 10px;font-size:13px;background:#FFFFFF;color:#211F1C;font-family:'Instrument Sans',sans-serif">
+                  <input value="{{ sr.timer }}" onChange="{{ sr.onTimer }}" type="number" min="0" aria-label="Timer minutes (optional)" placeholder="min" style="width:64px;box-sizing:border-box;height:40px;border:1px solid #CCC5BC;border-radius:8px;padding:0 8px;font-size:13px;background:#FFFFFF;color:#211F1C;font-family:'Instrument Sans',sans-serif">
+                </div>
+                <textarea value="{{ sr.text }}" onChange="{{ sr.onText }}" rows="2" aria-label="Step text" placeholder="Describe this step" style="width:100%;box-sizing:border-box;border:1px solid #CCC5BC;border-radius:8px;padding:8px 10px;font-size:14px;line-height:1.5;background:#FFFFFF;color:#211F1C;font-family:'Instrument Sans',sans-serif;resize:vertical"></textarea>
+                <div style="display:flex;gap:6px;margin-top:8px;justify-content:flex-end">
+                  <button onClick="{{ sr.onUp }}" aria-label="Move step up" style="width:40px;height:38px;border:1px solid #CCC5BC;border-radius:8px;background:#FFFFFF;color:#1F6590;font-size:14px;cursor:pointer">↑</button>
+                  <button onClick="{{ sr.onDown }}" aria-label="Move step down" style="width:40px;height:38px;border:1px solid #CCC5BC;border-radius:8px;background:#FFFFFF;color:#1F6590;font-size:14px;cursor:pointer">↓</button>
+                  <button onClick="{{ sr.onRemove }}" aria-label="Remove step" style="width:40px;height:38px;border:1px solid #CCC5BC;border-radius:8px;background:#FFFFFF;color:#8C1D29;font-size:16px;cursor:pointer">×</button>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+          <button onClick="{{ f.addStep }}" style="height:44px;padding:0 14px;border:1px solid #1F6590;border-radius:8px;background:#FFFFFF;color:#1F6590;font-size:14px;font-weight:600;cursor:pointer;font-family:'Instrument Sans',sans-serif" style-hover="background:#E6F3FC">+ Step</button>
+        </div>
+
+        <div style="background:#FFFFFF;border:1px solid #E6E0D8;border-radius:12px;padding:20px;margin-bottom:16px">
+          <h2 style="font-size:13px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#666159;margin:0 0 4px 0">Tags</h2>
+          
+          <sc-if value="{{ f.hasSelTags }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px">
+              <sc-for list="{{ f.selTags }}" as="st" hint-placeholder-count="2">
+                <span style="display:inline-flex;align-items:center;gap:4px;padding:5px 4px 5px 10px;border-radius:4px;background:linear-gradient(rgba(239,218,107,0.55),rgba(239,218,107,0.55)),url('assets/cardboard2.jpg') center / 300px auto repeat rgb(239,218,107);background-blend-mode:normal,multiply,normal;box-shadow:1px 1px 0 rgba(33,31,28,0.3);font-size:13px;font-weight:600;color:#211F1C;font-family:'Instrument Sans',sans-serif">{{ st.name }}<button onClick="{{ st.onRemove }}" aria-label="Remove tag {{ st.name }}" style="width:24px;height:24px;border:none;background:transparent;color:#211F1C;font-size:15px;cursor:pointer;line-height:1;padding:0">×</button></span>
+              </sc-for>
+            </div>
+          </sc-if>
+          <input value="{{ f.tagSearch }}" onChange="{{ f.onTagSearch }}" onKeyDown="{{ f.onTagKey }}" aria-label="Search or add a tag" placeholder="Search or add a tag" style="width:100%;box-sizing:border-box;height:44px;border:1px solid #CCC5BC;border-radius:8px;padding:0 12px;font-size:15px;background:#FFFFFF;color:#211F1C;margin-bottom:10px;font-family:'Instrument Sans',sans-serif">
+          <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center">
+            <sc-for list="{{ f.tagSuggestions }}" as="sg" hint-placeholder-count="6">
+              <button onClick="{{ sg.onAdd }}" style="display:inline-flex;align-items:center;gap:6px;min-height:36px;padding:5px 12px;border:1px solid #CCC5BC;border-radius:4px;background:#FFFFFF;font-size:13px;font-weight:600;color:#211F1C;cursor:pointer;font-family:'Instrument Sans',sans-serif" style-hover="background:#E6F3FC;border-color:#1F6590">+ {{ sg.name }} <span style="font-weight:400;color:#666159">{{ sg.count }}</span></button>
+            </sc-for>
+            <sc-if value="{{ f.canAddNewTag }}" hint-placeholder-val="{{ false }}">
+              <button onClick="{{ f.addTagFromSearch }}" style="min-height:36px;padding:5px 12px;border:1px dashed #1F6590;border-radius:4px;background:#E6F3FC;font-size:13px;font-weight:600;color:#164E70;cursor:pointer;font-family:'Instrument Sans',sans-serif">{{ f.addNewLabel }}</button>
+            </sc-if>
+          </div>
+          
+        </div>
+
+        <sc-if value="{{ f.canDelete }}" hint-placeholder-val="{{ false }}">
+          <div style="background:#FFFFFF;border:1px solid #EBA9AF;border-radius:12px;padding:20px">
+            <h2 style="font-size:13px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#8C1D29;margin:0 0 8px 0">Danger zone</h2>
+            <button onClick="{{ deleteRecipe }}" style="height:44px;padding:0 18px;border:1px solid #8C1D29;border-radius:8px;background:#FFFFFF;color:#8C1D29;font-size:15px;font-weight:600;cursor:pointer;font-family:'Instrument Sans',sans-serif" style-hover="background:#FFEDEF">Delete recipe</button>
+          </div>
+        </sc-if>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- LOGIN -->
+  <sc-if value="{{ showLogin }}" hint-placeholder-val="{{ false }}">
+    <div data-screen-label="Log in" style="position:fixed;inset:0;z-index:40;overflow-y:auto;background:linear-gradient(rgba(252,250,247,0.85),rgba(252,250,247,0.85)),url('assets/graph-paper.jpg') center / 720px auto repeat,#FCFAF7;animation:cookedFade 0.18s ease">
+      <div style="max-width:1280px;margin:0 auto;padding:12px 16px">
+        <button onClick="{{ closeLogin }}" style="height:44px;padding:0 12px;border:none;border-radius:8px;background:transparent;color:#164E70;font-size:15px;font-weight:600;cursor:pointer;font-family:'Instrument Sans',sans-serif" style-hover="background:#E6F3FC">‹ Back to recipes</button>
+      </div>
+      <div style="max-width:400px;margin:24px auto 64px auto;padding:0 16px">
+        <div style="background:linear-gradient(rgba(239,218,107,0.78),rgba(239,218,107,0.78)),url('assets/cardboard2.jpg') center / 512px auto repeat rgb(239,218,107);background-blend-mode:normal,multiply,normal;box-shadow:0 4px 4px rgba(0,0,0,0.25);padding:32px 28px">
+          <img src="assets/chef.svg" alt="" aria-hidden="true" style="height:120px;display:block;margin:0 auto 10px auto">
+          <img src="assets/logo-no-icon.svg" alt="Cooked" style="height:34px;display:block;margin:0 auto 8px auto">
+          <h1 style="font-family: 'Young Serif',Georgia,serif; font-weight: 400; font-size: 24px; text-align: center; color: #211F1C; margin: 0 0 12px 0">Log in</h1>
+          
+          <sc-if value="{{ loginError }}" hint-placeholder-val="{{ false }}">
+            <div role="alert" style="background:#FFEDEF;border:1px solid #EBA9AF;border-radius:8px;color:#8C1D29;padding:10px 14px;font-size:14px;margin-bottom:16px">{{ loginErrorMsg }}</div>
+          </sc-if>
+          <label for="login-email" style="display:block;font-size:13px;font-weight:600;margin-bottom:4px">Email</label>
+          <input id="login-email" type="email" value="{{ loginEmail }}" onChange="{{ onLoginEmail }}" placeholder="you@example.com" style="width:100%;box-sizing:border-box;height:44px;border:1px solid #CCC5BC;border-radius:8px;padding:0 12px;font-size:16px;background:#FFFFFF;color:#211F1C;margin-bottom:14px;font-family:'Instrument Sans',sans-serif">
+          <label for="login-pass" style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 4px; color: #211F1C">Password</label>
+          <input id="login-pass" type="password" value="{{ loginPassword }}" onChange="{{ onLoginPassword }}" placeholder="••••••••" style="width:100%;box-sizing:border-box;height:44px;border:1px solid #CCC5BC;border-radius:8px;padding:0 12px;font-size:16px;background:#FFFFFF;color:#211F1C;margin-bottom:20px;font-family:'Instrument Sans',sans-serif">
+          <button onClick="{{ submitLogin }}" style="width:100%;height:48px;border:none;border-radius:8px;background:url('assets/cardboard2.jpg') center / 300px auto repeat #1E31A9;background-blend-mode:multiply;color:#FFFFFF;font-size:16px;font-weight:600;cursor:pointer;font-family:'Instrument Sans',sans-serif;box-shadow:2px 2px 2px rgba(0,0,0,0.25);transition:transform 0.12s ease, box-shadow 0.12s ease" style-hover="box-shadow:3px 3px 3px rgba(0,0,0,0.3);transform:translate(-1px,-1px)" style-active="box-shadow:none;transform:translate(1px,1px)">Log in</button>
+          <button onClick="{{ forgotPassword }}" style="width:100%;height:44px;border:none;background:transparent;color:#1E31A9;font-size:14px;font-weight:600;cursor:pointer;margin-top:10px;text-decoration:underline;font-family:'Instrument Sans',sans-serif">Forgot password?</button>
+        </div>
+        <p style="font-size:12px;color:#666159;text-align:center;margin:16px 0 0 0">Prototype: any email and password signs you in as an editor.</p>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- FILTER SHEET (mobile) -->
+  <sc-if value="{{ filterSheetOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;inset:0;z-index:45">
+      <div onClick="{{ closeSheet }}" style="position:absolute;inset:0;background:rgba(33,31,28,0.45);animation:cookedFade 0.15s ease"></div>
+      <div data-screen-label="Filter sheet" role="dialog" aria-label="Filter recipes" style="position:absolute;left:0;right:0;bottom:0;background:#FFFFFF;border-radius:16px 16px 0 0;padding:12px 16px 24px 16px;max-height:70%;display:flex;flex-direction:column;animation:cookedSheetUp 0.22s ease;box-shadow:0 -3px 0 rgba(33,31,28,0.15)">
+        <div style="width:36px;height:4px;border-radius:2px;background:#CCC5BC;margin:0 auto 12px auto"></div>
+        <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:2px">
+          <h2 style="font-family:'Young Serif',Georgia,serif;font-weight:400;font-size:22px;color:#211F1C;margin:0">Filter by tag</h2>
+          <button onClick="{{ clearFilters }}" style="height:36px;border:none;background:transparent;color:#164E70;font-size:13px;font-weight:600;cursor:pointer;text-decoration:underline;font-family:'Instrument Sans',sans-serif">Clear all</button>
+        </div>
+        <p style="font-size:13px;color:#666159;margin:0 0 8px 0">Recipes match all selected tags.</p>
+        <div style="position:relative;margin-bottom:6px">
+          <input value="{{ tagFilterQuery }}" onChange="{{ onTagFilterQuery }}" aria-label="Find a tag" placeholder="Find a tag" style="width:100%;box-sizing:border-box;height:44px;border:1px solid #CCC5BC;border-radius:8px;padding:0 44px 0 12px;font-size:16px;background:#FFFFFF;color:#211F1C;font-family:'Instrument Sans',sans-serif">
+          <sc-if value="{{ hasTagFilterQuery }}" hint-placeholder-val="{{ false }}">
+            <button onClick="{{ clearTagFilterQuery }}" aria-label="Clear tag search" style="position:absolute;right:2px;top:2px;width:40px;height:40px;border:none;border-radius:8px;background:transparent;color:#666159;font-size:22px;cursor:pointer;line-height:1">×</button>
+          </sc-if>
+        </div>
+        <div style="flex:1;overflow-y:auto">
+          <sc-if value="{{ noSheetTags }}" hint-placeholder-val="{{ false }}">
+            <p style="font-size:14px;color:#666159;margin:12px 0">No tags match “{{ tagFilterQuery }}”.</p>
+          </sc-if>
+          <sc-for list="{{ sheetTags }}" as="t" hint-placeholder-count="6">
+            <label style="display:flex;align-items:center;gap:12px;min-height:48px;border-bottom:1px solid #F5F1EB;font-size:16px;cursor:pointer">
+              <input type="checkbox" checked="{{ t.selected }}" onChange="{{ t.onToggle }}" style="width:22px;height:22px;accent-color:#1F6590">
+              <span style="flex:1">{{ t.name }}</span>
+              <span style="font-size:13px;color:#666159">{{ t.count }}</span>
+            </label>
+          </sc-for>
+        </div>
+        <button onClick="{{ closeSheet }}" style="height:48px;border:none;border-radius:8px;background:#1F6590;color:#FFFFFF;font-size:16px;font-weight:600;cursor:pointer;margin-top:12px;font-family:'Instrument Sans',sans-serif" style-hover="background:#164E70">{{ sheetDoneLabel }}</button>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- ACCOUNT -->
+  <sc-if value="{{ showAccount }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;inset:0;z-index:46">
+      <div onClick="{{ closeAccount }}" style="position:absolute;inset:0;background:rgba(33,31,28,0.35);animation:cookedFade 0.15s ease"></div>
+      <div data-screen-label="Account menu" role="dialog" aria-label="Account" style="{{ accountPanelStyle }}">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+          <span style="width:44px;height:44px;border-radius:50%;background:linear-gradient(rgba(239,218,107,0.55),rgba(239,218,107,0.55)),url('assets/cardboard2.jpg') center / 300px auto repeat rgb(239,218,107);background-blend-mode:normal,multiply,normal;color:#211F1C;font-size:17px;font-weight:700;display:flex;align-items:center;justify-content:center;box-shadow:1px 1px 0 rgba(33,31,28,0.3)">{{ userInitial }}</span>
+          <div>
+            <p style="font-size:16px;font-weight:700;margin:0">{{ userName }}</p>
+            <p style="font-size:13px;color:#666159;margin:0">Editor · can add and edit recipes</p>
+          </div>
+        </div>
+        <button onClick="{{ openSettings }}" style="width:100%;height:44px;border:1px solid #1F6590;border-radius:8px;background:#FFFFFF;color:#1F6590;font-size:15px;font-weight:600;cursor:pointer;margin-bottom:8px;text-align:left;padding:0 14px;font-family:'Instrument Sans',sans-serif" style-hover="background:#E6F3FC">Settings</button>
+        <button onClick="{{ logOut }}" style="width:100%;height:44px;border:1px solid #E6E0D8;border-radius:8px;background:#FFFFFF;color:#8C1D29;font-size:15px;font-weight:600;cursor:pointer;text-align:left;padding:0 14px;font-family:'Instrument Sans',sans-serif" style-hover="background:#FFEDEF">Log out</button>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- CONFIRM DIALOG -->
+  <sc-if value="{{ confirmOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;padding:24px">
+      <div style="position:absolute;inset:0;background:rgba(33,31,28,0.45);animation:cookedFade 0.15s ease"></div>
+      <div role="alertdialog" aria-label="Confirm" style="position:relative;background:#FFFFFF;border:1px solid #E6E0D8;border-radius:12px;padding:20px;max-width:340px;width:100%;animation:cookedFade 0.15s ease;box-shadow:4px 4px 0 rgba(33,31,28,0.18)">
+        <p style="font-size:16px;font-weight:700;margin:0 0 6px 0">{{ confirmTitle }}</p>
+        <p style="font-size:14px;color:#666159;line-height:1.55;margin:0 0 18px 0">{{ confirmMessage }}</p>
+        <div style="display:flex;gap:8px;justify-content:flex-end">
+          <button onClick="{{ confirmNo }}" style="height:44px;padding:0 16px;border:1px solid #CCC5BC;border-radius:8px;background:#FFFFFF;color:#211F1C;font-size:14px;font-weight:600;cursor:pointer;font-family:'Instrument Sans',sans-serif">{{ confirmNoLabel }}</button>
+          <sc-if value="{{ confirmDanger }}" hint-placeholder-val="{{ false }}">
+            <button onClick="{{ confirmYes }}" style="height:44px;padding:0 16px;border:none;border-radius:8px;background:#8C1D29;color:#FFFFFF;font-size:14px;font-weight:600;cursor:pointer;font-family:'Instrument Sans',sans-serif" style-hover="background:#70121B">{{ confirmYesLabel }}</button>
+          </sc-if>
+          <sc-if value="{{ confirmNeutral }}" hint-placeholder-val="{{ true }}">
+            <button onClick="{{ confirmYes }}" style="height:44px;padding:0 16px;border:none;border-radius:8px;background:#1F6590;color:#FFFFFF;font-size:14px;font-weight:600;cursor:pointer;font-family:'Instrument Sans',sans-serif" style-hover="background:#164E70">{{ confirmYesLabel }}</button>
+          </sc-if>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- RESET PASSWORD -->
+  <sc-if value="{{ showReset }}" hint-placeholder-val="{{ false }}">
+    <div data-screen-label="Reset password" style="position:fixed;inset:0;z-index:41;overflow-y:auto;background:linear-gradient(rgba(252,250,247,0.85),rgba(252,250,247,0.85)),url('assets/graph-paper.jpg') center / 720px auto repeat,#FCFAF7;animation:cookedFade 0.18s ease">
+      <div style="max-width:1280px;margin:0 auto;padding:12px 16px">
+        <button onClick="{{ closeReset }}" style="height:44px;padding:0 12px;border:none;border-radius:8px;background:transparent;color:#164E70;font-size:15px;font-weight:600;cursor:pointer;font-family:'Instrument Sans',sans-serif" style-hover="background:#E6F3FC">‹ Back to log in</button>
+      </div>
+      <div style="max-width:400px;margin:24px auto 64px auto;padding:0 16px">
+        <div style="background:linear-gradient(rgba(239,218,107,0.78),rgba(239,218,107,0.78)),url('assets/cardboard2.jpg') center / 512px auto repeat rgb(239,218,107);background-blend-mode:normal,multiply,normal;box-shadow:0 4px 4px rgba(0,0,0,0.25);padding:32px 28px">
+          <h1 style="font-family:'Young Serif',Georgia,serif;font-weight:400;font-size:24px;text-align:center;color:#1E31A9;margin:0 0 6px 0">Reset password</h1>
+          <p style="font-size:14px;color:#211F1C;text-align:center;line-height:1.5;margin:0 0 16px 0">Enter the email on your account and choose a new password.</p>
+          <sc-if value="{{ resetError }}" hint-placeholder-val="{{ false }}">
+            <div role="alert" style="background:#FFEDEF;border:1px solid #EBA9AF;border-radius:8px;color:#8C1D29;padding:10px 14px;font-size:14px;margin-bottom:16px">{{ resetErrorMsg }}</div>
+          </sc-if>
+          <label for="reset-email" style="display:block;font-size:13px;font-weight:600;margin-bottom:4px">Email</label>
+          <input id="reset-email" type="email" value="{{ resetEmail }}" onChange="{{ onResetEmail }}" placeholder="you@example.com" style="width:100%;box-sizing:border-box;height:44px;border:1px solid #CCC5BC;border-radius:8px;padding:0 12px;font-size:16px;background:#FFFFFF;color:#211F1C;margin-bottom:14px;font-family:'Instrument Sans',sans-serif">
+          <label for="reset-pass" style="display:block;font-size:13px;font-weight:600;margin-bottom:4px">New password</label>
+          <input id="reset-pass" type="password" value="{{ resetPass }}" onChange="{{ onResetPass }}" placeholder="At least 8 characters" style="width:100%;box-sizing:border-box;height:44px;border:1px solid #CCC5BC;border-radius:8px;padding:0 12px;font-size:16px;background:#FFFFFF;color:#211F1C;margin-bottom:14px;font-family:'Instrument Sans',sans-serif">
+          <label for="reset-pass2" style="display:block;font-size:13px;font-weight:600;margin-bottom:4px">Confirm new password</label>
+          <input id="reset-pass2" type="password" value="{{ resetPass2 }}" onChange="{{ onResetPass2 }}" placeholder="••••••••" style="width:100%;box-sizing:border-box;height:44px;border:1px solid #CCC5BC;border-radius:8px;padding:0 12px;font-size:16px;background:#FFFFFF;color:#211F1C;margin-bottom:20px;font-family:'Instrument Sans',sans-serif">
+          <button onClick="{{ submitReset }}" style="width:100%;height:48px;border:none;border-radius:8px;background:url('assets/cardboard2.jpg') center / 300px auto repeat #1E31A9;background-blend-mode:multiply;color:#FFFFFF;font-size:16px;font-weight:600;cursor:pointer;font-family:'Instrument Sans',sans-serif;box-shadow:2px 2px 2px rgba(0,0,0,0.25);transition:transform 0.12s ease, box-shadow 0.12s ease" style-hover="box-shadow:3px 3px 3px rgba(0,0,0,0.3);transform:translate(-1px,-1px)" style-active="box-shadow:none;transform:translate(1px,1px)">Reset password</button>
+        </div>
+        <p style="font-size:12px;color:#666159;text-align:center;margin:16px 0 0 0">Prototype: no email is sent — the reset applies immediately.</p>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- SETTINGS -->
+  <sc-if value="{{ showSettings }}" hint-placeholder-val="{{ false }}">
+    <div data-screen-label="Settings" style="position:fixed;inset:0;z-index:47;overflow-y:auto;background:linear-gradient(rgba(252,250,247,0.85),rgba(252,250,247,0.85)),url('assets/graph-paper.jpg') center / 720px auto repeat,#FCFAF7;animation:cookedFade 0.18s ease">
+      <header style="position:sticky;top:0;z-index:5;background:url('assets/paper.jpg') center / 512px auto repeat #D84A1A;background-blend-mode:multiply;box-shadow:0 2px 0 rgba(33,31,28,0.25)">
+        <div style="max-width:1280px;margin:0 auto;padding:10px 16px;position:relative;display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:44px">
+          <button onClick="{{ closeSettings }}" style="height:44px;padding:0 12px;border:none;border-radius:8px;background:transparent;color:#FCFAF7;font-size:15px;font-weight:600;cursor:pointer;font-family:'Instrument Sans',sans-serif" style-hover="background:rgba(252,250,247,0.12);text-decoration:underline;text-underline-offset:3px">‹ Back</button>
+          <p style="font-size:16px;font-weight:700;color:#FCFAF7;margin:0;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%)">Settings</p>
+        </div>
+      </header>
+      <div style="max-width:560px;margin:0 auto;padding:24px 16px 64px 16px">
+        <div style="background:#FFFFFF;border:1px solid #E6E0D8;border-radius:12px;padding:20px;margin-bottom:16px">
+          <h1 style="font-family:'Young Serif',Georgia,serif;font-weight:400;font-size:26px;margin:0 0 4px 0;color:#211F1C">Your account</h1>
+          <p style="font-size:13px;color:#666159;margin:0 0 16px 0">Leave the password fields empty to keep your current password.</p>
+          <sc-if value="{{ settingsError }}" hint-placeholder-val="{{ false }}">
+            <div role="alert" style="background:#FFEDEF;border:1px solid #EBA9AF;border-radius:8px;color:#8C1D29;padding:10px 14px;font-size:14px;margin-bottom:16px">{{ settingsErrorMsg }}</div>
+          </sc-if>
+          <label for="set-name" style="display:block;font-size:13px;font-weight:600;margin-bottom:4px">Name</label>
+          <input id="set-name" value="{{ settingsName }}" onChange="{{ onSettingsName }}" style="width:100%;box-sizing:border-box;height:44px;border:1px solid #CCC5BC;border-radius:8px;padding:0 12px;font-size:16px;background:#FFFFFF;color:#211F1C;margin-bottom:14px;font-family:'Instrument Sans',sans-serif">
+          <label for="set-email" style="display:block;font-size:13px;font-weight:600;margin-bottom:4px">Email</label>
+          <input id="set-email" type="email" value="{{ settingsEmail }}" onChange="{{ onSettingsEmail }}" style="width:100%;box-sizing:border-box;height:44px;border:1px solid #CCC5BC;border-radius:8px;padding:0 12px;font-size:16px;background:#FFFFFF;color:#211F1C;margin-bottom:14px;font-family:'Instrument Sans',sans-serif">
+          <label for="set-pass" style="display:block;font-size:13px;font-weight:600;margin-bottom:4px">New password</label>
+          <input id="set-pass" type="password" value="{{ settingsPass }}" onChange="{{ onSettingsPass }}" placeholder="At least 8 characters" style="width:100%;box-sizing:border-box;height:44px;border:1px solid #CCC5BC;border-radius:8px;padding:0 12px;font-size:16px;background:#FFFFFF;color:#211F1C;margin-bottom:14px;font-family:'Instrument Sans',sans-serif">
+          <label for="set-pass2" style="display:block;font-size:13px;font-weight:600;margin-bottom:4px">Confirm new password</label>
+          <input id="set-pass2" type="password" value="{{ settingsPass2 }}" onChange="{{ onSettingsPass2 }}" placeholder="••••••••" style="width:100%;box-sizing:border-box;height:44px;border:1px solid #CCC5BC;border-radius:8px;padding:0 12px;font-size:16px;background:#FFFFFF;color:#211F1C;margin-bottom:20px;font-family:'Instrument Sans',sans-serif">
+          <button onClick="{{ saveSettings }}" style="height:48px;padding:0 22px;border:none;border-radius:8px;background:linear-gradient(rgba(239,218,107,0.55),rgba(239,218,107,0.55)),url('assets/cardboard2.jpg') center / 300px auto repeat rgb(239,218,107);background-blend-mode:normal,multiply,normal;color:#211F1C;font-size:15px;font-weight:600;cursor:pointer;font-family:'Instrument Sans',sans-serif;box-shadow:2px 2px 0 rgba(33,31,28,0.3);transition:transform 0.12s ease, box-shadow 0.12s ease" style-hover="box-shadow:3px 3px 0 rgba(33,31,28,0.35);transform:translate(-1px,-1px)" style-active="box-shadow:none;transform:translate(1px,1px)">Save changes</button>
+        </div>
+        <div style="background:#FFFFFF;border:1px solid #EBA9AF;border-radius:12px;padding:20px">
+          <h2 style="font-family:'Young Serif',Georgia,serif;font-weight:400;font-size:20px;margin:0 0 4px 0;color:#8C1D29">Delete account</h2>
+          <p style="font-size:13px;color:#666159;line-height:1.5;margin:0 0 14px 0">Removes your access and signs you out. Recipes stay in the library.</p>
+          <button onClick="{{ deleteAccount }}" style="height:44px;padding:0 16px;border:none;border-radius:8px;background:#8C1D29;color:#FFFFFF;font-size:14px;font-weight:600;cursor:pointer;font-family:'Instrument Sans',sans-serif" style-hover="background:#70121B">Delete account</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- TOAST -->
+  <sc-if value="{{ toastVisible }}" hint-placeholder-val="{{ false }}">
+    <sc-if value="{{ toastSuccess }}" hint-placeholder-val="{{ false }}">
+      <div role="status" style="position:fixed;bottom:32px;left:50%;transform:translateX(-50%);background:#EAF3E6;border:1px solid #4E9A5C;color:#1C4A26;font-size:14px;font-weight:600;padding:12px 18px;border-radius:8px;z-index:60;animation:cookedToast 0.2s ease;white-space:nowrap;box-shadow:2px 2px 0 rgba(33,31,28,0.25)">{{ toastMsg }}</div>
+    </sc-if>
+    <sc-if value="{{ toastDanger }}" hint-placeholder-val="{{ false }}">
+      <div role="status" style="position:fixed;bottom:32px;left:50%;transform:translateX(-50%);background:#FFEDEF;border:1px solid #EBA9AF;color:#8C1D29;font-size:14px;font-weight:600;padding:12px 18px;border-radius:8px;z-index:60;animation:cookedToast 0.2s ease;white-space:nowrap;box-shadow:2px 2px 0 rgba(33,31,28,0.25)">{{ toastMsg }}</div>
+    </sc-if>
+    <sc-if value="{{ toastNeutral }}" hint-placeholder-val="{{ false }}">
+      <div role="status" style="position:fixed;bottom:32px;left:50%;transform:translateX(-50%);background:#211F1C;color:#FCFAF7;font-size:14px;font-weight:600;padding:12px 18px;border-radius:8px;z-index:60;animation:cookedToast 0.2s ease;white-space:nowrap;box-shadow:2px 2px 0 rgba(33,31,28,0.3)">{{ toastMsg }}</div>
+    </sc-if>
+  </sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;startSignedIn&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Prototype&quot;},&quot;defaultSort&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;recent&quot;,&quot;updated&quot;,&quot;alpha&quot;,&quot;time&quot;],&quot;default&quot;:&quot;recent&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Prototype&quot;}}">
+const ALL_TAGS = ["breakfast", "dinner", "dessert", "vegetarian", "quick", "soup", "pasta", "baking"];
+
+const RECIPES = [
+  {
+    id: "r1", title: "Miso-Glazed Aubergine",
+    desc: "Nasu dengaku — aubergine halves roasted until silky, brushed with a sweet-savoury miso glaze and finished under the grill.",
+    source: { name: "Just One Cookbook", url: "https://www.justonecookbook.com" },
+    servings: 2, prep: 10, cook: 20, tags: ["dinner", "vegetarian", "quick"],
+    created: "2026-07-02", updated: "2026-07-02",
+    ingredients: [
+      { q: "2", u: "", n: "small aubergines, halved lengthways" },
+      { q: "2", u: "tbsp", n: "neutral oil" },
+      { q: "3", u: "tbsp", n: "white miso paste" },
+      { q: "1½", u: "tbsp", n: "mirin" },
+      { q: "1", u: "tbsp", n: "caster sugar" },
+      { q: "1", u: "tsp", n: "toasted sesame seeds" },
+      { q: "2", u: "", n: "spring onions, finely sliced" }
+    ],
+    steps: [
+      { t: "Score the cut face of each aubergine half in a diamond pattern and brush with oil." },
+      { t: "Roast at 200°C until completely tender.", m: 15 },
+      { t: "Stir the miso, mirin and sugar together until smooth." },
+      { t: "Brush the glaze thickly over the cut faces and grill until bubbling and caramelised.", m: 4 },
+      { t: "Scatter with sesame seeds and spring onion. Serve with rice." }
+    ],
+    notes: [
+      { id: "n1", author: "Sam", date: "2026-07-05", text: "Red miso works too — use 2 tbsp instead of 3, it's saltier.", edited: false }
+    ]
+  },
+  {
+    id: "r2", title: "Weeknight Chicken Ramen",
+    desc: "A shortcut ramen built on good stock, soy and soft-boiled eggs. Not traditional, ready in half an hour.",
+    source: { name: "Serious Eats", url: "https://www.seriouseats.com" },
+    servings: 2, prep: 15, cook: 20, tags: ["dinner", "soup", "quick"],
+    created: "2026-06-21", updated: "2026-07-01",
+    ingredients: [
+      { q: "2", u: "", n: "chicken thighs, boneless" },
+      { q: "1", u: "l", n: "good chicken stock" },
+      { q: "2", u: "tbsp", n: "soy sauce" },
+      { q: "1", u: "tbsp", n: "miso paste" },
+      { q: "2", u: "cloves", n: "garlic, grated" },
+      { q: "1", u: "thumb", n: "ginger, grated" },
+      { q: "2", u: "portions", n: "ramen noodles" },
+      { q: "2", u: "", n: "eggs" },
+      { q: "1", u: "handful", n: "spinach" },
+      { q: "2", u: "", n: "spring onions, sliced" },
+      { q: "1", u: "tsp", n: "chilli oil, to serve" }
+    ],
+    steps: [
+      { t: "Soft-boil the eggs, then peel and halve.", m: 7 },
+      { t: "Sear the chicken thighs in a little oil until golden and cooked through, then rest and slice.", m: 10 },
+      { t: "Simmer the stock with soy, miso, garlic and ginger.", m: 8 },
+      { t: "Cook the noodles separately, then divide between bowls.", m: 3 },
+      { t: "Ladle over the broth, then top with chicken, eggs, spinach, spring onion and chilli oil." }
+    ],
+    notes: []
+  },
+  {
+    id: "r3", title: "Slow-Braised Beef Ragù",
+    desc: "A Sunday ragù of beef shin braised until it collapses, folded through pappardelle. Freezes beautifully.",
+    source: { name: "Felicity Cloake, The Guardian", url: "https://www.theguardian.com" },
+    servings: 6, prep: 20, cook: 180, tags: ["dinner", "pasta"],
+    created: "2026-05-14", updated: "2026-06-18",
+    ingredients: [
+      { h: "Ragù" },
+      { q: "1", u: "kg", n: "beef shin, cut into large chunks" },
+      { q: "2", u: "tbsp", n: "olive oil" },
+      { q: "1", u: "", n: "onion, finely chopped" },
+      { q: "2", u: "", n: "carrots, finely chopped" },
+      { q: "2", u: "sticks", n: "celery, finely chopped" },
+      { q: "4", u: "cloves", n: "garlic, sliced" },
+      { q: "2", u: "tbsp", n: "tomato purée" },
+      { q: "250", u: "ml", n: "red wine" },
+      { q: "800", u: "g", n: "tinned plum tomatoes" },
+      { q: "2", u: "", n: "bay leaves" },
+      { h: "To serve" },
+      { q: "500", u: "g", n: "pappardelle" },
+      { q: "50", u: "g", n: "parmesan, finely grated" }
+    ],
+    steps: [
+      { s: "Ragù", t: "Season the beef and brown hard in olive oil, in batches. Set aside.", m: 12 },
+      { t: "Soften the onion, carrot and celery in the same pot, then add garlic and tomato purée.", m: 10 },
+      { t: "Deglaze with the wine and reduce by half.", m: 5 },
+      { t: "Return the beef with the tomatoes and bay. Cover and braise at 150°C until falling apart.", m: 150 },
+      { t: "Shred the beef into the sauce and season." },
+      { s: "To serve", t: "Cook the pappardelle, then fold through the ragù with a splash of pasta water. Serve with parmesan." }
+    ],
+    notes: [
+      { id: "n2", author: "Sam", date: "2026-05-20", text: "Doubled the batch and froze half in two-portion tubs. Defrosts well.", edited: false },
+      { id: "n3", author: "Alex", date: "2026-06-18", text: "Used ox cheek instead of shin — 30 minutes less in the oven.", edited: true }
+    ]
+  },
+  {
+    id: "r4", title: "Shakshuka",
+    desc: "Eggs poached in a spiced pepper and tomato sauce. One pan, bread required.",
+    source: { name: "Ottolenghi Simple", url: "https://ottolenghi.co.uk" },
+    servings: 3, prep: 10, cook: 20, tags: ["breakfast", "vegetarian", "quick"],
+    created: "2026-06-28", updated: "2026-06-28",
+    ingredients: [
+      { q: "2", u: "tbsp", n: "olive oil" },
+      { q: "1", u: "", n: "onion, sliced" },
+      { q: "2", u: "", n: "red peppers, sliced" },
+      { q: "3", u: "cloves", n: "garlic, sliced" },
+      { q: "1", u: "tsp", n: "ground cumin" },
+      { q: "1", u: "tsp", n: "smoked paprika" },
+      { q: "800", u: "g", n: "tinned chopped tomatoes" },
+      { q: "6", u: "", n: "eggs" },
+      { q: "50", u: "g", n: "feta, crumbled" },
+      { q: "1", u: "small bunch", n: "coriander, chopped" }
+    ],
+    steps: [
+      { t: "Soften the onion and peppers in the oil over medium heat.", m: 10 },
+      { t: "Add garlic and spices and cook for a minute until fragrant." },
+      { t: "Pour in the tomatoes, season, and simmer until thickened.", m: 8 },
+      { t: "Make six wells and crack in the eggs. Cover and cook until the whites are set.", m: 6 },
+      { t: "Finish with feta and coriander. Serve from the pan with bread." }
+    ],
+    notes: []
+  },
+  {
+    id: "r5", title: "Lemon Yoghurt Cake",
+    desc: "A one-bowl loaf cake — sharp lemon syrup over a tender yoghurt crumb. Keeps for days.",
+    source: { name: "Smitten Kitchen", url: "https://smittenkitchen.com" },
+    servings: 8, prep: 15, cook: 50, tags: ["baking", "dessert"],
+    created: "2026-06-05", updated: "2026-06-05",
+    ingredients: [
+      { q: "240", u: "g", n: "plain flour" },
+      { q: "2", u: "tsp", n: "baking powder" },
+      { q: "200", u: "g", n: "caster sugar" },
+      { q: "2", u: "", n: "lemons, zest and juice" },
+      { q: "240", u: "ml", n: "natural yoghurt" },
+      { q: "3", u: "", n: "eggs" },
+      { q: "120", u: "ml", n: "light olive oil" },
+      { q: "50", u: "g", n: "icing sugar, for the syrup" }
+    ],
+    steps: [
+      { t: "Rub the lemon zest into the sugar, then whisk in the yoghurt, eggs and oil." },
+      { t: "Fold in the flour and baking powder until just combined." },
+      { t: "Bake in a lined loaf tin at 175°C until a skewer comes out clean.", m: 50 },
+      { t: "Warm the lemon juice with the icing sugar and brush over the hot cake." },
+      { t: "Cool completely in the tin before slicing." }
+    ],
+    notes: [
+      { id: "n4", author: "Alex", date: "2026-06-09", text: "Added a handful of poppy seeds with the flour — would do again.", edited: false }
+    ]
+  },
+  {
+    id: "r6", title: "Roasted Tomato & Basil Soup",
+    desc: "Tomatoes roasted until jammy, blended with basil and finished with a swirl of cream.",
+    source: { name: "BBC Good Food", url: "https://www.bbcgoodfood.com" },
+    servings: 4, prep: 10, cook: 45, tags: ["soup", "vegetarian"],
+    created: "2026-05-30", updated: "2026-05-30",
+    ingredients: [
+      { q: "1.2", u: "kg", n: "ripe tomatoes, halved" },
+      { q: "1", u: "", n: "red onion, quartered" },
+      { q: "4", u: "cloves", n: "garlic, unpeeled" },
+      { q: "3", u: "tbsp", n: "olive oil" },
+      { q: "500", u: "ml", n: "vegetable stock" },
+      { q: "1", u: "bunch", n: "basil, leaves picked" },
+      { q: "4", u: "tbsp", n: "double cream, to serve" }
+    ],
+    steps: [
+      { t: "Roast the tomatoes, onion and garlic with the oil at 190°C until collapsed and caramelised at the edges.", m: 40 },
+      { t: "Squeeze the garlic from its skins and blend everything with the stock and most of the basil until smooth." },
+      { t: "Reheat gently, season, and adjust with stock if too thick.", m: 5 },
+      { t: "Serve with a swirl of cream and the remaining basil." }
+    ],
+    notes: []
+  }
+];
+
+const TODAY = "2026-07-14";
+
+function fmtDate(d) {
+  try {
+    return new Date(d + "T12:00:00").toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
+  } catch (e) { return d; }
+}
+
+class Component extends DCLogic {
+  state = {
+    recipes: RECIPES,
+    allTags: ALL_TAGS,
+    query: "",
+    activeTags: [],
+    sort: "recent",
+    sheetOpen: false,
+    detailId: null,
+    showForm: false,
+    showLogin: false,
+    showAccount: false,
+    user: null,
+    form: null,
+    formErrors: [],
+    confirm: null,
+    toast: null,
+    showReset: false, resetEmail: "", resetPass: "", resetPass2: "", resetError: null,
+    showSettings: false, settingsName: "", settingsEmail: "", settingsPass: "", settingsPass2: "", settingsError: null,
+    saveFlash: false,
+    favs: [],
+    noteText: "",
+    editingNoteId: null,
+    newTag: "",
+    tagSearch: "",
+    tagFilterQuery: "",
+    loginEmail: "",
+    loginPassword: "",
+    loginError: null,
+    pendingAdd: false,
+    winW: typeof window !== "undefined" ? window.innerWidth : 1200
+  };
+
+  componentDidMount() {
+    try {
+      const p = new URLSearchParams(window.location.search);
+      const patch = {};
+      if (p.get("editor") === "1") patch.user = { name: "Alex" };
+      const scr = p.get("screen");
+      if (scr === "detail") patch.detailId = p.get("id") || "r3";
+      if (scr === "login") patch.showLogin = true;
+      if (scr === "form" && patch.user) { patch.form = this.blankForm(); patch.showForm = true; }
+      if (scr === "filters") patch.sheetOpen = true;
+      if (Object.keys(patch).length) this.setState(patch);
+    } catch (e) {}
+    if (this.props.startSignedIn && !this.state.user) this.setState({ user: { name: "Alex" } });
+    if (this.props.defaultSort && this.props.defaultSort !== this.state.sort) this.setState({ sort: this.props.defaultSort });
+    this._onResize = () => this.setState({ winW: window.innerWidth });
+    window.addEventListener("resize", this._onResize);
+  }
+  componentWillUnmount() { window.removeEventListener("resize", this._onResize); }
+
+  isMobile() { return this.state.winW < 700; }
+
+  componentDidUpdate() {
+    const st = this.state;
+    const sig = st.activeTags.join("|") + "::" + st.query.trim().toLowerCase() + "::" + st.sort;
+    if (this._prevSig !== undefined && this._prevSig !== sig && !this.isMobile()) this.runShuffle();
+    this._prevSig = sig;
+  }
+  componentDidMount() {
+    const st = this.state;
+    this._prevSig = st.activeTags.join("|") + "::" + st.query.trim().toLowerCase() + "::" + st.sort;
+  }
+
+  // Deck-of-cards shuffle: cards collapse onto the top-left pile, then spread back out
+  runShuffle() {
+    if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    requestAnimationFrame(() => {
+      const grid = document.getElementById("recipe-grid");
+      if (!grid) return;
+      const cards = Array.from(grid.querySelectorAll(":scope > article"));
+      if (!cards.length || !cards[0].animate) return;
+      const pile = cards[0].getBoundingClientRect();
+      cards.forEach((el, i) => {
+        const r = el.getBoundingClientRect();
+        const dx = pile.left - r.left, dy = pile.top - r.top;
+        const tilt = (i % 3 - 1) * 2.5;
+        el.animate([
+          { transform: "translate(" + dx + "px," + dy + "px) rotate(" + tilt + "deg) scale(0.98)", boxShadow: "0 2px 3px rgba(0,0,0,0.3)" },
+          { transform: "translate(0,0) rotate(0deg) scale(1)", boxShadow: "0 4px 4px rgba(0,0,0,0.25)" }
+        ], { duration: 460, delay: Math.min(i * 40, 420), easing: "cubic-bezier(0.25,0.8,0.3,1)", fill: "backwards" });
+      });
+    });
+  }
+
+  showToast(msg, kind) {
+    clearTimeout(this._toastTimer);
+    this.setState({ toast: { msg: msg, kind: kind || "neutral" } });
+    this._toastTimer = setTimeout(() => this.setState({ toast: null }), 2600);
+  }
+
+  updForm(patch) {
+    this.setState({ form: Object.assign({}, this.state.form, patch, { dirty: true }) });
+  }
+
+  ingRows(list) {
+    return list.map((i) => i.h
+      ? { isHeading: true, isRow: false, label: i.h }
+      : { isHeading: false, isRow: true, amount: [i.q, i.u].filter(Boolean).join(" "), name: i.n });
+  }
+
+  matches(r, q) {
+    if (r.title.toLowerCase().includes(q)) return true;
+    if (r.tags.some((t) => t.toLowerCase().includes(q))) return true;
+    if (r.ingredients.some((i) => !i.h && (i.n || "").toLowerCase().includes(q))) return true;
+    return false;
+  }
+
+  goHome = (e) => {
+    if (e && e.preventDefault) e.preventDefault();
+    const s = this.state;
+    const onHome = !s.detailId && !s.showForm && !s.showLogin && !s.showAccount && !s.showReset && !s.showSettings;
+    this.setState({ detailId: null, showForm: false, showLogin: false, showAccount: false, sheetOpen: false });
+    window.scrollTo({ top: 0, behavior: onHome ? "smooth" : "auto" });
+  };
+  openDetail(id) { this.setState({ detailId: id, noteText: "", editingNoteId: null }); }
+
+  // Lift the clicked card off the pile, then open the recipe page
+  openDetailFromCard(id, e) {
+    const card = e && e.currentTarget && e.currentTarget.closest ? e.currentTarget.closest("article") : null;
+    const reduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (card && card.animate && !reduced) {
+      card.style.zIndex = "3";
+      const lift = card.animate([
+        { transform: "translateY(0) scale(1) rotate(0deg)", boxShadow: "0 4px 4px rgba(0,0,0,0.25)" },
+        { transform: "translateY(-10px) scale(1.04) rotate(-0.6deg)", boxShadow: "0 18px 20px rgba(0,0,0,0.22)", opacity: 0.95 }
+      ], { duration: 170, easing: "ease-out", fill: "forwards" });
+      setTimeout(() => {
+        card.style.zIndex = "";
+        lift.cancel(); // don't let the lifted pose persist when the library is shown again
+        this.openDetail(id);
+      }, 165);
+    } else {
+      this.openDetail(id);
+    }
+  }
+
+  toggleFav(id, e) {
+    if (e && e.stopPropagation) e.stopPropagation();
+    if (!this.state.user) { this.openLogin(); return; }
+    const favs = this.state.favs.includes(id) ? this.state.favs.filter((x) => x !== id) : this.state.favs.concat([id]);
+    this.setState({ favs: favs });
+  }
+
+  scrollToGridTop() {
+    const grid = document.getElementById("recipe-grid");
+    if (!grid) return;
+    const top = grid.getBoundingClientRect().top + window.scrollY - 140;
+    window.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
+  }
+  closeDetail = () => this.setState({ detailId: null, noteText: "", editingNoteId: null });
+
+  openLogin = (e) => { if (e && e.preventDefault) e.preventDefault(); this.setState({ showLogin: true, loginError: null }); };
+  closeLogin = () => this.setState({ showLogin: false, pendingAdd: false });
+  openAccount = () => this.setState({ showAccount: true });
+  closeAccount = () => this.setState({ showAccount: false });
+
+  submitLogin = () => {
+    const e = this.state.loginEmail.trim();
+    const p = this.state.loginPassword;
+    if (!e || !p) { this.setState({ loginError: "Enter your email and password." }); return; }
+    const name = e.split("@")[0].replace(/[^a-zA-Z]+/g, " ").trim() || "Alex";
+    const display = name.charAt(0).toUpperCase() + name.slice(1);
+    const openAdd = this.state.pendingAdd;
+    this.setState({ user: { name: display, email: e }, showLogin: false, loginEmail: "", loginPassword: "", loginError: null, pendingAdd: false }, () => {
+      this.showToast("Signed in as " + display, "success");
+      if (openAdd) this.openBlankForm();
+    });
+  };
+  forgotPassword = () => this.setState({ showReset: true, resetEmail: this.state.loginEmail, resetPass: "", resetPass2: "", resetError: null });
+  closeReset = () => this.setState({ showReset: false });
+  submitReset = () => {
+    const s = this.state;
+    if (!s.resetEmail.trim() || s.resetEmail.indexOf("@") === -1) { this.setState({ resetError: "Enter the email on your account." }); return; }
+    if (!s.resetPass || s.resetPass.length < 8) { this.setState({ resetError: "New password must be at least 8 characters." }); return; }
+    if (s.resetPass !== s.resetPass2) { this.setState({ resetError: "Passwords don\u2019t match." }); return; }
+    this.setState({ showReset: false, loginPassword: "", resetError: null });
+    this.showToast("Password reset \u2014 log in with your new password", "success");
+  };
+  openSettings = () => {
+    const u = this.state.user || {};
+    this.setState({ showSettings: true, showAccount: false, settingsName: u.name || "", settingsEmail: u.email || "", settingsPass: "", settingsPass2: "", settingsError: null });
+  };
+  closeSettings = () => this.setState({ showSettings: false });
+  saveSettings = () => {
+    const s = this.state;
+    if (!s.settingsName.trim()) { this.setState({ settingsError: "Add your name." }); return; }
+    if (!s.settingsEmail.trim() || s.settingsEmail.indexOf("@") === -1) { this.setState({ settingsError: "Enter a valid email address." }); return; }
+    if (s.settingsPass || s.settingsPass2) {
+      if (s.settingsPass.length < 8) { this.setState({ settingsError: "New password must be at least 8 characters." }); return; }
+      if (s.settingsPass !== s.settingsPass2) { this.setState({ settingsError: "Passwords don\u2019t match." }); return; }
+    }
+    this.setState({ user: { name: s.settingsName.trim(), email: s.settingsEmail.trim() }, showSettings: false, settingsError: null });
+    this.showToast("Settings saved", "success");
+  };
+  deleteAccount = () => {
+    this.setState({
+      confirm: {
+        title: "Delete your account?",
+        message: "This removes your access and signs you out. Recipes stay in the library.",
+        yesLabel: "Delete account", noLabel: "Cancel", danger: true,
+        action: () => {
+          this.setState({ user: null, showSettings: false, showAccount: false, confirm: null });
+          this.showToast("Account deleted", "danger");
+        }
+      }
+    });
+  };
+  logOut = () => {
+    this.setState({ user: null, showAccount: false, showSettings: false, showForm: false, form: null, editingNoteId: null, noteText: "" });
+    this.showToast("Signed out");
+  };
+
+  blankForm() {
+    return {
+      id: "r" + Date.now(), isNew: true, dirty: false,
+      title: "", desc: "", sourceName: "", sourceUrl: "",
+      servings: "4", prep: "", cook: "",
+      ingredients: [{ q: "", u: "", n: "" }, { q: "", u: "", n: "" }],
+      steps: [{ t: "", s: "", m: "" }],
+      tags: []
+    };
+  }
+
+  openBlankForm() { this.setState({ form: this.blankForm(), formErrors: [], showForm: true, tagSearch: "" }); }
+
+  addTagFromSearch = () => {
+    const t = this.state.tagSearch.trim().toLowerCase();
+    const fm = this.state.form;
+    if (!t || !fm) return;
+    const allTags = this.state.allTags.includes(t) ? this.state.allTags : this.state.allTags.concat([t]);
+    this.setState({ allTags: allTags, tagSearch: "" });
+    if (!fm.tags.includes(t)) this.updForm({ tags: fm.tags.concat([t]) });
+  };
+
+  openAdd = () => {
+    if (!this.state.user) { this.setState({ showLogin: true, pendingAdd: true }); return; }
+    this.openBlankForm();
+  };
+  openAddFromAccount = () => { this.setState({ showAccount: false }); this.openAdd(); };
+
+  openEdit = () => {
+    const r = this.state.recipes.find((x) => x.id === this.state.detailId);
+    if (!r) return;
+    this.setState({
+      form: {
+        id: r.id, isNew: false, dirty: false,
+        title: r.title, desc: r.desc, sourceName: r.source.name, sourceUrl: r.source.url,
+        servings: String(r.servings), prep: String(r.prep), cook: String(r.cook),
+        ingredients: r.ingredients.map((i) => i.h ? { h: i.h } : { q: i.q, u: i.u, n: i.n }),
+        steps: r.steps.map((st) => ({ t: st.t, s: st.s || "", m: st.m ? String(st.m) : "" })),
+        tags: r.tags.slice()
+      },
+      formErrors: [], showForm: true
+    });
+  };
+
+  cancelForm = () => {
+    if (this.state.form && this.state.form.dirty) {
+      this.setState({
+        confirm: {
+          title: "Discard changes?",
+          message: "You have unsaved changes. If you leave now they will be lost.",
+          yesLabel: "Discard", noLabel: "Stay", danger: true,
+          action: () => this.setState({ showForm: false, form: null, formErrors: [], confirm: null })
+        }
+      });
+    } else {
+      this.setState({ showForm: false, form: null, formErrors: [] });
+    }
+  };
+
+  saveForm = () => {
+    const f = this.state.form;
+    const errors = [];
+    if (!f.title.trim()) errors.push({ msg: "Add a recipe title." });
+    if (!f.ingredients.some((i) => !i.h && (i.n || "").trim())) errors.push({ msg: "Add at least one ingredient." });
+    if (errors.length) { this.setState({ formErrors: errors }); return; }
+    const recipe = {
+      id: f.id,
+      title: f.title.trim(),
+      desc: f.desc.trim(),
+      source: { name: f.sourceName.trim() || "Added manually", url: f.sourceUrl.trim() || "#" },
+      servings: parseInt(f.servings, 10) || 1,
+      prep: parseInt(f.prep, 10) || 0,
+      cook: parseInt(f.cook, 10) || 0,
+      tags: f.tags.slice(),
+      ingredients: f.ingredients.filter((i) => i.h ? i.h.trim() : (i.n || "").trim()),
+      steps: f.steps.filter((st) => st.t.trim()).map((st) => {
+        const out = { t: st.t.trim() };
+        if (st.s && st.s.trim()) out.s = st.s.trim();
+        if (st.m && parseInt(st.m, 10) > 0) out.m = parseInt(st.m, 10);
+        return out;
+      }),
+      notes: [], created: TODAY, updated: TODAY
+    };
+    let recipes;
+    const existing = this.state.recipes.find((r) => r.id === f.id);
+    if (existing) {
+      recipe.notes = existing.notes;
+      recipe.created = existing.created;
+      recipes = this.state.recipes.map((r) => r.id === f.id ? recipe : r);
+    } else {
+      recipes = [recipe].concat(this.state.recipes);
+    }
+    this.setState({ saveFlash: true, formErrors: [] });
+    clearTimeout(this._saveFlashTimer);
+    this._saveFlashTimer = setTimeout(() => {
+      this.setState({ recipes: recipes, showForm: false, form: null, formErrors: [], detailId: recipe.id, saveFlash: false });
+      this.showToast(existing ? "Recipe saved" : "Recipe created", "success");
+    }, 700);
+  };
+
+  deleteRecipe = () => {
+    const f = this.state.form;
+    const r = this.state.recipes.find((x) => x.id === f.id);
+    if (!r) return;
+    this.setState({
+      confirm: {
+        title: "Delete recipe?",
+        message: "Delete “" + r.title + "” permanently? This cannot be undone.",
+        yesLabel: "Delete", noLabel: "Cancel", danger: true,
+        action: () => {
+          this.setState({
+            recipes: this.state.recipes.filter((x) => x.id !== f.id),
+            showForm: false, form: null, detailId: null, confirm: null
+          });
+          this.showToast("Recipe deleted", "danger");
+        }
+      }
+    });
+  };
+
+  saveNote = () => {
+    const text = this.state.noteText.trim();
+    if (!text) { this.showToast("Write a note first"); return; }
+    const recipes = this.state.recipes.map((r) => {
+      if (r.id !== this.state.detailId) return r;
+      let notes;
+      if (this.state.editingNoteId) {
+        notes = r.notes.map((n) => n.id === this.state.editingNoteId ? Object.assign({}, n, { text: text, edited: true }) : n);
+      } else {
+        notes = r.notes.concat([{ id: "n" + Date.now(), author: this.state.user.name, date: TODAY, text: text, edited: false }]);
+      }
+      return Object.assign({}, r, { notes: notes });
+    });
+    const editing = !!this.state.editingNoteId;
+    this.setState({ recipes: recipes, noteText: "", editingNoteId: null });
+    this.showToast(editing ? "Note updated" : "Note added", "success");
+  };
+
+  cancelNoteEdit = () => this.setState({ noteText: "", editingNoteId: null });
+
+  deleteNote(noteId) {
+    this.setState({
+      confirm: {
+        title: "Delete note?",
+        message: "This note will be removed from the recipe.",
+        yesLabel: "Delete", noLabel: "Cancel", danger: true,
+        action: () => {
+          const recipes = this.state.recipes.map((r) => r.id !== this.state.detailId ? r : Object.assign({}, r, { notes: r.notes.filter((n) => n.id !== noteId) }));
+          this.setState({ recipes: recipes, confirm: null });
+          this.showToast("Note deleted", "danger");
+        }
+      }
+    });
+  }
+
+  renderVals() {
+    const s = this.state;
+    const user = s.user;
+    const isEditor = !!user;
+    const mobile = this.isMobile();
+
+    const q = s.query.trim().toLowerCase();
+    let list = s.recipes.filter((r) => {
+      if (s.activeTags.length && !s.activeTags.every((t) => r.tags.includes(t))) return false;
+      if (q && !this.matches(r, q)) return false;
+      return true;
+    });
+    const sorters = {
+      recent: (a, b) => b.created.localeCompare(a.created),
+      updated: (a, b) => b.updated.localeCompare(a.updated),
+      alpha: (a, b) => a.title.localeCompare(b.title),
+      time: (a, b) => (a.prep + a.cook) - (b.prep + b.cook),
+      favs: (a, b) => {
+        const order = s.favsOrder || s.favs;
+        return (order.indexOf(b.id) - order.indexOf(a.id)) || b.created.localeCompare(a.created);
+      }
+    };
+    list = list.slice().sort(sorters[s.sort] || sorters.recent);
+
+    const visible = list.map((r, i) => ({
+      id: r.id,
+      slotId: "photo-" + r.id,
+      title: r.title,
+      timeLabel: (r.prep + r.cook) + " min · Serves " + r.servings,
+      tags: r.tags.map((t) => ({
+        name: t,
+        onFilter: (e) => {
+          if (e && e.stopPropagation) e.stopPropagation();
+          this.setState({ activeTags: s.activeTags.includes(t) ? s.activeTags : s.activeTags.concat([t]) }, () => {
+            if (this.isMobile()) this.scrollToGridTop();
+          });
+        }
+      })),
+      ings: this.ingRows(r.ingredients),
+      fav: s.favs.includes(r.id),
+      notFav: !s.favs.includes(r.id),
+      onFav: (e) => this.toggleFav(r.id, e),
+      open: (e) => this.openDetailFromCard(r.id, e)
+    }));
+
+    const filtered = q || s.activeTags.length;
+    const total = s.recipes.length;
+
+    const dr = s.detailId ? s.recipes.find((r) => r.id === s.detailId) : null;
+    let d = { title: "", desc: "", slotId: "none", tags: [], ings: [], steps: [], notes: [], hasNotes: false, noNotes: true, prepLabel: "", cookLabel: "", totalLabel: "", servings: "", sourceName: "", sourceUrl: "#" };
+    if (dr) {
+      let num = 0;
+      const steps = [];
+      dr.steps.forEach((st) => {
+        if (st.s) steps.push({ isHeading: true, isStep: false, label: st.s });
+        num += 1;
+        steps.push({ isHeading: false, isStep: true, num: num, text: st.t, hasTimer: !!st.m, timerLabel: st.m ? st.m + " min" : "" });
+      });
+      d = {
+        title: dr.title, desc: dr.desc,
+        slotId: "photo-" + dr.id,
+        tags: dr.tags.map((t) => ({
+          name: t,
+          onFilter: () => this.setState({ activeTags: [t], detailId: null, query: "" }, () => {
+            if (this.isMobile()) this.scrollToGridTop();
+          })
+        })),
+        fav: s.favs.includes(dr.id),
+        notFav: !s.favs.includes(dr.id),
+        onFav: (e) => this.toggleFav(dr.id, e),
+        ings: this.ingRows(dr.ingredients),
+        steps: steps,
+        prepLabel: dr.prep + " min", cookLabel: dr.cook + " min",
+        totalLabel: (dr.prep + dr.cook) + " min", servings: String(dr.servings),
+        sourceName: dr.source.name, sourceUrl: dr.source.url,
+        hasNotes: dr.notes.length > 0, noNotes: dr.notes.length === 0,
+        notes: dr.notes.map((n, i) => ({
+          id: n.id, text: n.text,
+          paperBg: [
+            "linear-gradient(rgba(239,218,107,0.78),rgba(239,218,107,0.78)),url('assets/cardboard2.jpg') center / 512px auto repeat rgb(239,218,107)",
+            "linear-gradient(rgba(205,225,238,0.78),rgba(205,225,238,0.78)),url('assets/cardboard2.jpg') center / 512px auto repeat rgb(205,225,238)",
+            "linear-gradient(rgba(240,178,148,0.78),rgba(240,178,148,0.78)),url('assets/cardboard2.jpg') center / 512px auto repeat rgb(240,178,148)"
+          ][i % 3],
+          rot: [-0.4, 0.35, -0.25][i % 3],
+          byline: n.author + " · " + fmtDate(n.date) + (n.edited ? " · Edited" : ""),
+          mine: isEditor && n.author === user.name,
+          onEdit: () => this.setState({ noteText: n.text, editingNoteId: n.id }),
+          onDelete: () => this.deleteNote(n.id)
+        }))
+      };
+    }
+
+    const fm = s.form;
+    let f = { heading: "Add recipe", title: "", desc: "", sourceName: "", sourceUrl: "", servings: "", prep: "", cook: "", slotId: "form-none", ingRows: [], stepRows: [], tagOpts: [], errors: [], hasErrors: false, canDelete: false };
+    if (fm) {
+      const setIng = (idx, patch) => this.updForm({ ingredients: fm.ingredients.map((it, i) => i === idx ? Object.assign({}, it, patch) : it) });
+      const moveIng = (idx, dir) => {
+        const arr = fm.ingredients.slice(); const j = idx + dir;
+        if (j < 0 || j >= arr.length) return;
+        const tmp = arr[idx]; arr[idx] = arr[j]; arr[j] = tmp;
+        this.updForm({ ingredients: arr });
+      };
+      const setStep = (idx, patch) => this.updForm({ steps: fm.steps.map((it, i) => i === idx ? Object.assign({}, it, patch) : it) });
+      const moveStep = (idx, dir) => {
+        const arr = fm.steps.slice(); const j = idx + dir;
+        if (j < 0 || j >= arr.length) return;
+        const tmp = arr[idx]; arr[idx] = arr[j]; arr[j] = tmp;
+        this.updForm({ steps: arr });
+      };
+      f = {
+        heading: fm.isNew ? "Add recipe" : "Edit recipe",
+        title: fm.title, desc: fm.desc, sourceName: fm.sourceName, sourceUrl: fm.sourceUrl,
+        servings: fm.servings, prep: fm.prep, cook: fm.cook,
+        slotId: "photo-" + fm.id,
+        onTitle: (e) => this.updForm({ title: e.target.value }),
+        onDesc: (e) => this.updForm({ desc: e.target.value }),
+        onSourceName: (e) => this.updForm({ sourceName: e.target.value }),
+        onSourceUrl: (e) => this.updForm({ sourceUrl: e.target.value }),
+        onServings: (e) => this.updForm({ servings: e.target.value }),
+        onPrep: (e) => this.updForm({ prep: e.target.value }),
+        onCook: (e) => this.updForm({ cook: e.target.value }),
+        addIngredient: () => this.updForm({ ingredients: fm.ingredients.concat([{ q: "", u: "", n: "" }]) }),
+        addIngHeading: () => this.updForm({ ingredients: fm.ingredients.concat([{ h: "" }]) }),
+        addStep: () => this.updForm({ steps: fm.steps.concat([{ t: "", s: "", m: "" }]) }),
+        ingRows: fm.ingredients.map((it, idx) => it.h !== undefined
+          ? {
+              isHeading: true, isRow: false, label: it.h,
+              onLabel: (e) => setIng(idx, { h: e.target.value }),
+              onRemove: () => this.updForm({ ingredients: fm.ingredients.filter((_, i) => i !== idx) })
+            }
+          : {
+              isHeading: false, isRow: true, q: it.q, u: it.u, n: it.n,
+              onQ: (e) => setIng(idx, { q: e.target.value }),
+              onU: (e) => setIng(idx, { u: e.target.value }),
+              onN: (e) => setIng(idx, { n: e.target.value }),
+              onUp: () => moveIng(idx, -1),
+              onDown: () => moveIng(idx, 1),
+              onRemove: () => this.updForm({ ingredients: fm.ingredients.filter((_, i) => i !== idx) })
+            }),
+        stepRows: fm.steps.map((it, idx) => ({
+          num: idx + 1, text: it.t, section: it.s, timer: it.m,
+          onText: (e) => setStep(idx, { t: e.target.value }),
+          onSection: (e) => setStep(idx, { s: e.target.value }),
+          onTimer: (e) => setStep(idx, { m: e.target.value }),
+          onUp: () => moveStep(idx, -1),
+          onDown: () => moveStep(idx, 1),
+          onRemove: () => this.updForm({ steps: fm.steps.filter((_, i) => i !== idx) })
+        })),
+        selTags: fm.tags.map((t) => ({ name: t, onRemove: () => this.updForm({ tags: fm.tags.filter((x) => x !== t) }) })),
+        hasSelTags: fm.tags.length > 0,
+        tagSearch: s.tagSearch,
+        onTagSearch: (e) => this.setState({ tagSearch: e.target.value }),
+        onTagKey: (e) => { if (e.key === "Enter") { e.preventDefault(); this.addTagFromSearch(); } },
+        addTagFromSearch: this.addTagFromSearch,
+        tagSuggestions: (() => {
+          const counts = {};
+          s.recipes.forEach((r) => r.tags.forEach((t) => { counts[t] = (counts[t] || 0) + 1; }));
+          const q = s.tagSearch.trim().toLowerCase();
+          return s.allTags
+            .filter((t) => !fm.tags.includes(t) && (!q || t.indexOf(q) !== -1))
+            .sort((a, b) => (counts[b] || 0) - (counts[a] || 0) || a.localeCompare(b))
+            .slice(0, 12)
+            .map((t) => ({ name: t, count: String(counts[t] || 0), onAdd: () => { this.updForm({ tags: fm.tags.concat([t]) }); if (q) this.setState({ tagSearch: "" }); } }));
+        })(),
+        canAddNewTag: !!s.tagSearch.trim() && !s.allTags.includes(s.tagSearch.trim().toLowerCase()),
+        addNewLabel: "+ Add \u201C" + s.tagSearch.trim().toLowerCase() + "\u201D",
+        errors: s.formErrors,
+        hasErrors: s.formErrors.length > 0,
+        canDelete: !fm.isNew
+      };
+    }
+
+    const tagCounts = {};
+    s.recipes.forEach((r) => r.tags.forEach((t) => { tagCounts[t] = (tagCounts[t] || 0) + 1; }));
+    const tq = s.tagFilterQuery.trim().toLowerCase();
+    const sheetTags = s.allTags.filter((t) => !tq || t.indexOf(tq) !== -1).sort((a, b) => {
+      const sa = s.activeTags.includes(a), sb = s.activeTags.includes(b);
+      if (sa !== sb) return sa ? -1 : 1;
+      return (tagCounts[b] || 0) - (tagCounts[a] || 0) || a.localeCompare(b);
+    }).map((t) => ({
+      name: t, count: String(tagCounts[t] || 0),
+      selected: s.activeTags.includes(t),
+      onToggle: () => this.setState({ activeTags: s.activeTags.includes(t) ? s.activeTags.filter((x) => x !== t) : s.activeTags.concat([t]) })
+    }));
+
+    const c = s.confirm;
+
+    return {
+      goHome: this.goHome,
+      isEditor: isEditor,
+      isPublic: !isEditor,
+      userInitial: user ? user.name.charAt(0).toUpperCase() : "",
+      userName: user ? user.name : "",
+      openAdd: this.openAdd,
+      openAccount: this.openAccount,
+      openLogin: this.openLogin,
+
+      countLabel: filtered ? visible.length + " of " + total + " recipes" : total + " recipes",
+      query: s.query,
+      hasQuery: !!s.query,
+      onQuery: (e) => this.setState({ query: e.target.value }),
+      clearQuery: () => this.setState({ query: "" }),
+      sort: s.sort,
+      onSort: (e) => this.setState({ sort: e.target.value, favsOrder: this.state.favs.slice() }),
+      toggleFilter: () => this.setState({ sheetOpen: !s.sheetOpen, tagFilterQuery: "" }),
+      closeSheet: () => this.setState({ sheetOpen: false, tagFilterQuery: "" }),
+      tagFilterQuery: s.tagFilterQuery,
+      onTagFilterQuery: (e) => this.setState({ tagFilterQuery: e.target.value }),
+      noSheetTags: sheetTags.length === 0,
+      filterOpenAria: s.sheetOpen ? "true" : "false",
+      filterSheetOpen: s.sheetOpen && mobile,
+      filterPanelOpen: s.sheetOpen && !mobile,
+      sheetTags: sheetTags,
+      sheetDoneLabel: "Show " + visible.length + (visible.length === 1 ? " recipe" : " recipes"),
+      filterCount: String(s.activeTags.length),
+      hasFilters: s.activeTags.length > 0,
+      chips: s.activeTags.map((t) => ({ name: t, onRemove: () => this.setState({ activeTags: s.activeTags.filter((x) => x !== t) }) })),
+      clearFilters: () => this.setState({ activeTags: [] }),
+      clearEverything: () => this.setState({ activeTags: [], query: "" }),
+      visible: visible,
+      hasResults: visible.length > 0,
+      noResults: visible.length === 0,
+      noResultsDetail: q
+        ? "Nothing matches “" + s.query.trim() + "”" + (s.activeTags.length ? " with the selected tags." : ".")
+        : "No recipes have all the selected tags.",
+
+      showDetail: !!dr,
+      closeDetail: this.closeDetail,
+      openEdit: this.openEdit,
+      d: d,
+      noteText: s.noteText,
+      onNoteText: (e) => this.setState({ noteText: e.target.value }),
+      saveNote: this.saveNote,
+      cancelNoteEdit: this.cancelNoteEdit,
+      isEditingNote: !!s.editingNoteId,
+      noteFormLabel: s.editingNoteId ? "Edit your note" : "Add a note",
+      noteSaveLabel: s.editingNoteId ? "Save note" : "Add note",
+
+      showForm: s.showForm && !!fm,
+      f: f,
+      cancelForm: this.cancelForm,
+      saveForm: this.saveForm,
+      deleteRecipe: this.deleteRecipe,
+      newTag: s.newTag,
+      onNewTag: (e) => this.setState({ newTag: e.target.value }),
+      addNewTag: () => {
+        const t = s.newTag.trim().toLowerCase();
+        if (!t) return;
+        const allTags = s.allTags.includes(t) ? s.allTags : s.allTags.concat([t]);
+        const tags = fm && !fm.tags.includes(t) ? fm.tags.concat([t]) : (fm ? fm.tags : []);
+        this.setState({ allTags: allTags, newTag: "" });
+        if (fm) this.updForm({ tags: tags });
+      },
+
+      showLogin: s.showLogin,
+      closeLogin: this.closeLogin,
+      loginEmail: s.loginEmail,
+      loginPassword: s.loginPassword,
+      onLoginEmail: (e) => this.setState({ loginEmail: e.target.value }),
+      onLoginPassword: (e) => this.setState({ loginPassword: e.target.value }),
+      submitLogin: this.submitLogin,
+      forgotPassword: this.forgotPassword,
+      loginError: !!s.loginError,
+      loginErrorMsg: s.loginError || "",
+
+      showAccount: s.showAccount,
+      closeAccount: this.closeAccount,
+      openAddFromAccount: this.openAddFromAccount,
+      logOut: this.logOut,
+      accountPanelStyle: mobile
+        ? "position:absolute;left:0;right:0;bottom:0;background:#FFFFFF;border-radius:16px 16px 0 0;padding:20px 16px 24px 16px;animation:cookedSheetUp 0.22s ease;box-shadow:0 -3px 0 rgba(33,31,28,0.15)"
+        : "position:absolute;top:68px;right:24px;width:300px;background:#FFFFFF;border:1px solid #E6E0D8;border-radius:12px;padding:18px 16px;animation:cookedFade 0.15s ease;box-shadow:4px 4px 0 rgba(33,31,28,0.15)",
+
+      confirmOpen: !!c,
+      confirmTitle: c ? c.title : "",
+      confirmMessage: c ? c.message : "",
+      confirmYesLabel: c ? c.yesLabel : "OK",
+      confirmNoLabel: c ? c.noLabel : "Cancel",
+      confirmDanger: c ? !!c.danger : false,
+      confirmNeutral: c ? !c.danger : false,
+      confirmYes: () => { if (c && c.action) c.action(); },
+      confirmNo: () => this.setState({ confirm: null }),
+
+      showClearFavs: s.sort === "favs" && !!s.user && s.favs.length > 0,
+      clearFavs: () => this.setState({
+        confirm: {
+          title: "Clear all favourites?",
+          message: "This removes all " + s.favs.length + " recipe" + (s.favs.length === 1 ? "" : "s") + " from your favourites. Recipes themselves are not affected.",
+          yesLabel: "Clear favourites", noLabel: "Cancel", danger: true,
+          action: () => {
+            this.setState({ favs: [], confirm: null });
+            this.showToast("Favourites cleared", "danger");
+          }
+        }
+      }),
+
+      toastVisible: !!s.toast,
+      toastMsg: s.toast ? s.toast.msg : "",
+      toastSuccess: !!s.toast && s.toast.kind === "success",
+      toastDanger: !!s.toast && s.toast.kind === "danger",
+      toastNeutral: !!s.toast && s.toast.kind === "neutral",
+
+      hasTagFilterQuery: !!s.tagFilterQuery,
+      clearTagFilterQuery: () => this.setState({ tagFilterQuery: "" }),
+
+      showReset: s.showReset, closeReset: this.closeReset, submitReset: this.submitReset,
+      resetEmail: s.resetEmail, onResetEmail: (e) => this.setState({ resetEmail: e.target.value }),
+      resetPass: s.resetPass, onResetPass: (e) => this.setState({ resetPass: e.target.value }),
+      resetPass2: s.resetPass2, onResetPass2: (e) => this.setState({ resetPass2: e.target.value }),
+      resetError: !!s.resetError, resetErrorMsg: s.resetError || "",
+
+      showSettings: s.showSettings, openSettings: this.openSettings, closeSettings: this.closeSettings,
+      saveSettings: this.saveSettings, deleteAccount: this.deleteAccount,
+      settingsName: s.settingsName, onSettingsName: (e) => this.setState({ settingsName: e.target.value }),
+      settingsEmail: s.settingsEmail, onSettingsEmail: (e) => this.setState({ settingsEmail: e.target.value }),
+      settingsPass: s.settingsPass, onSettingsPass: (e) => this.setState({ settingsPass: e.target.value }),
+      settingsPass2: s.settingsPass2, onSettingsPass2: (e) => this.setState({ settingsPass2: e.target.value }),
+      settingsError: !!s.settingsError, settingsErrorMsg: s.settingsError || "",
+      saveFlash: s.saveFlash,
+      notSaveFlash: !s.saveFlash
+    };
+  }
+}
+</script>
+</body>
+</html>

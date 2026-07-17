@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="_ds/cooked-design-system-4c46489c-68c9-4b4a-a72e-016b6ed713f3/tokens/fonts.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&display=swap">
+  <style>
+    @font-face { font-family:'Young Serif'; src:url('assets/Young-Serif-var.ttf') format('truetype-variations'); font-weight:400 700; font-display:swap; }
+    html, body { margin:0; padding:0; background:#FCFAF7; }
+    body { font-family:'Instrument Sans',system-ui,sans-serif; color:#211F1C; }
+    a { color:#164E70; } a:hover { color:#0F3B57; }
+  </style>
+</helmet>
+<div style="max-width:960px;margin:0 auto;padding:48px 24px 96px 24px;display:flex;flex-direction:column;gap:48px">
+
+  <header>
+    <img src="assets/logo-no-icon.svg" alt="Cooked" style="height:28px;display:block;margin:0 0 10px 0;transform:rotate(-0.4deg)">
+    <h1 style="font-family:'Young Serif',Georgia,serif;font-weight:400;font-size:38px;line-height:1.1;letter-spacing:-0.5px;margin:0 0 10px 0">Design system reference</h1>
+    <p style="font-size:15px;line-height:1.55;color:#4F4B44;max-width:70ch;margin:0">The reconciled direction: an <strong>editorial scrapbook</strong>. Texture, hard shadows and rotation live only on brand surfaces — the header, tags, illustrations and empty states. Reading and input surfaces are flat, high-contrast and quiet. Companion to <a href="Cooked Website.dc.html">the prototype</a>, <a href="Cooked Breakpoint Boards.dc.html">breakpoint boards</a> and the audit doc.</p>
+  </header>
+
+  <section>
+    <h2 style="font-family:'Young Serif',Georgia,serif;font-weight:400;font-size:26px;margin:0 0 4px 0">Colour roles</h2>
+    <p style="font-size:13px;color:#666159;margin:0 0 16px 0">Palette doc is the source of truth. Blue is dominant; yellow is reserved for tags and the wordmark; orange for small accents only. All text pairs meet 4.5:1.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px">
+      <sc-for list="{{ colors }}" as="c" hint-placeholder-count="6">
+        <div style="border:1px solid #E6E0D8;border-radius:12px;overflow:hidden;background:#FFFFFF">
+          <div style="height:56px;background:{{ c.hex }};border-bottom:1px solid #E6E0D8"></div>
+          <div style="padding:10px 12px">
+            <p style="font-size:13px;font-weight:700;margin:0">{{ c.role }}</p>
+            <p style="font-size:12px;color:#666159;margin:2px 0 0 0">{{ c.hex }} · {{ c.use }}</p>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <section>
+    <h2 style="font-family:'Young Serif',Georgia,serif;font-weight:400;font-size:26px;margin:0 0 4px 0">Typography</h2>
+    <p style="font-size:13px;color:#666159;margin:0 0 16px 0">Exactly two families. <strong>Young Serif</strong> (variable, self-hosted) — Bold for the wordmark, Regular for all display headings and titles; <strong>Instrument Sans</strong> for everything else. Black Han Sans and Average are retired — the wordmark is Young Serif Bold, yellow on the orange header, with the hourglass icon in the lockup and a −0.4° rotation. Negative letter-spacing on serif display sizes only. Max line length ~70ch.</p>
+    <div style="border:1px solid #E6E0D8;border-radius:12px;background:#FFFFFF;padding:8px 20px">
+      <sc-for list="{{ type }}" as="t" hint-placeholder-count="5">
+        <div style="display:flex;gap:20px;align-items:baseline;border-bottom:1px solid #F5F1EB;padding:14px 0;flex-wrap:wrap">
+          <span style="width:190px;flex-shrink:0;font-size:12px;color:#666159">{{ t.name }} · {{ t.spec }}</span>
+          <span style="{{ t.style }}">{{ t.sample }}</span>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <section>
+    <h2 style="font-family:'Young Serif',Georgia,serif;font-weight:400;font-size:26px;margin:0 0 4px 0">Surfaces, radii &amp; shadows</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;margin-top:12px">
+      <div style="background:linear-gradient(rgba(205,225,238,0.78),rgba(205,225,238,0.78)),url('assets/cardboard2.jpg') center / 512px auto repeat rgb(205,225,238);background-blend-mode:normal,multiply,normal;border-radius:3px;box-shadow:0 4px 4px rgba(0,0,0,0.25);padding:16px">
+        <p style="font-size:13px;font-weight:700;margin:0 0 4px 0">Brand card</p>
+        <p style="font-size:13px;color:#666159;line-height:1.5;margin:0">Light-blue construction paper (rgb(205,225,238)) with the cardboard texture multiplied in; 3px radius; hard shadow <code>0 4px 4px rgba(0,0,0,0.25)</code>. Recipe cards and title strips. Photos get the scanned-print overlay directly. The login/reset card is the same recipe-card treatment in brand yellow (rgba(239,218,107,0.78)).</p>
+      </div>
+      <div style="background:#FFFFFF;border:1px solid #E6E0D8;border-radius:12px;padding:16px">
+        <p style="font-size:13px;font-weight:700;margin:0 0 4px 0">Reading / input surface</p>
+        <p style="font-size:13px;color:#666159;line-height:1.5;margin:0">Flat white, no texture, no shadow. Ingredients, method, every form field group.</p>
+      </div>
+      <div style="background:url('assets/paper.jpg') center / 512px auto repeat #D84A1A;background-blend-mode:multiply;border-radius:12px;padding:16px">
+        <p style="font-size:13px;font-weight:700;color:#EFDA6B;margin:0 0 4px 0">Brand bar</p>
+        <p style="font-size:13px;color:#FCFAF7;line-height:1.5;margin:0">Brand orange (rgb(216,74,26)) with paper texture multiplied in. Global header only.</p>
+      </div>
+      <div style="background:linear-gradient(rgba(239,218,107,0.78),rgba(239,218,107,0.78)),url('assets/cardboard2.jpg') center / 512px auto repeat rgb(239,218,107);background-blend-mode:normal,multiply,normal;box-shadow:1px 4px 2px rgba(0,0,0,0.25);padding:16px;transform:rotate(-0.4deg)">
+        <p style="font-size:13px;font-weight:700;margin:0 0 4px 0">Note post-it</p>
+        <p style="font-size:13px;color:rgba(41,39,40,0.75);line-height:1.5;margin:0">Notes are thin post-its stuck to the page: cardboard texture over paper colour, square corners, panel shadow <code>1px 4px 2px rgba(0,0,0,0.25)</code>, ±0.4° rotation. Colours alternate yellow → blue → orange (rgba 0.78 washes of rgb(239,218,107) / rgb(205,225,238) / rgb(240,178,148)) in list order.</p>
+      </div>
+      <div style="background:#FFFFFF;border:1px solid #E6E0D8;border-radius:12px;padding:16px">
+        <p style="font-size:13px;font-weight:700;margin:0 0 8px 0">Tag chip</p>
+        <span style="display:inline-flex;padding:5px 10px;border-radius:4px;background:linear-gradient(rgba(239,218,107,0.55),rgba(239,218,107,0.55)),url('assets/cardboard2.jpg') center / 300px auto repeat rgb(239,218,107);background-blend-mode:normal,multiply,normal;box-shadow:1px 1px 0 rgba(33,31,28,0.3);font-size:13px;font-weight:600">vegetarian</span>
+        <p style="font-size:13px;color:#666159;line-height:1.5;margin:8px 0 0 0">Cardboard-textured yellow, 4px radius, 1px hard shadow. The one “scrapbook” element allowed inside content.</p>
+      </div>
+    </div>
+    <p style="font-size:13px;color:#666159;margin:12px 0 0 0">Radii: 12px cards/dialogs · 8px inputs/buttons · 4px chips. Interactive height ≥44px. Focus: 2px <code>#1F6590</code> outline, 2px offset, global.</p>
+  </section>
+
+  <section>
+    <h2 style="font-family:'Young Serif',Georgia,serif;font-weight:400;font-size:26px;margin:0 0 4px 0">Buttons</h2>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-top:12px">
+      <button style="height:44px;padding:0 16px;border:none;border-radius:8px;background:#1F6590;color:#FFFFFF;font-size:14px;font-weight:600;font-family:'Instrument Sans',sans-serif;cursor:pointer">Primary</button>
+      <button style="height:44px;padding:0 16px;border:1px solid #1F6590;border-radius:8px;background:#FFFFFF;color:#1F6590;font-size:14px;font-weight:600;font-family:'Instrument Sans',sans-serif;cursor:pointer">Secondary</button>
+      <button style="height:44px;padding:0 16px;border:none;border-radius:8px;background:linear-gradient(rgba(239,218,107,0.55),rgba(239,218,107,0.55)),url('assets/cardboard2.jpg') center / 300px auto repeat rgb(239,218,107);background-blend-mode:normal,multiply,normal;color:#211F1C;font-size:14px;font-weight:600;font-family:'Instrument Sans',sans-serif;box-shadow:2px 2px 0 rgba(33,31,28,0.3);cursor:pointer;transition:transform 0.12s ease, box-shadow 0.12s ease" style-hover="box-shadow:3px 3px 0 rgba(33,31,28,0.35);transform:translate(-1px,-1px)" style-active="box-shadow:none;transform:translate(1px,1px)">Brand action</button>
+      <button style="height:44px;padding:0 16px;border:1px solid #8C1D29;border-radius:8px;background:#FFFFFF;color:#8C1D29;font-size:14px;font-weight:600;font-family:'Instrument Sans',sans-serif;cursor:pointer">Danger</button>
+      <button style="height:44px;padding:0 8px;border:none;background:transparent;color:#164E70;font-size:14px;font-weight:600;text-decoration:underline;font-family:'Instrument Sans',sans-serif;cursor:pointer">Text link</button>
+    </div>
+    <p style="font-size:13px;color:#666159;margin:12px 0 0 0">Brand action (cardboard-textured yellow, hard shadow) is reserved for the header’s “Add recipe”, Save and Edit recipe — at most one per view. Everything else uses flat primary/secondary. All paper buttons and chips share the physical press model: hover lifts (−1px translate, deeper offset shadow), press flattens (+1px translate, shadow removed).</p>
+  </section>
+
+  <section>
+    <h2 style="font-family:'Young Serif',Georgia,serif;font-weight:400;font-size:26px;margin:0 0 4px 0">Tags at scale</h2>
+    <p style="font-size:13px;color:#666159;margin:0 0 12px 0">Tags are user-generated and unbounded, so tag pickers never render the full list as a checkbox grid. Two patterns:</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px">
+      <div style="border:1px solid #E6E0D8;border-radius:12px;background:#FFFFFF;padding:16px">
+        <p style="font-size:13px;font-weight:700;margin:0 0 6px 0">Recipe form — combobox</p>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px">
+          <span style="display:inline-flex;align-items:center;gap:4px;padding:5px 4px 5px 10px;border-radius:4px;background:linear-gradient(rgba(239,218,107,0.55),rgba(239,218,107,0.55)),url('assets/cardboard2.jpg') center / 300px auto repeat rgb(239,218,107);background-blend-mode:normal,multiply,normal;box-shadow:1px 1px 0 rgba(33,31,28,0.3);font-size:13px;font-weight:600">pasta<span aria-hidden="true" style="width:24px;text-align:center;font-size:15px">×</span></span>
+          <span style="display:inline-flex;align-items:center;min-height:32px;padding:5px 12px;border:1px solid #CCC5BC;border-radius:4px;background:#FFFFFF;font-size:13px;font-weight:600">+ quick <span style="font-weight:400;color:#666159;margin-left:6px">3</span></span>
+          <span style="display:inline-flex;align-items:center;min-height:32px;padding:5px 12px;border:1px dashed #1F6590;border-radius:4px;background:#E6F3FC;font-size:13px;font-weight:600;color:#164E70">+ Add &ldquo;fermented&rdquo;</span>
+        </div>
+        <p style="font-size:13px;color:#666159;line-height:1.5;margin:0">Selected tags are yellow paper chips with ×. One search field filters suggestions (12 most-used, with counts); an unmatched query offers a dashed &ldquo;Add&rdquo; chip; Enter creates.</p>
+      </div>
+      <div style="border:1px solid #E6E0D8;border-radius:12px;background:#FFFFFF;padding:16px">
+        <p style="font-size:13px;font-weight:700;margin:0 0 6px 0">Filter panel &amp; sheet — searchable list</p>
+        <p style="font-size:13px;color:#666159;line-height:1.5;margin:0">A &ldquo;Find a tag&rdquo; input above the scrolling checkbox list. Selected tags pin to the top; the rest sort by recipe count, then alphabetically. Empty results show &ldquo;No tags match&rdquo;. Active filters echo below the toolbar as removable yellow tag chips.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2 style="font-family:'Young Serif',Georgia,serif;font-weight:400;font-size:26px;margin:0 0 4px 0">Motion &amp; interactivity</h2>
+    <p style="font-size:13px;color:#666159;margin:0 0 12px 0">Cards and chips behave like physical paper. All motion respects <code>prefers-reduced-motion</code>.</p>
+    <div style="border:1px solid #E6E0D8;border-radius:12px;background:#FFFFFF;overflow:hidden">
+      <div style="display:grid;grid-template-columns:190px 1fr;gap:12px;padding:10px 16px;border-bottom:1px solid #F5F1EB;font-size:13px"><span style="font-weight:700">Card hover (desktop)</span><span style="color:#666159;line-height:1.5">Lifts −6px, tilts −0.5°, scales 1.01, shadow deepens to <code>0 14px 16px</code>; photo straightens and scales 1.02; the recipe title underlines (3px offset) as a link affordance. 180ms ease.</span></div>
+      <div style="display:grid;grid-template-columns:190px 1fr;gap:12px;padding:10px 16px;border-bottom:1px solid #F5F1EB;font-size:13px"><span style="font-weight:700">Card press (mobile)</span><span style="color:#666159;line-height:1.5">Subtle press-down: scale 0.995, shadow flattens while touched.</span></div>
+      <div style="display:grid;grid-template-columns:190px 1fr;gap:12px;padding:10px 16px;border-bottom:1px solid #F5F1EB;font-size:13px"><span style="font-weight:700">Deck shuffle (desktop)</span><span style="color:#666159;line-height:1.5">On filter/search/sort change, cards collapse onto the top-left pile (alternating ±2.5° tilts) then deal back out, 460ms, 40ms stagger, FLIP via WAAPI.</span></div>
+      <div style="display:grid;grid-template-columns:190px 1fr;gap:12px;padding:10px 16px;border-bottom:1px solid #F5F1EB;font-size:13px"><span style="font-weight:700">Feed fade (mobile)</span><span style="color:#666159;line-height:1.5">Scroll-driven opacity fade-in only (<code>animation-timeline: view()</code>, entry 0–35%); no transforms, so press states never fight it.</span></div>
+      <div style="display:grid;grid-template-columns:190px 1fr;gap:12px;padding:10px 16px;border-bottom:1px solid #F5F1EB;font-size:13px"><span style="font-weight:700">Open recipe</span><span style="color:#666159;line-height:1.5">Whole card is the tap target (chips and star stop propagation). Clicked card lifts off the pile 170ms, then the page slides up and settles 280ms.</span></div>
+      <div style="display:grid;grid-template-columns:190px 1fr;gap:12px;padding:10px 16px;border-bottom:1px solid #F5F1EB;font-size:13px"><span style="font-weight:700">Tag chip tap</span><span style="color:#666159;line-height:1.5">Adds the tag to active filters; on a recipe page it returns to the filtered library; on mobile it smooth-scrolls to the top of the list.</span></div>
+      <div style="display:grid;grid-template-columns:190px 1fr;gap:12px;padding:10px 16px;border-bottom:1px solid #F5F1EB;font-size:13px"><span style="font-weight:700">Favourite star</span><span style="color:#666159;line-height:1.5">Muted star on a white round chip → pops onto a yellow paper chip with a 0.4s spin-in (scale 0.6→1.25→1, −20°→8°→0°).</span></div>
+      <div style="display:grid;grid-template-columns:190px 1fr;gap:12px;padding:10px 16px;border-bottom:1px solid #F5F1EB;font-size:13px"><span style="font-weight:700">Header links</span><span style="color:#666159;line-height:1.5">White header text buttons (“‹ Back”) underline on hover (3px offset) like links. Logo click on the home page smooth-scrolls to top; from any other view it returns home.</span></div>
+      <div style="display:grid;grid-template-columns:190px 1fr;gap:12px;padding:10px 16px;border-bottom:1px solid #F5F1EB;font-size:13px"><span style="font-weight:700">Log in from a recipe</span><span style="color:#666159;line-height:1.5">Logged-out recipe pages show “Log in” in the header; signing in returns to the same recipe, never the library.</span></div>
+      <div style="display:grid;grid-template-columns:190px 1fr;gap:12px;padding:10px 16px;font-size:13px"><span style="font-weight:700">Save confirmation</span><span style="color:#666159;line-height:1.5">Save flips to a green “✓ Saved” with a 0.45s pop for 700ms before returning to the recipe and firing the success toast.</span></div>
+    </div>
+    <p style="font-size:13px;color:#666159;margin:12px 0 0 0">Toasts: success on green (<code>#EAF3E6</code> / <code>#4E9A5C</code> / <code>#1C4A26</code>) for saved/created/favourite/sign-in; danger on red (<code>#FFEDEF</code> / <code>#EBA9AF</code> / <code>#8C1D29</code>) for deletions; neutral ink for everything else. 2.6s, bottom-centre.</p>
+  </section>
+
+  <section>
+    <h2 style="font-family:'Young Serif',Georgia,serif;font-weight:400;font-size:26px;margin:0 0 4px 0">Access control — what must sit behind auth</h2>
+    <p style="font-size:13px;color:#666159;margin:0 0 12px 0">The prototype hides these from public users with client-side state. In the deployed product every one of them must be enforced server-side — hiding a control is not authorisation.</p>
+    <div style="border:1px solid #E6E0D8;border-radius:12px;background:#FFFFFF;overflow:hidden">
+      <div style="display:grid;grid-template-columns:220px 1fr;gap:12px;padding:10px 16px;border-bottom:1px solid #F5F1EB;font-size:13px"><span style="font-weight:700">Recipe create / edit / delete</span><span style="color:#666159;line-height:1.5">“+ Add recipe”, the add/edit form, Save, “Edit recipe”, “Delete recipe”. Editor role required.</span></div>
+      <div style="display:grid;grid-template-columns:220px 1fr;gap:12px;padding:10px 16px;border-bottom:1px solid #F5F1EB;font-size:13px"><span style="font-weight:700">Recipe photos</span><span style="color:#666159;line-height:1.5">Replace / reframe / drag-drop upload on the recipe page. Cards are always view-only. Public users get read-only images.</span></div>
+      <div style="display:grid;grid-template-columns:220px 1fr;gap:12px;padding:10px 16px;border-bottom:1px solid #F5F1EB;font-size:13px"><span style="font-weight:700">Notes</span><span style="color:#666159;line-height:1.5">Composer, edit and delete (delete additionally scoped to the note’s author). Reading notes is public.</span></div>
+      <div style="display:grid;grid-template-columns:220px 1fr;gap:12px;padding:10px 16px;border-bottom:1px solid #F5F1EB;font-size:13px"><span style="font-weight:700">Favourites</span><span style="color:#666159;line-height:1.5">Star buttons on cards and recipe pages, plus the “Favourites first” sort results. Per-user data — server must scope reads and writes to the session user.</span></div>
+      <div style="display:grid;grid-template-columns:220px 1fr;gap:12px;padding:10px 16px;border-bottom:1px solid #F5F1EB;font-size:13px"><span style="font-weight:700">Tag creation</span><span style="color:#666159;line-height:1.5">New tags are only created via the recipe form, so they inherit editor auth. Filtering by existing tags is public.</span></div>
+      <div style="display:grid;grid-template-columns:220px 1fr;gap:12px;padding:10px 16px;border-bottom:1px solid #F5F1EB;font-size:13px"><span style="font-weight:700">Account menu &amp; settings</span><span style="color:#666159;line-height:1.5">Profile menu, settings page (name, email, password change), delete account. Password change and account deletion should re-verify the current password server-side.</span></div>
+      <div style="display:grid;grid-template-columns:220px 1fr;gap:12px;padding:10px 16px;font-size:13px"><span style="font-weight:700">Public without auth</span><span style="color:#666159;line-height:1.5">Browse, search, sort (except favourites), tag filtering, reading recipes and notes, log in, password reset (reset must be token-gated via email in production — the prototype applies it immediately).</span></div>
+    </div>
+  </section>
+
+  <section>
+    <h2 style="font-family:'Young Serif',Georgia,serif;font-weight:400;font-size:26px;margin:0 0 4px 0">Brand expression matrix</h2>
+    <p style="font-size:13px;color:#666159;margin:0 0 12px 0">How much scrapbook each surface is allowed. None → flat and functional; expressive → texture, rotation, illustration.</p>
+    <div style="border:1px solid #E6E0D8;border-radius:12px;background:#FFFFFF;overflow:hidden">
+      <sc-for list="{{ matrix }}" as="m" hint-placeholder-count="6">
+        <div style="display:grid;grid-template-columns:200px 110px 1fr;gap:12px;padding:10px 16px;border-bottom:1px solid #F5F1EB;font-size:13px;align-items:center">
+          <span style="font-weight:700">{{ m.surface }}</span>
+          <span style="display:inline-flex;justify-content:center;padding:3px 8px;border-radius:4px;background:{{ m.bg }};color:{{ m.fg }};font-weight:600;font-size:12px">{{ m.level }}</span>
+          <span style="color:#666159;line-height:1.5">{{ m.note }}</span>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <section>
+    <h2 style="font-family:'Young Serif',Georgia,serif;font-weight:400;font-size:26px;margin:0 0 4px 0">Illustration &amp; asset rules</h2>
+    <div style="display:flex;gap:24px;align-items:flex-start;flex-wrap:wrap;margin-top:12px">
+      <div style="display:flex;gap:16px">
+        <img src="assets/chef.svg" alt="Chef illustration" style="height:110px;transform:rotate(-1.5deg)">
+        <img src="assets/cookware.svg" alt="Cookware illustration" style="height:110px;transform:rotate(2deg)">
+        <img src="assets/vieja.svg" alt="No-results illustration" style="height:110px;transform:rotate(-1deg)">
+      </div>
+      <ul style="flex:1;min-width:280px;font-size:14px;line-height:1.7;color:#4F4B44;margin:0;padding-left:18px">
+        <li><code>logo.svg</code> — full header lockup (chef-boy icon + wordmark, yellow), replaces the typeset wordmark; <code>logo-no-icon.svg</code> — wordmark alone (blue), login/reset cards and docs; <code>star.svg</code> — favourite star; <code>chef.svg</code> — login and empty library; <code>vieja.svg</code> — the “no recipes match” empty state; <code>cookware.svg</code> — missing photos; <code>little-guy.svg</code> — favicon. All are true vector re-exports (paths, no embedded bitmaps); chef/cookware are recoloured to ink rgba(41,39,40,0.85).</li>
+        <li style="display:flex;align-items:center;gap:12px;margin-top:6px"><img src="assets/little-guy.svg" alt="Little chef guy favicon mark" style="height:56px;display:block">Favicon mark — render on a plain or brand-yellow background at 32px and 512px.</li>
+        <li>Recipe photos get the scanned-print treatment: <code>contrast(1.18) saturate(0.92) brightness(0.98)</code> plus a screen-blended overlay of <code>photo-grunge.jpg</code> tinted rgba(11,122,249,0.22) at 60% opacity.</li>
+        <li>Page graph paper shows at ~15% strength (0.85 alpha wash over the tile).</li>
+        <li>Max one illustration per viewport; never behind dense text; always <code>aria-hidden</code> when decorative.</li>
+        <li>Textures (paper, graph, cardboard) only on page background, header, cards and chips — never behind body copy at full strength.</li>
+        <li>Rotation only on illustrations, the wordmark and chips, ≤2°; never on text blocks.</li>
+        <li>Utility glyphs (⌕ ▾ × ↑ ↓) inherit <code>currentColor</code>; motion is fades ≤200ms and respects reduced-motion.</li>
+      </ul>
+    </div>
+  </section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const COLORS = [
+  { role: "Brand orange", hex: "#D84A1A", use: "header bar, filter count accent" },
+  { role: "Primary blue", hex: "#1F6590", use: "primary buttons, focus, checkboxes" },
+  { role: "Step blue", hex: "#1E31A9", use: "numbered step circles" },
+  { role: "Card paper blue", hex: "#CDE1EE", use: "recipe cards, title strips" },
+  { role: "Blue (interactive text)", hex: "#164E70", use: "links, text buttons; hover #0F3B57" },
+  { role: "Blue tint", hex: "#E6F3FC", use: "secondary hover, subtle fills" },
+  { role: "Brand yellow", hex: "#EFDA6B", use: "wordmark, tags, brand actions" },
+  { role: "Ink", hex: "#211F1C", use: "body text, toast" },
+  { role: "Ink soft", hex: "#4F4B44", use: "secondary body text" },
+  { role: "Ink muted", hex: "#666159", use: "meta, labels, placeholders" },
+  { role: "Paper", hex: "#FCFAF7", use: "page background (over graph texture)" },
+  { role: "Surface", hex: "#FFFFFF", use: "reading & input surfaces" },
+  { role: "Surface warm", hex: "#FFF9ED", use: "note composer, heading inputs" },
+  { role: "Border", hex: "#E6E0D8", use: "card & divider borders" },
+  { role: "Border strong", hex: "#CCC5BC", use: "input borders" },
+  { role: "Danger", hex: "#8C1D29", use: "destructive text/buttons; bg #FFEDEF" },
+  { role: "Success", hex: "#1A7549", use: "confirmations" }
+];
+const SERIF = "font-family:'Young Serif',Georgia,serif;font-weight:400;color:#211F1C;";
+const SANS = "font-family:'Instrument Sans',sans-serif;color:#211F1C;";
+const TYPE = [
+  { name: "Wordmark", spec: "logo.svg / logo-no-icon.svg (drawn, not typeset)", style: SERIF + "font-weight:700;font-size:34px;letter-spacing:-0.5px;color:#1F6590", sample: "Cooked" },
+  { name: "Recipe title", spec: "Young Serif 36–44 / 1.05", style: SERIF + "font-size:40px;line-height:1.05;letter-spacing:-1px", sample: "Slow-Braised Beef Ragù" },
+  { name: "Page title H1", spec: "Young Serif 32 / 1.1", style: SERIF + "font-size:32px;letter-spacing:-0.5px", sample: "Recipes" },
+  { name: "Card title", spec: "Young Serif 26 / 1.15", style: SERIF + "font-size:26px;letter-spacing:-0.5px", sample: "Lemon Yoghurt Cake" },
+  { name: "Section heading", spec: "Young Serif 22–24 / 1.2", style: SERIF + "font-size:24px", sample: "Ingredients" },
+  { name: "Body / steps", spec: "Instrument Sans 16 / 1.55", style: SANS + "font-size:16px;line-height:1.55", sample: "Score the cut face in a diamond pattern and brush with oil." },
+  { name: "Meta / labels", spec: "Instrument Sans 13–14 / 1.4", style: SANS + "font-size:13px;color:#666159", sample: "30 min · Serves 2 · Just One Cookbook" },
+  { name: "Button", spec: "Instrument Sans 14–15 SemiBold", style: SANS + "font-size:14px;font-weight:600", sample: "Add recipe" },
+  { name: "Eyebrow", spec: "Instrument Sans 12–13 Bold caps", style: SANS + "font-size:12px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#666159", sample: "INGREDIENTS" }
+];
+const LEVELS = {
+  none: { bg: "#F5F1EB", fg: "#4F4B44" },
+  restrained: { bg: "#E6F3FC", fg: "#164E70" },
+  moderate: { bg: "#FFF3D6", fg: "#7A5210" },
+  expressive: { bg: "#EFDA6B", fg: "#211F1C" }
+};
+const MATRIX = [
+  { surface: "Global header", level: "expressive", note: "Textured orange bar; rotated yellow serif wordmark." },
+  { surface: "Library controls", level: "none", note: "Flat search, sort, filter — pure function." },
+  { surface: "Recipe cards", level: "expressive", note: "Blue construction paper, hard shadow, polaroid photo with scan overlay." },
+  { surface: "Tag chips", level: "moderate", note: "Cardboard texture, hard 1px shadow, 4px radius." },
+  { surface: "Detail reading column", level: "none", note: "Flat white; the paper title strip is the only expression." },
+  { surface: "Forms & validation", level: "none", note: "Flat fields, plain error summary, no texture." },
+  { surface: "Empty / error / login", level: "moderate", note: "One illustration, slight rotation, brand card." },
+  { surface: "Dialogs & toasts", level: "restrained", note: "Hard shadow only; content stays flat." }
+];
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      colors: COLORS,
+      type: TYPE,
+      matrix: MATRIX.map((m) => ({ surface: m.surface, level: m.level, note: m.note, bg: LEVELS[m.level].bg, fg: LEVELS[m.level].fg }))
+    };
+  }
+}
+</script>
+</body>
+</html>

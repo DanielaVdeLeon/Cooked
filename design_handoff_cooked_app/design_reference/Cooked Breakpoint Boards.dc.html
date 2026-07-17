@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <meta name="design_doc_mode" content="canvas">
+  <link rel="stylesheet" href="_ds/cooked-design-system-4c46489c-68c9-4b4a-a72e-016b6ed713f3/tokens/fonts.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&display=swap">
+  <style>
+    @font-face { font-family:'Young Serif'; src:url('assets/Young-Serif-var.ttf') format('truetype-variations'); font-weight:400 700; font-display:swap; }
+    html, body { margin:0; padding:0; background:#EFEAE2; }
+    body { font-family:'Instrument Sans',system-ui,sans-serif; color:#211F1C; }
+    a { color:#0B5A8F; } a:hover { color:#084B78; }
+    iframe { border:none; display:block; background:#FCFAF7; }
+  </style>
+</helmet>
+<div style="padding:40px;display:flex;flex-direction:column;gap:56px">
+  <div>
+    <h1 style="font-family:'Young Serif',Georgia,serif;font-weight:400;font-size:36px;letter-spacing:-0.5px;margin:0 0 6px 0">Cooked — Breakpoint boards</h1>
+    <p style="font-size:14px;color:#666159;margin:0;max-width:70ch">Static views of the responsive prototype at 390 (mobile), 834 (tablet) and 1440 (desktop). Boards are non-interactive; open <a href="Cooked Website.dc.html">the live prototype</a> to interact. Breakpoint logic: filter bottom-sheet &lt;700px → anchored panel ≥700px; recipe detail stacks &lt;760px → two columns above; card grid is fluid (min 340px).</p>
+  </div>
+
+  <sc-for list="{{ boards }}" as="b" hint-placeholder-count="2">
+    <section style="display:flex;flex-direction:column;gap:16px">
+      <div>
+        <h2 style="font-family:'Young Serif',Georgia,serif;font-weight:400;font-size:26px;margin:0 0 2px 0">{{ b.title }}</h2>
+        <p style="font-size:13px;color:#666159;margin:0">{{ b.note }}</p>
+      </div>
+      <div style="display:flex;gap:32px;align-items:flex-start;flex-wrap:wrap">
+        <sc-for list="{{ b.frames }}" as="fr" hint-placeholder-count="3">
+          <figure style="margin:0;display:flex;flex-direction:column;gap:8px">
+            <figcaption style="font-size:12px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:#666159">{{ fr.label }}</figcaption>
+            <div style="width:{{ fr.outW }}px;height:{{ fr.outH }}px;overflow:hidden;border:1px solid #CCC5BC;border-radius:10px;box-shadow:3px 3px 0 rgba(33,31,28,0.1);background:#FCFAF7">
+              <iframe src="{{ fr.src }}" title="{{ b.title }} — {{ fr.label }}" tabindex="-1" scrolling="no" style="width:{{ fr.w }}px;height:{{ fr.h }}px;transform:scale({{ fr.s }});transform-origin:top left;pointer-events:none"></iframe>
+            </div>
+          </figure>
+        </sc-for>
+      </div>
+    </section>
+  </sc-for>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const SIZES = [
+  { label: "Mobile · 390", w: 390, h: 1100, s: 0.5 },
+  { label: "Tablet · 834", w: 834, h: 1160, s: 0.5 },
+  { label: "Desktop · 1440", w: 1440, h: 1000, s: 0.5 }
+];
+const SCREENS = [
+  { title: "Recipe library (public)", note: "Fluid card grid; search, filters and sort in one row; log in only affordance for visitors.", qs: "" },
+  { title: "Library — filters open", note: "Bottom sheet on mobile, anchored panel from 700px.", qs: "screen=filters" },
+  { title: "Recipe detail (public)", note: "Single column on mobile; sticky ingredients beside method from 760px. Notes are read-only for visitors.", qs: "screen=detail&id=r3" },
+  { title: "Recipe detail (editor)", note: "Edit recipe action in the header; note composer and own-note controls visible.", qs: "screen=detail&id=r3&editor=1" },
+  { title: "Add recipe (editor)", note: "Flat single-column form, max width 720; grouped cards; validation summary appears on save.", qs: "screen=form&editor=1" },
+  { title: "Log in", note: "Chef illustration on the brand card; browsing never requires an account.", qs: "screen=login" }
+];
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      boards: SCREENS.map((sc) => ({
+        title: sc.title, note: sc.note,
+        frames: SIZES.map((z) => ({
+          label: z.label, w: z.w, h: z.h, s: z.s,
+          outW: Math.round(z.w * z.s), outH: Math.round(z.h * z.s),
+          src: "Cooked Website.dc.html" + (sc.qs ? "?" + sc.qs : "")
+        }))
+      }))
+    };
+  }
+}
+</script>
+</body>
+</html>
