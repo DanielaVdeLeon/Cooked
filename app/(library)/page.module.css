@@ -1,0 +1,58 @@
+.titleRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.count {
+  font-size: 14px;
+  color: var(--ink-muted);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
+  gap: 24px;
+  align-items: start;
+}
+
+/* Mobile scroll-driven fade-in (no transforms, so press states never fight it) */
+@supports (animation-timeline: view()) {
+  @media (max-width: 699px) {
+    .grid > article {
+      animation: cookedCardIn linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 35%;
+    }
+  }
+}
+
+.endNote {
+  text-align: center;
+  font-size: 13px;
+  color: var(--ink-muted);
+  margin: 32px 0 0;
+}
+
+.clearEverything {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--tap-target);
+  padding: 0 18px;
+  border: 1px solid var(--primary);
+  border-radius: var(--radius-control);
+  background: var(--surface);
+  color: var(--primary);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+}
+.clearEverything:hover {
+  background: var(--blue-tint);
+  color: var(--primary);
+  text-decoration: none;
+}
