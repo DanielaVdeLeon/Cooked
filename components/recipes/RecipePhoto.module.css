@@ -1,0 +1,55 @@
+.frame {
+  position: relative;
+  background: var(--border-soft);
+  overflow: hidden;
+  filter: contrast(1.18) saturate(0.92) brightness(0.98);
+}
+
+.card {
+  aspect-ratio: 4 / 3;
+}
+
+.hero {
+  aspect-ratio: 16 / 9;
+  max-height: 420px;
+}
+
+.photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Screen-blended grunge overlay, tinted blue, per the asset rules */
+.grunge {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(rgba(11, 122, 249, 0.22), rgba(11, 122, 249, 0.22)),
+    url("/assets/photo-grunge.jpg") center / cover;
+  mix-blend-mode: screen;
+  opacity: 0.6;
+}
+
+.missing {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.cookware {
+  height: 64%;
+  max-height: 150px;
+}
+
+.missingLabel {
+  font-size: 13px;
+  color: var(--ink-muted);
+}

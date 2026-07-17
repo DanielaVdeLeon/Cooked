@@ -1,0 +1,19 @@
+.homeLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--tap-target);
+  padding: 0 18px;
+  border: 1px solid var(--primary);
+  border-radius: var(--radius-control);
+  background: var(--surface);
+  color: var(--primary);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+}
+.homeLink:hover {
+  background: var(--blue-tint);
+  color: var(--primary);
+  text-decoration: none;
+}

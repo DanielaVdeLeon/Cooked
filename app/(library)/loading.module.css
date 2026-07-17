@@ -1,0 +1,60 @@
+.titleRow {
+  margin-bottom: 16px;
+}
+
+.ghostTitle {
+  width: 140px;
+  height: 36px;
+  border-radius: 6px;
+  background: var(--border);
+  animation: ghostPulse 1.2s ease-in-out infinite;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
+  gap: 24px;
+  align-items: start;
+}
+
+.ghostCard {
+  background:
+    linear-gradient(var(--wash-blue), var(--wash-blue)),
+    url("/assets/cardboard2.jpg") center / 512px auto repeat rgb(205, 225, 238);
+  background-blend-mode: normal, multiply, normal;
+  border-radius: var(--radius-paper);
+  box-shadow: var(--shadow-card);
+  padding: 18px 16px 20px;
+  animation: ghostPulse 1.2s ease-in-out infinite;
+}
+
+.ghostPhoto {
+  aspect-ratio: 4 / 3;
+  background: rgba(252, 250, 247, 0.65);
+  margin-bottom: 14px;
+}
+
+.ghostLineWide {
+  height: 22px;
+  width: 75%;
+  background: rgba(252, 250, 247, 0.65);
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+
+.ghostLine {
+  height: 14px;
+  width: 45%;
+  background: rgba(252, 250, 247, 0.65);
+  border-radius: 4px;
+}
+
+@keyframes ghostPulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}

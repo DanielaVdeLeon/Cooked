@@ -1,0 +1,287 @@
+.toolbar {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.searchWrap {
+  position: relative;
+  flex: 1 1 260px;
+  min-width: 220px;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 14px;
+  top: 9px;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.searchInput {
+  width: 100%;
+  height: var(--tap-target);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-control);
+  padding: 0 40px;
+  font-size: 15px;
+  background: var(--surface);
+  color: var(--ink);
+  font-family: inherit;
+}
+
+.clearSearch {
+  position: absolute;
+  right: 2px;
+  top: 2px;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: var(--radius-control);
+  background: transparent;
+  color: var(--ink-muted);
+  font-size: 20px;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.filterWrap {
+  position: relative;
+}
+
+.filterButton {
+  height: var(--tap-target);
+  padding: 0 16px;
+  border: 1px solid var(--primary);
+  border-radius: var(--radius-control);
+  background: var(--surface);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--primary);
+  cursor: pointer;
+  white-space: nowrap;
+  font-family: inherit;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.filterButton:hover {
+  background: var(--blue-tint);
+}
+
+.filterCount {
+  min-width: 20px;
+  height: 20px;
+  border-radius: 10px;
+  background: var(--brand-orange);
+  color: var(--surface);
+  font-size: 12px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 5px;
+}
+
+.caret {
+  font-size: 11px;
+}
+
+.scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 24;
+}
+
+/* Hide the native WebKit clear control — we render our own */
+.searchInput::-webkit-search-cancel-button {
+  display: none;
+}
+
+/* Desktop: anchored popover panel (right-anchored so it stays in view) */
+.panel {
+  position: absolute;
+  top: 50px;
+  right: 0;
+  z-index: 25;
+  width: 320px;
+  max-height: 440px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-panel);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  animation: cookedFade 0.15s ease;
+}
+
+/* Mobile: bottom sheet */
+@media (max-width: 699px) {
+  .scrim {
+    background: rgba(33, 31, 28, 0.45);
+    animation: cookedFade 0.15s ease;
+  }
+  .panel {
+    position: fixed;
+    top: auto;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: auto;
+    max-height: 70%;
+    border-radius: 16px 16px 0 0;
+    border: none;
+    box-shadow: 0 -3px 0 rgba(33, 31, 28, 0.15);
+    padding: 12px 16px 24px;
+    animation: cookedSheetUp 0.22s ease;
+  }
+}
+
+.panelHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.panelTitle {
+  font-size: 22px;
+}
+
+.clearAll {
+  height: 36px;
+  border: none;
+  background: transparent;
+  color: var(--link);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  font-family: inherit;
+}
+
+.panelHint {
+  font-size: 13px;
+  color: var(--ink-muted);
+  margin: 2px 0 8px;
+}
+
+.tagSearchWrap {
+  position: relative;
+  margin-bottom: 6px;
+}
+
+.tagSearchInput {
+  width: 100%;
+  height: 40px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-control);
+  padding: 0 36px 0 12px;
+  font-size: 14px;
+  background: var(--surface);
+  color: var(--ink);
+  font-family: inherit;
+}
+
+.clearTagSearch {
+  position: absolute;
+  right: 2px;
+  top: 2px;
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: var(--radius-control);
+  background: transparent;
+  color: var(--ink-muted);
+  font-size: 19px;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.tagList {
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
+}
+
+.noTags {
+  font-size: 14px;
+  color: var(--ink-muted);
+  margin: 12px 0;
+}
+
+.tagRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: var(--tap-target);
+  padding-right: 10px;
+  border-bottom: 1px solid var(--border-soft);
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.tagCheckbox {
+  width: 20px;
+  height: 20px;
+  accent-color: var(--primary);
+}
+
+.tagName {
+  flex: 1;
+}
+
+.tagCount {
+  font-size: 13px;
+  color: var(--ink-muted);
+}
+
+.doneButton {
+  height: var(--tap-target);
+  border: none;
+  border-radius: var(--radius-control);
+  background: var(--primary);
+  color: var(--surface);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 12px;
+  font-family: inherit;
+}
+.doneButton:hover {
+  background: var(--primary-hover);
+}
+
+.activeChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.activeChip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 36px;
+  padding: 6px 12px;
+  border: none;
+  border-radius: var(--radius-chip);
+  background:
+    linear-gradient(rgba(239, 218, 107, 0.55), rgba(239, 218, 107, 0.55)),
+    url("/assets/cardboard2.jpg") center / 300px auto repeat rgb(239, 218, 107);
+  background-blend-mode: normal, multiply, normal;
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: var(--shadow-chip);
+  font-family: inherit;
+}
+.activeChip:hover {
+  box-shadow: 2px 2px 0 rgba(33, 31, 28, 0.3);
+}
