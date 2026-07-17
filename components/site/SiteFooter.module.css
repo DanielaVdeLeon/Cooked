@@ -1,0 +1,21 @@
+.footer {
+  border-top: 1px solid var(--border);
+  background: rgba(252, 250, 247, 0.8);
+}
+
+.inner {
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: 20px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.wordmark {
+  font-family: var(--font-young-serif), "Young Serif", Georgia, serif;
+  font-size: 18px;
+  color: var(--ink-muted);
+}

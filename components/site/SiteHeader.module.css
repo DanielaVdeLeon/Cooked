@@ -1,0 +1,62 @@
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: url("/assets/paper.jpg") center / 512px auto repeat var(--brand-orange);
+  background-blend-mode: multiply;
+  box-shadow: 0 2px 0 rgba(33, 31, 28, 0.25);
+}
+
+.inner {
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  transform: rotate(-0.4deg);
+}
+.logo:hover {
+  opacity: 0.85;
+}
+
+.logoImg {
+  height: 42px;
+  display: block;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+/* White outline text button on the orange bar */
+.login {
+  height: var(--tap-target);
+  padding: 0 16px;
+  border: 1px solid rgba(252, 250, 247, 0.55);
+  border-radius: var(--radius-control);
+  background: transparent;
+  color: var(--paper);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: var(--font-instrument-sans), "Instrument Sans", sans-serif;
+  transition: background 0.12s ease, border-color 0.12s ease, transform 0.12s ease;
+}
+.login:hover {
+  background: rgba(252, 250, 247, 0.18);
+  border-color: var(--paper);
+  transform: translateY(-1px);
+}
+.login:active {
+  transform: translateY(1px);
+  background: rgba(252, 250, 247, 0.1);
+}

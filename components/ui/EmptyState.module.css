@@ -1,0 +1,32 @@
+.card {
+  max-width: 440px;
+  margin: 40px auto;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  box-shadow: 3px 3px 0 rgba(33, 31, 28, 0.12);
+  padding: 32px 24px;
+  text-align: center;
+}
+
+.illustration {
+  height: 120px;
+  margin: 0 auto 12px;
+  display: block;
+  transform: rotate(-2deg);
+}
+
+.title {
+  font-family: var(--font-young-serif), "Young Serif", Georgia, serif;
+  font-weight: 400;
+  font-size: 24px;
+  color: var(--ink);
+  margin: 0 0 8px;
+}
+
+.detail {
+  font-size: 14px;
+  color: var(--ink-muted);
+  margin: 0 0 16px;
+  line-height: 1.5;
+}

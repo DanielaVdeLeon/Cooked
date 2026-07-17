@@ -1,0 +1,89 @@
+.button {
+  height: var(--tap-target);
+  padding: 0 16px;
+  border: none;
+  border-radius: var(--radius-control);
+  font-family: var(--font-instrument-sans), "Instrument Sans", sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.block {
+  width: 100%;
+}
+
+.primary {
+  background: var(--primary);
+  color: var(--surface);
+}
+.primary:hover:not(:disabled) {
+  background: var(--primary-hover);
+}
+
+.secondary {
+  background: var(--surface);
+  border: 1px solid var(--primary);
+  color: var(--primary);
+}
+.secondary:hover:not(:disabled) {
+  background: var(--blue-tint);
+}
+
+/* Brand action — cardboard-textured yellow with the physical press model.
+   At most one per view (header “Add recipe”, Save, Edit recipe). */
+.brand {
+  background:
+    linear-gradient(rgba(239, 218, 107, 0.55), rgba(239, 218, 107, 0.55)),
+    url("/assets/cardboard2.jpg") center / 300px auto repeat rgb(239, 218, 107);
+  background-blend-mode: normal, multiply, normal;
+  color: var(--ink);
+  box-shadow: var(--shadow-paper-btn);
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+.brand:hover:not(:disabled) {
+  box-shadow: var(--shadow-paper-btn-hover);
+  transform: translate(-1px, -1px);
+}
+.brand:active:not(:disabled) {
+  box-shadow: none;
+  transform: translate(1px, 1px);
+}
+
+.danger {
+  background: var(--danger);
+  color: var(--surface);
+}
+.danger:hover:not(:disabled) {
+  background: var(--danger-hover);
+}
+
+.dangerOutline {
+  background: var(--surface);
+  border: 1px solid var(--danger);
+  color: var(--danger);
+}
+.dangerOutline:hover:not(:disabled) {
+  background: var(--danger-bg);
+}
+
+.text {
+  background: transparent;
+  color: var(--link);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  padding: 0 8px;
+}
+.text:hover:not(:disabled) {
+  color: var(--link-hover);
+}

@@ -1,0 +1,18 @@
+.card {
+  border-radius: var(--radius-paper);
+  box-shadow: var(--shadow-card);
+}
+
+.blue {
+  background:
+    linear-gradient(var(--wash-blue), var(--wash-blue)),
+    url("/assets/cardboard2.jpg") center / 512px auto repeat rgb(205, 225, 238);
+  background-blend-mode: normal, multiply, normal;
+}
+
+.yellow {
+  background:
+    linear-gradient(var(--wash-yellow), var(--wash-yellow)),
+    url("/assets/cardboard2.jpg") center / 512px auto repeat rgb(239, 218, 107);
+  background-blend-mode: normal, multiply, normal;
+}

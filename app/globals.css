@@ -1,0 +1,200 @@
+/* ============================================================
+   Cooked design tokens — source: design_handoff_cooked_app/
+   design_reference/Cooked Design System Docs.dc.html
+   ============================================================ */
+
+:root {
+  /* Colour roles */
+  --brand-orange: #d84a1a;
+  --primary: #1f6590;
+  --primary-hover: #164e70;
+  --step-blue: #1e31a9;
+  --card-blue: #cde1ee;
+  --link: #164e70;
+  --link-hover: #0f3b57;
+  --blue-tint: #e6f3fc;
+  --brand-yellow: #efda6b;
+  --ink: #211f1c;
+  --ink-soft: #4f4b44;
+  --ink-muted: #666159;
+  --paper: #fcfaf7;
+  --surface: #ffffff;
+  --surface-warm: #fff9ed;
+  --border: #e6e0d8;
+  --border-soft: #f5f1eb;
+  --border-strong: #ccc5bc;
+  --danger: #8c1d29;
+  --danger-hover: #70121b;
+  --danger-bg: #ffedef;
+  --danger-border: #eba9af;
+  --success: #1a7549;
+  --success-bg: #eaf3e6;
+  --success-border: #4e9a5c;
+  --success-ink: #1c4a26;
+
+  /* Radii */
+  --radius-card: 12px;
+  --radius-control: 8px;
+  --radius-chip: 4px;
+  --radius-paper: 3px;
+
+  /* Shadows */
+  --shadow-card: 0 4px 4px rgba(0, 0, 0, 0.25);
+  --shadow-card-hover: 0 14px 16px rgba(0, 0, 0, 0.22);
+  --shadow-chip: 1px 1px 0 rgba(33, 31, 28, 0.3);
+  --shadow-paper-btn: 2px 2px 0 rgba(33, 31, 28, 0.3);
+  --shadow-paper-btn-hover: 3px 3px 0 rgba(33, 31, 28, 0.35);
+  --shadow-panel: 4px 4px 0 rgba(33, 31, 28, 0.15);
+  --shadow-dialog: 4px 4px 0 rgba(33, 31, 28, 0.18);
+  --shadow-postit: 1px 4px 2px rgba(0, 0, 0, 0.25);
+
+  /* Layout */
+  --tap-target: 44px;
+  --content-max: 1280px;
+
+  /* Texture washes */
+  --wash-yellow: rgba(239, 218, 107, 0.78);
+  --wash-blue: rgba(205, 225, 238, 0.78);
+  --wash-orange: rgba(240, 178, 148, 0.78);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  /* Paper over graph texture at ~15% strength, per asset rules */
+  background:
+    linear-gradient(rgba(252, 250, 247, 0.85), rgba(252, 250, 247, 0.85)),
+    url("/assets/graph-paper.jpg") center / 720px auto repeat fixed,
+    var(--paper);
+}
+
+body {
+  font-family: var(--font-instrument-sans), "Instrument Sans", system-ui, sans-serif;
+  color: var(--ink);
+  font-size: 16px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: var(--link);
+}
+
+a:hover {
+  color: var(--link-hover);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--ink-muted);
+  opacity: 1;
+}
+
+/* Global focus ring */
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+button:focus-visible,
+a:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* Display type — Young Serif for all headings */
+h1,
+h2,
+h3 {
+  font-family: var(--font-young-serif), "Young Serif", Georgia, serif;
+  font-weight: 400;
+  color: var(--ink);
+  margin: 0;
+}
+
+h1 {
+  font-size: 32px;
+  line-height: 1.1;
+  letter-spacing: -0.5px;
+}
+
+h2 {
+  font-size: 22px;
+  line-height: 1.2;
+  letter-spacing: -0.3px;
+}
+
+/* Shell — footer sits at the viewport bottom on low-content pages */
+.app-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-shell > main {
+  flex: 1;
+  width: 100%;
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: 24px 16px 64px;
+}
+
+/* Motion vocabulary (names match the prototype) */
+@keyframes cookedFade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes cookedSheetUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+@keyframes cookedToast {
+  from { opacity: 0; transform: translate(-50%, 8px); }
+  to { opacity: 1; transform: translate(-50%, 0); }
+}
+@keyframes cookedDealA {
+  from { opacity: 0; transform: translateY(16px) rotate(0.6deg) scale(0.96); }
+  to { opacity: 1; transform: translateY(0) rotate(0deg) scale(1); }
+}
+@keyframes cookedDealB {
+  from { opacity: 0; transform: translateY(16px) rotate(-0.6deg) scale(0.96); }
+  to { opacity: 1; transform: translateY(0) rotate(0deg) scale(1); }
+}
+@keyframes cookedSavePop {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.12) rotate(-1.5deg); }
+  100% { transform: scale(1); }
+}
+@keyframes cookedStarPop {
+  0% { transform: scale(0.6) rotate(-20deg); }
+  55% { transform: scale(1.25) rotate(8deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+@keyframes cookedDetailIn {
+  from { opacity: 0; transform: translateY(22px) scale(0.985); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes cookedCardIn {
+  from { opacity: 0.55; }
+  to { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

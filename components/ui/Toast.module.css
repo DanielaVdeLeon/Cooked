@@ -1,0 +1,32 @@
+.toast {
+  position: fixed;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 14px;
+  font-weight: 600;
+  padding: 12px 18px;
+  border-radius: var(--radius-control);
+  z-index: 60;
+  animation: cookedToast 0.2s ease;
+  white-space: nowrap;
+  box-shadow: 2px 2px 0 rgba(33, 31, 28, 0.25);
+}
+
+.success {
+  background: var(--success-bg);
+  border: 1px solid var(--success-border);
+  color: var(--success-ink);
+}
+
+.danger {
+  background: var(--danger-bg);
+  border: 1px solid var(--danger-border);
+  color: var(--danger);
+}
+
+.neutral {
+  background: var(--ink);
+  color: var(--paper);
+  box-shadow: 2px 2px 0 rgba(33, 31, 28, 0.3);
+}
