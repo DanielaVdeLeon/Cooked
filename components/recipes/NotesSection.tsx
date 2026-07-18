@@ -180,11 +180,11 @@ export function NotesSection({ recipeId, slug, notes, viewer }: NotesSectionProp
         </div>
       ) : (
         <p className={styles.notesFooter}>
-          Notes are added by Cooked editors.{" "}
+          To edit or add notes{" "}
           <Link href={`/login?next=${encodeURIComponent(`/recipes/${slug}`)}`}>
             Log in
           </Link>{" "}
-          if you have editing access.
+          .
         </p>
       )}
 
