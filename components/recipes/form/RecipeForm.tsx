@@ -233,7 +233,7 @@ export function RecipeForm({
             id="f-srcname"
             value={draft.sourceName}
             maxLength={120}
-            placeholder="e.g. Ottolenghi Simple, p. 122"
+            placeholder="e.g. Hello Fresh"
             onChange={(e) => patch({ sourceName: e.target.value })}
             className={styles.input}
           />
