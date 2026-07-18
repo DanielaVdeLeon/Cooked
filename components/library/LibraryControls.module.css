@@ -184,12 +184,6 @@
   font-family: inherit;
 }
 
-.panelHint {
-  font-size: 13px;
-  color: var(--ink-muted);
-  margin: 2px 0 8px;
-}
-
 .tagSearchWrap {
   position: relative;
   margin-bottom: 6px;

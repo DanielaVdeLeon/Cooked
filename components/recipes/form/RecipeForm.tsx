@@ -302,14 +302,10 @@ export function RecipeForm({
                 id="f-serv"
                 value={draft.servings}
                 maxLength={40}
-                placeholder="2 or Makes 24"
-                aria-describedby="f-serv-hint"
+                placeholder="4 or 'Makes 24'"
                 onChange={(e) => patch({ servings: e.target.value })}
                 className={styles.input}
               />
-              <p id="f-serv-hint" className={styles.fieldHint}>
-                Numbers default to “Serves”; you can also enter a complete “Makes” phrase.
-              </p>
             </div>
           </div>
         </section>

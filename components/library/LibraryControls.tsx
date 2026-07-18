@@ -180,7 +180,6 @@ export function LibraryControls({
                     Clear all
                   </button>
                 </div>
-                <p className={styles.panelHint}>Recipes match all selected tags.</p>
                 <div className={styles.tagSearchWrap}>
                   <input
                     value={tagSearch}

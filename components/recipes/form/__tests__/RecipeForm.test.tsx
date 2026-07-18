@@ -90,17 +90,13 @@ describe("RecipeForm cancel navigation", () => {
     expect(router.back).not.toHaveBeenCalled();
   });
 
-  it("explains how numeric and explicit yields are interpreted", () => {
+  it("uses the concise yield placeholder without extra explanation copy", () => {
     renderEditForm();
 
     expect(screen.getByRole("textbox", { name: "Yield" })).toHaveAttribute(
       "placeholder",
-      "2 or Makes 24",
+      "4 or 'Makes 24'",
     );
-    expect(
-      screen.getByText(
-        "Numbers default to “Serves”; you can also enter a complete “Makes” phrase.",
-      ),
-    ).toBeInTheDocument();
+    expect(screen.queryByText(/Numbers default to/)).not.toBeInTheDocument();
   });
 });
