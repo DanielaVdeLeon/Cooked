@@ -3,7 +3,9 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { fetchRecipeBySlug } from "@/lib/recipes";
 import { getSessionProfile } from "@/lib/auth";
+import { isFavourited } from "@/lib/favourites";
 import { RecipePhoto } from "@/components/recipes/RecipePhoto";
+import { FavouriteStar } from "@/components/recipes/FavouriteStar";
 import { NotesSection } from "@/components/recipes/NotesSection";
 import { formatAmount, formatMinutes } from "@/lib/format";
 import styles from "./page.module.css";
@@ -42,6 +44,8 @@ export default async function RecipePage({ params }: { params: Promise<Params> }
   ]);
   if (!recipe) notFound();
 
+  const favourited = profile ? await isFavourited(recipe.id) : false;
+
   const numberedSteps = recipe.instructions.map((step, i) => ({
     step,
     number: i + 1,
@@ -53,6 +57,16 @@ export default async function RecipePage({ params }: { params: Promise<Params> }
         <div className={styles.titleStrip}>
           <h1 className={styles.title}>{recipe.title}</h1>
         </div>
+        {profile ? (
+          <span className={styles.titleStar}>
+            <FavouriteStar
+              recipeId={recipe.id}
+              recipeTitle={recipe.title}
+              initialFavourited={favourited}
+              size="page"
+            />
+          </span>
+        ) : null}
       </div>
 
       {recipe.description ? (

@@ -43,6 +43,13 @@
   transition: transform 0.18s ease, box-shadow 0.18s ease;
 }
 
+.starWrap {
+  position: absolute;
+  top: 26px;
+  right: 24px;
+  z-index: 2;
+}
+
 .body {
   padding: 18px 18px 20px;
   display: flex;
