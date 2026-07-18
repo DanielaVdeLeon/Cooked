@@ -24,11 +24,11 @@ const youngSerif = localFont({
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"),
   title: {
-    default: "Cooked — recipe library",
+    default: "Cooked",
     template: "%s · Cooked",
   },
   description:
-    "A fast, uncluttered library of recipes collected from websites, social platforms, and personal sources. Browse, search, and cook — no account needed.",
+    "ayo we've got recipes in here",
 };
 
 export default async function RootLayout({
