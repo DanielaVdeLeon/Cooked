@@ -42,4 +42,12 @@ describe("RecipeCard navigation", () => {
     expect(window.location.pathname).toBe("/");
     expect(window.location.search).toBe("?tags=Quick");
   });
+
+  it("gives bare serving quantities context without changing explicit yields", () => {
+    const { rerender } = render(<RecipeCard recipe={recipe} />);
+    expect(screen.getByText("20 min · Serves 2")).toBeInTheDocument();
+
+    rerender(<RecipeCard recipe={{ ...recipe, servings: "Makes 24" }} />);
+    expect(screen.getByText("20 min · Makes 24")).toBeInTheDocument();
+  });
 });

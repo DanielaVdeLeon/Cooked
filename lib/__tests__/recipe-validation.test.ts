@@ -24,6 +24,18 @@ describe("recipeSchema (AC-AUTH-008 validation, title/ingredient rules)", () => 
     expect(recipeSchema.safeParse(validRecipe).success).toBe(true);
   });
 
+  it("requires an unambiguous recipe yield", () => {
+    expect(
+      recipeSchema.safeParse({ ...validRecipe, servings: "Makes 24" }).success,
+    ).toBe(true);
+    const result = recipeSchema.safeParse({ ...validRecipe, servings: "a lot" });
+
+    expect(result.success).toBe(false);
+    expect(allErrors(result)).toContain(
+      "Enter a number, or begin the yield with “Serves” or “Makes”.",
+    );
+  });
+
   it("preserves intentional line breaks inside a recipe step", () => {
     const text = [
       "a) Keep your butter in the fridge.",

@@ -7,7 +7,7 @@ import { isFavourited } from "@/lib/favourites";
 import { RecipePhoto } from "@/components/recipes/RecipePhoto";
 import { FavouriteStar } from "@/components/recipes/FavouriteStar";
 import { NotesSection } from "@/components/recipes/NotesSection";
-import { formatAmount, formatMinutes } from "@/lib/format";
+import { formatAmount, formatMinutes, formatYield } from "@/lib/format";
 import styles from "./page.module.css";
 
 export const dynamic = "force-dynamic";
@@ -107,8 +107,8 @@ export default async function RecipePage({ params }: { params: Promise<Params> }
         </div>
         {recipe.servings ? (
           <div>
-            <span className={styles.metaLabel}>Serves</span>
-            {recipe.servings}
+            <span className={styles.metaLabel}>Yield</span>
+            {formatYield(recipe.servings)}
           </div>
         ) : null}
         {recipe.source_name || recipe.source_url ? (

@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { isValidYieldInput } from "./format";
 
 /** Server-side validation schemas (every mutation validates before Supabase).
     Length limits everywhere user text enters the system. */
@@ -122,7 +123,13 @@ export const recipeSchema = z.object({
     .string()
     .trim()
     .max(2000, { error: "Descriptions must be 2000 characters or fewer." }),
-  servings: z.string().trim().max(40, { error: "Serves must be 40 characters or fewer." }),
+  servings: z
+    .string()
+    .trim()
+    .max(40, { error: "Yield must be 40 characters or fewer." })
+    .refine(isValidYieldInput, {
+      error: "Enter a number, or begin the yield with “Serves” or “Makes”.",
+    }),
   sourceName: z
     .string()
     .trim()

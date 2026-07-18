@@ -89,4 +89,18 @@ describe("RecipeForm cancel navigation", () => {
     expect(router.replace).toHaveBeenCalledWith("/recipes/tomato-soup");
     expect(router.back).not.toHaveBeenCalled();
   });
+
+  it("explains how numeric and explicit yields are interpreted", () => {
+    renderEditForm();
+
+    expect(screen.getByRole("textbox", { name: "Yield" })).toHaveAttribute(
+      "placeholder",
+      "2 or Makes 24",
+    );
+    expect(
+      screen.getByText(
+        "Numbers default to “Serves”; you can also enter a complete “Makes” phrase.",
+      ),
+    ).toBeInTheDocument();
+  });
 });

@@ -21,3 +21,27 @@ export function formatDate(iso: string): string {
 export function formatAmount(quantity: string, unit: string): string {
   return [quantity, unit].filter(Boolean).join(" ");
 }
+
+/** Recipe yield for cards and metadata. Bare quantities default to servings;
+    explicit "Serves" and "Makes" wording is kept and normalized. */
+export function formatYield(value: string | null | undefined): string {
+  const text = value?.trim() ?? "";
+  if (!text) return "";
+
+  const explicit = text.match(/^(serves?|makes?)\b(.*)$/i);
+  if (!explicit) return `Serves ${text}`;
+
+  const verb = explicit[1].toLowerCase().startsWith("make") ? "Makes" : "Serves";
+  const amount = explicit[2].trim();
+  return amount ? `${verb} ${amount}` : verb;
+}
+
+/** Accept a quantity-first yield or a complete phrase beginning with Serves/Makes. */
+export function isValidYieldInput(value: string): boolean {
+  const text = value.trim();
+  return (
+    text === "" ||
+    /^\d/.test(text) ||
+    /^(?:serves?|makes?)\s+\S/i.test(text)
+  );
+}
