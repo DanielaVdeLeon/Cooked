@@ -90,7 +90,7 @@ export function NotesSection({ recipeId, slug, notes, viewer }: NotesSectionProp
     <section aria-label="Notes">
       <h2 className={styles.notesTitle}>Notes</h2>
       <p className={styles.notesHint}>
-        Alterations and results from past cooks, oldest first.
+        Share your spiciest (recipe related) take.
       </p>
 
       {notes.length > 0 ? (
@@ -155,7 +155,7 @@ export function NotesSection({ recipeId, slug, notes, viewer }: NotesSectionProp
             onChange={(e) => setDraft(e.target.value)}
             rows={3}
             maxLength={2000}
-            placeholder="e.g. Swapped honey for maple syrup — worked well"
+            placeholder="e.g. Grate a little cheese 👀"
             className={styles.composerInput}
           />
           <div className={styles.composerActions}>
