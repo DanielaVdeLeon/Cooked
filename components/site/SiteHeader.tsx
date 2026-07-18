@@ -105,6 +105,16 @@ export function SiteHeader({ profile }: { profile: HeaderProfile | null }) {
                         <p className={styles.menuRole}>{ROLE_LINES[profile.role]}</p>
                       </div>
                     </div>
+                    <button
+                      type="button"
+                      className={styles.settingsButton}
+                      onClick={() => {
+                        setMenuOpen(false);
+                        router.push("/settings");
+                      }}
+                    >
+                      Settings
+                    </button>
                     <button type="button" className={styles.logoutButton} onClick={onLogout}>
                       Log out
                     </button>

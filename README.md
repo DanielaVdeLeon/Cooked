@@ -51,5 +51,5 @@ Every protected mutation is authorised **server-side**: route handlers verify th
 - [x] **M4** — editor CRUD: recipe form, image upload, tag combobox
 - [x] **M5** — notes (post-its), author-scoped editing
 - [x] **M6** — favourites + snapshot-ordered “Favourites first”
-- [ ] **M7** — account settings, delete account
+- [x] **M7** — account settings, delete account
 - [ ] **M8** — motion polish, breakpoints, a11y audit, full e2e suite
