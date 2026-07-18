@@ -22,12 +22,16 @@ function client(): SupabaseClient<Database> {
 }
 
 describe.runIf(hasEnv)("note author scoping (AC-AUTH-011)", () => {
-  const author = client();
-  const other = client();
+  // Created in beforeAll: the describe body runs at collection time even
+  // when runIf skips the tests (e.g. CI without Supabase env).
+  let author: SupabaseClient<Database>;
+  let other: SupabaseClient<Database>;
   let recipeId = "";
   let noteId = "";
 
   beforeAll(async () => {
+    author = client();
+    other = client();
     const [a, b] = await Promise.all([
       author.auth.signInWithPassword(AUTHOR),
       other.auth.signInWithPassword(OTHER_EDITOR),
