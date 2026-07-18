@@ -45,6 +45,114 @@ export const updatePasswordSchema = z
     path: ["confirm"],
   });
 
+/* ------------------------------------------------------------------ recipes */
+
+const ingredientRowSchema = z.object({
+  quantity: z.string().trim().max(40, { error: "Quantities must be 40 characters or fewer." }),
+  unit: z.string().trim().max(40, { error: "Units must be 40 characters or fewer." }),
+  name: z
+    .string()
+    .trim()
+    .min(1, { error: "Every ingredient row needs a name." })
+    .max(120, { error: "Ingredient names must be 120 characters or fewer." }),
+  isHeading: z.boolean(),
+});
+
+const instructionRowSchema = z.object({
+  sectionHeading: z
+    .string()
+    .trim()
+    .max(120, { error: "Section headings must be 120 characters or fewer." })
+    .transform((v) => (v === "" ? null : v))
+    .nullable(),
+  text: z
+    .string()
+    .trim()
+    .min(1, { error: "Every step needs text." })
+    .max(2000, { error: "Steps must be 2000 characters or fewer." }),
+  timerMinutes: z
+    .number()
+    .int()
+    .min(1, { error: "Timers must be at least 1 minute." })
+    .max(6000, { error: "Timers must be 6000 minutes or fewer." })
+    .nullable(),
+});
+
+export const recipeSchema = z.object({
+  title: z
+    .string()
+    .trim()
+    .min(1, { error: "Add a title." })
+    .max(120, { error: "Titles must be 120 characters or fewer." }),
+  description: z
+    .string()
+    .trim()
+    .max(2000, { error: "Descriptions must be 2000 characters or fewer." }),
+  servings: z.string().trim().max(40, { error: "Serves must be 40 characters or fewer." }),
+  sourceName: z
+    .string()
+    .trim()
+    .max(120, { error: "Source names must be 120 characters or fewer." }),
+  sourceUrl: z.union(
+    [
+      z.literal(""),
+      z
+        .url({
+          protocol: /^https?$/,
+          error: "Source URLs must start with http:// or https://.",
+        })
+        .max(500, { error: "Source URLs must be 500 characters or fewer." }),
+    ],
+    { error: "Source URLs must start with http:// or https://." },
+  ),
+  prepMinutes: z.number().int().min(0).max(6000).nullable(),
+  cookMinutes: z.number().int().min(0).max(6000).nullable(),
+  imagePath: z
+    .string()
+    .max(300)
+    .regex(/^[\w.\-/]+$/, { error: "Invalid image reference." })
+    .nullable(),
+  ingredients: z
+    .array(ingredientRowSchema)
+    .max(100, { error: "Recipes are limited to 100 ingredient rows." })
+    .refine((rows) => rows.some((r) => !r.isHeading), {
+      error: "Add at least one ingredient.",
+    }),
+  instructions: z
+    .array(instructionRowSchema)
+    .max(100, { error: "Recipes are limited to 100 steps." }),
+  tags: z
+    .array(
+      z
+        .string()
+        .trim()
+        .min(1)
+        .max(40, { error: "Tags must be 40 characters or fewer." }),
+    )
+    .max(20, { error: "Recipes are limited to 20 tags." }),
+});
+
+export type RecipeInput = z.infer<typeof recipeSchema>;
+
+/** All error messages from a failed parse — the recipe form lists them. */
+export function allErrors(result: { error?: z.ZodError }): string[] {
+  const messages = (result.error?.issues ?? []).map((i) => i.message);
+  return [...new Set(messages)];
+}
+
+/** URL slug from a title: lowercase a–z0–9 with single hyphens. */
+export function slugify(title: string): string {
+  const slug = title
+    .toLowerCase()
+    .normalize("NFKD")
+    .replace(/[̀-ͯ]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 80)
+    .replace(/-+$/g, "");
+  return slug || "recipe";
+}
+
 /** First error message from a failed parse — the auth forms show one alert. */
 export function firstError(result: { error?: z.ZodError }): string {
   return result.error?.issues[0]?.message ?? "Please check the form and try again.";

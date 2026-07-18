@@ -1,0 +1,97 @@
+.selected {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 4px 5px 10px;
+  border-radius: var(--radius-chip);
+  background:
+    linear-gradient(rgba(239, 218, 107, 0.55), rgba(239, 218, 107, 0.55)),
+    url("/assets/cardboard2.jpg") center / 300px auto repeat rgb(239, 218, 107);
+  background-blend-mode: normal, multiply, normal;
+  box-shadow: var(--shadow-chip);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.chipRemove {
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: transparent;
+  color: var(--ink);
+  font-size: 15px;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0;
+}
+
+.search {
+  width: 100%;
+  height: var(--tap-target);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-control);
+  padding: 0 12px;
+  font-size: 15px;
+  background: var(--surface);
+  color: var(--ink);
+  margin-bottom: 10px;
+  font-family: inherit;
+}
+
+.suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.suggestion {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 36px;
+  padding: 5px 12px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-chip);
+  background: var(--surface);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+  cursor: pointer;
+  font-family: inherit;
+}
+.suggestion:hover:not(:disabled) {
+  background: var(--blue-tint);
+  border-color: var(--primary);
+}
+
+.count {
+  font-weight: 400;
+  color: var(--ink-muted);
+}
+
+.create {
+  min-height: 36px;
+  padding: 5px 12px;
+  border: 1px dashed var(--primary);
+  border-radius: var(--radius-chip);
+  background: var(--blue-tint);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--link);
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.limit {
+  font-size: 13px;
+  color: var(--ink-muted);
+}
