@@ -45,6 +45,14 @@ export const updatePasswordSchema = z
     path: ["confirm"],
   });
 
+/* -------------------------------------------------------------------- notes */
+
+export const noteBodySchema = z
+  .string()
+  .trim()
+  .min(1, { error: "Write something first." })
+  .max(2000, { error: "Notes must be 2000 characters or fewer." });
+
 /* ------------------------------------------------------------------ recipes */
 
 const ingredientRowSchema = z.object({

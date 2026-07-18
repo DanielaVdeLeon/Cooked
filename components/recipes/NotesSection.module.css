@@ -1,0 +1,188 @@
+.notesTitle {
+  font-size: 24px;
+  margin: 0 0 4px;
+}
+
+.notesHint {
+  font-size: 13px;
+  color: var(--ink-muted);
+  margin: 0 0 14px;
+}
+
+.notes {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 16px;
+  max-width: 640px;
+}
+
+/* Post-its: cardboard texture over alternating paper washes, square corners */
+.note {
+  box-shadow: var(--shadow-postit);
+  padding: 12px 18px;
+  background-blend-mode: normal, multiply, normal;
+}
+
+.noteYellow {
+  background:
+    linear-gradient(var(--wash-yellow), var(--wash-yellow)),
+    url("/assets/cardboard2.jpg") center / 512px auto repeat rgb(239, 218, 107);
+}
+
+.noteBlue {
+  background:
+    linear-gradient(var(--wash-blue), var(--wash-blue)),
+    url("/assets/cardboard2.jpg") center / 512px auto repeat rgb(205, 225, 238);
+}
+
+.noteOrange {
+  background:
+    linear-gradient(var(--wash-orange), var(--wash-orange)),
+    url("/assets/cardboard2.jpg") center / 512px auto repeat rgb(240, 178, 148);
+}
+
+.noteTiltA {
+  transform: rotate(0.4deg);
+}
+
+.noteTiltB {
+  transform: rotate(-0.4deg);
+}
+
+.noteText {
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--ink);
+  margin: 0 0 8px;
+  white-space: pre-line;
+}
+
+.noteFooterRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.noteByline {
+  font-size: 13px;
+  color: rgba(41, 39, 40, 0.7);
+  margin: 0;
+}
+
+.noteActions {
+  display: flex;
+  gap: 4px;
+}
+
+.noteEdit,
+.noteDelete {
+  height: 36px;
+  padding: 0 10px;
+  border: none;
+  background: transparent;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  font-family: inherit;
+}
+
+.noteEdit {
+  color: var(--link);
+}
+
+.noteDelete {
+  color: var(--danger);
+}
+
+.noNotes {
+  font-size: 14px;
+  color: var(--ink-muted);
+  margin: 0 0 16px;
+}
+
+/* Warm composer surface per the design system (surface-warm role) */
+.composer {
+  background: var(--surface-warm);
+  border: 1px solid #f7ebaf;
+  border-radius: var(--radius-card);
+  padding: 14px 16px;
+  max-width: 640px;
+}
+
+.composerLabel {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 6px;
+}
+
+.composerError {
+  margin: 0 0 8px;
+  font-size: 13px;
+  color: var(--danger);
+}
+
+.composerInput {
+  width: 100%;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-control);
+  padding: 10px 12px;
+  font-size: 15px;
+  line-height: 1.5;
+  font-family: inherit;
+  background: var(--surface);
+  color: var(--ink);
+  resize: vertical;
+}
+
+.composerActions {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.composerSave {
+  height: var(--tap-target);
+  padding: 0 16px;
+  border: none;
+  border-radius: var(--radius-control);
+  background: var(--primary);
+  color: var(--surface);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+}
+.composerSave:hover:not(:disabled) {
+  background: var(--primary-hover);
+}
+.composerSave:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.composerCancel {
+  height: var(--tap-target);
+  padding: 0 14px;
+  border: 1px solid var(--primary);
+  border-radius: var(--radius-control);
+  background: var(--surface);
+  color: var(--primary);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.notesFooter {
+  font-size: 13px;
+  color: var(--ink-muted);
+  margin: 8px 0 0;
+  max-width: 640px;
+}

@@ -2,8 +2,10 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { fetchRecipeBySlug } from "@/lib/recipes";
+import { getSessionProfile } from "@/lib/auth";
 import { RecipePhoto } from "@/components/recipes/RecipePhoto";
-import { formatAmount, formatDate, formatMinutes } from "@/lib/format";
+import { NotesSection } from "@/components/recipes/NotesSection";
+import { formatAmount, formatMinutes } from "@/lib/format";
 import styles from "./page.module.css";
 
 export const dynamic = "force-dynamic";
@@ -32,11 +34,12 @@ export async function generateMetadata({
   };
 }
 
-const NOTE_TONES = [styles.noteYellow, styles.noteBlue, styles.noteOrange];
-
 export default async function RecipePage({ params }: { params: Promise<Params> }) {
   const { slug } = await params;
-  const recipe = await fetchRecipeBySlug(slug);
+  const [recipe, profile] = await Promise.all([
+    fetchRecipeBySlug(slug),
+    getSessionProfile(),
+  ]);
   if (!recipe) notFound();
 
   const numberedSteps = recipe.instructions.map((step, i) => ({
@@ -158,44 +161,20 @@ export default async function RecipePage({ params }: { params: Promise<Params> }
             </div>
           </section>
 
-          <section aria-label="Notes">
-            <h2 className={styles.notesTitle}>Notes</h2>
-            <p className={styles.notesHint}>
-              Alterations and results from past cooks, oldest first.
-            </p>
-            {recipe.notes.length > 0 ? (
-              <div className={styles.notes}>
-                {recipe.notes.map((note, i) => (
-                  <div
-                    key={note.id}
-                    className={`${styles.note} ${NOTE_TONES[i % NOTE_TONES.length]} ${
-                      i % 2 === 0 ? styles.noteTiltA : styles.noteTiltB
-                    }`}
-                  >
-                    <p className={styles.noteText}>{note.body}</p>
-                    <p className={styles.noteByline}>
-                      {[
-                        note.author_name,
-                        formatDate(note.created_at),
-                        note.updated_at > note.created_at ? "edited" : null,
-                      ]
-                        .filter(Boolean)
-                        .join(" · ")}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <p className={styles.noNotes}>No notes yet.</p>
-            )}
-            <p className={styles.notesFooter}>
-              Notes are added by Cooked editors.{" "}
-              <Link href={`/login?next=${encodeURIComponent(`/recipes/${recipe.slug}`)}`}>
-                Log in
-              </Link>{" "}
-              if you have editing access.
-            </p>
-          </section>
+          <NotesSection
+            recipeId={recipe.id}
+            slug={recipe.slug}
+            notes={recipe.notes}
+            viewer={
+              profile
+                ? {
+                    id: profile.id,
+                    isEditor: profile.isEditor,
+                    isAdmin: profile.role === "admin",
+                  }
+                : null
+            }
+          />
         </div>
       </div>
     </main>
