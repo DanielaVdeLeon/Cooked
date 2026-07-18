@@ -85,6 +85,17 @@
   cursor: wait;
 }
 
+/* Save confirmation: green “✓ Saved” with a 0.45s pop */
+.saved {
+  background: #3e8e4e;
+  color: var(--surface);
+  opacity: 1;
+  animation: cookedSavePop 0.45s ease;
+}
+.saved:disabled {
+  opacity: 1;
+}
+
 .body {
   max-width: 720px;
   margin: 0 auto;

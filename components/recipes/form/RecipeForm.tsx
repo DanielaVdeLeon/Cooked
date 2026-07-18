@@ -57,6 +57,7 @@ export function RecipeForm({
   const [draft, setDraft] = useState<RecipeDraft>(initial);
   const [errors, setErrors] = useState<string[]>([]);
   const [saving, setSaving] = useState(false);
+  const [savedFlash, setSavedFlash] = useState(false);
   const [confirmDiscard, setConfirmDiscard] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
   const initialJson = useMemo(() => JSON.stringify(initial), [initial]);
@@ -143,9 +144,13 @@ export function RecipeForm({
       return;
     }
 
+    // Save flips to a green “✓ Saved” pop for 700ms before navigating.
+    setSavedFlash(true);
     showToast("Recipe saved", "success");
-    router.push(`/recipes/${result.slug}`);
-    router.refresh();
+    setTimeout(() => {
+      router.push(`/recipes/${result.slug}`);
+      router.refresh();
+    }, 700);
   }
 
   async function onDelete() {
@@ -174,11 +179,11 @@ export function RecipeForm({
           </p>
           <button
             type="button"
-            className={styles.save}
+            className={`${styles.save} ${savedFlash ? styles.saved : ""}`}
             onClick={onSave}
-            disabled={saving}
+            disabled={saving || savedFlash}
           >
-            {saving ? "Saving…" : "Save"}
+            {savedFlash ? "✓ Saved" : saving ? "Saving…" : "Save"}
           </button>
         </div>
       </header>

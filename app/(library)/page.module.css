@@ -12,24 +12,6 @@
   color: var(--ink-muted);
 }
 
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
-  gap: 24px;
-  align-items: start;
-}
-
-/* Mobile scroll-driven fade-in (no transforms, so press states never fight it) */
-@supports (animation-timeline: view()) {
-  @media (max-width: 699px) {
-    .grid > article {
-      animation: cookedCardIn linear both;
-      animation-timeline: view();
-      animation-range: entry 0% entry 35%;
-    }
-  }
-}
-
 .endNote {
   text-align: center;
   font-size: 13px;

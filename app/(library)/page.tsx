@@ -3,6 +3,7 @@ import Link from "next/link";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { LibraryControls } from "@/components/library/LibraryControls";
 import { FavouritesProvider } from "@/components/library/FavouritesContext";
+import { RecipeGrid } from "@/components/library/RecipeGrid";
 import { RecipeCard } from "@/components/recipes/RecipeCard";
 import { fetchLibrary, fetchTagUsage } from "@/lib/recipes";
 import { fetchMyFavourites } from "@/lib/favourites";
@@ -96,7 +97,7 @@ export default async function HomePage({
           )
         ) : (
           <>
-            <div id="recipe-grid" className={styles.grid}>
+            <RecipeGrid>
               {recipes.map((recipe) => (
                 <RecipeCard
                   key={recipe.id}
@@ -104,7 +105,7 @@ export default async function HomePage({
                   favourite={profile ? favouritedAt.has(recipe.id) : null}
                 />
               ))}
-            </div>
+            </RecipeGrid>
             <p role="status" className={styles.endNote}>
               You’ve reached the end · {countLabel}
             </p>
