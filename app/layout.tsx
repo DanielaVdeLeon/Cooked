@@ -6,6 +6,7 @@ import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { ToastProvider } from "@/components/ui/Toast";
 import { getSessionProfile } from "@/lib/auth";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const instrumentSans = Instrument_Sans({
   subsets: ["latin"],
@@ -59,6 +60,7 @@ export default async function RootLayout({
             <SiteFooter />
           </div>
         </ToastProvider>
+        <SpeedInsights />
       </body>
     </html>
   );
