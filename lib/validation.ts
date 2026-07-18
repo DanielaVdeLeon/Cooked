@@ -45,6 +45,32 @@ export const updatePasswordSchema = z
     path: ["confirm"],
   });
 
+/* ----------------------------------------------------------------- settings */
+
+export const accountSettingsSchema = z
+  .object({
+    displayName: displayNameSchema,
+    email: emailSchema,
+    currentPassword: z.string().max(72),
+    newPassword: z.union([z.literal(""), passwordSchema]),
+    confirmPassword: z.string().max(72),
+  })
+  .refine((v) => v.newPassword === "" || v.newPassword === v.confirmPassword, {
+    error: "New passwords do not match.",
+    path: ["confirmPassword"],
+  })
+  .refine((v) => v.newPassword === "" || v.currentPassword.length > 0, {
+    error: "Enter your current password to change it.",
+    path: ["currentPassword"],
+  });
+
+export const deleteAccountSchema = z.object({
+  currentPassword: z
+    .string()
+    .min(1, { error: "Enter your current password to delete the account." })
+    .max(72),
+});
+
 /* -------------------------------------------------------------------- notes */
 
 export const noteBodySchema = z
