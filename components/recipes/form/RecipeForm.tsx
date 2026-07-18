@@ -100,9 +100,16 @@ export function RecipeForm({
 
   const backHref = mode === "edit" && recipeSlug ? `/recipes/${recipeSlug}` : "/";
 
+  function leaveForm() {
+    // Returning through history removes the form entry. Pushing the destination
+    // here would leave the form behind it, so the next Back reopened the form.
+    if (window.history.length > 2) router.back();
+    else router.replace(backHref);
+  }
+
   function onCancel() {
     if (dirty) setConfirmDiscard(true);
-    else router.push(backHref);
+    else leaveForm();
   }
 
   async function onSave() {
@@ -542,7 +549,7 @@ export function RecipeForm({
         danger
         onConfirm={() => {
           setConfirmDiscard(false);
-          router.push(backHref);
+          leaveForm();
         }}
         onCancel={() => setConfirmDiscard(false)}
       />
