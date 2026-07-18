@@ -61,4 +61,16 @@ describe("LibraryControls prototype styles", () => {
       }),
     );
   });
+
+  it("prevents the desktop filter action from collapsing below its prototype size", () => {
+    expect(declarationsFor(".doneButton")).toContainEqual(
+      expect.objectContaining({
+        height: "var(--tap-target)",
+        "min-height": "var(--tap-target)",
+        width: "100%",
+        "flex-shrink": "0",
+        "font-size": "15px",
+      }),
+    );
+  });
 });
