@@ -5,6 +5,7 @@ import "./globals.css";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteFooter } from "@/components/site/SiteFooter";
 import { ToastProvider } from "@/components/ui/Toast";
+import { getSessionProfile } from "@/lib/auth";
 
 const instrumentSans = Instrument_Sans({
   subsets: ["latin"],
@@ -30,17 +31,30 @@ export const metadata: Metadata = {
     "A fast, uncluttered library of recipes collected from websites, social platforms, and personal sources. Browse, search, and cook — no account needed.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const profile = await getSessionProfile();
+
   return (
     <html lang="en" className={`${instrumentSans.variable} ${youngSerif.variable}`}>
       <body>
         <ToastProvider>
           <div className="app-shell">
-            <SiteHeader />
+            <SiteHeader
+              profile={
+                profile
+                  ? {
+                      displayName: profile.displayName,
+                      initial: profile.initial,
+                      role: profile.role,
+                      isEditor: profile.isEditor,
+                    }
+                  : null
+              }
+            />
             {children}
             <SiteFooter />
           </div>

@@ -79,3 +79,105 @@
   transform: translateY(1px);
   background: rgba(252, 250, 247, 0.1);
 }
+
+.accountWrap {
+  position: relative;
+}
+
+.avatarButton {
+  width: var(--tap-target);
+  height: var(--tap-target);
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatar,
+.menuAvatar {
+  border-radius: 50%;
+  background:
+    linear-gradient(rgba(239, 218, 107, 0.55), rgba(239, 218, 107, 0.55)),
+    url("/assets/cardboard2.jpg") center / 300px auto repeat rgb(239, 218, 107);
+  background-blend-mode: normal, multiply, normal;
+  color: var(--ink);
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 1px 1px 0 rgba(33, 31, 28, 0.3);
+}
+
+.avatar {
+  width: 36px;
+  height: 36px;
+  font-size: 15px;
+}
+
+.menuAvatar {
+  width: 44px;
+  height: 44px;
+  font-size: 17px;
+  flex-shrink: 0;
+}
+
+.scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 24;
+}
+
+.menu {
+  position: absolute;
+  top: 52px;
+  right: 0;
+  z-index: 25;
+  width: 280px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-panel);
+  padding: 16px;
+  animation: cookedFade 0.15s ease;
+}
+
+.menuUser {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.menuName {
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0;
+  color: var(--ink);
+}
+
+.menuRole {
+  font-size: 13px;
+  color: var(--ink-muted);
+  margin: 0;
+}
+
+.logoutButton {
+  width: 100%;
+  height: var(--tap-target);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-control);
+  background: var(--surface);
+  color: var(--danger);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: left;
+  padding: 0 14px;
+  font-family: var(--font-instrument-sans), "Instrument Sans", sans-serif;
+}
+.logoutButton:hover {
+  background: var(--danger-bg);
+}
