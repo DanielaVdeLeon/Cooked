@@ -46,10 +46,10 @@ Every protected mutation is authorised **server-side**: route handlers verify th
 
 - [x] **M0** — repo, CI, Supabase MCP wiring
 - [x] **M1** — design tokens, fonts, textures, shared UI primitives
-- [ ] **M2** — public read path: feed, search/filter/sort, recipe page, SEO
-- [ ] **M3** — auth: login, logout, password reset, viewer-role signup
-- [ ] **M4** — editor CRUD: recipe form, image upload, tag combobox
-- [ ] **M5** — notes (post-its), author-scoped editing
+- [x] **M2** — public read path: feed, search/filter/sort, recipe page, SEO
+- [x] **M3** — auth: login, logout, password reset, viewer-role signup
+- [x] **M4** — editor CRUD: recipe form, image upload, tag combobox
+- [x] **M5** — notes (post-its), author-scoped editing
 - [ ] **M6** — favourites + snapshot-ordered “Favourites first”
 - [ ] **M7** — account settings, delete account
 - [ ] **M8** — motion polish, breakpoints, a11y audit, full e2e suite
