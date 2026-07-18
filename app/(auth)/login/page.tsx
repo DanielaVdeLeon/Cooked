@@ -24,7 +24,7 @@ export default async function LoginPage({
       <AuthCard
         title="Log in"
         withChef
-        footnote="Creating an account lets you favourite recipes. Editing access is granted by an administrator."
+        footnote="Create an account to favourite recipes. DM me for editing access. "
       >
         <LoginForm next={next} linkError={params.error === "link"} />
       </AuthCard>
