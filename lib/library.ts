@@ -55,3 +55,53 @@ export function orderWithFavourites<T extends { id: string }>(
   const rest = recipes.filter((r) => !favouritedAt.has(r.id));
   return [...favs, ...rest];
 }
+
+/** Filters and sorts the library data already present in the browser. The
+    server sends this same card data for the unfiltered library, so URL-driven
+    search/filter/sort changes do not need another RSC + database round trip. */
+export function filterAndSortLibrary(
+  recipes: LibraryCard[],
+  options: {
+    query?: string;
+    tags?: string[];
+    sort?: LibrarySort;
+    favouritedAt?: Map<string, string>;
+  },
+): LibraryCard[] {
+  const needle = (options.query ?? "").trim().toLowerCase();
+  const wantedTags = (options.tags ?? []).map((tag) => tag.trim().toLowerCase());
+
+  const filtered = recipes.filter((recipe) => {
+    const matchesQuery =
+      !needle ||
+      recipe.title.toLowerCase().includes(needle) ||
+      recipe.ingredients.some((ingredient) =>
+        ingredient.name.toLowerCase().includes(needle),
+      ) ||
+      recipe.tags.some((tag) => tag.name.toLowerCase().includes(needle));
+    const recipeTags = new Set(recipe.tags.map((tag) => tag.name.toLowerCase()));
+    const matchesTags = wantedTags.every((tag) => recipeTags.has(tag));
+    return matchesQuery && matchesTags;
+  });
+
+  const recent = [...filtered].sort((a, b) =>
+    b.created_at.localeCompare(a.created_at),
+  );
+
+  switch (options.sort ?? "recent") {
+    case "updated":
+      return recent.sort((a, b) => b.updated_at.localeCompare(a.updated_at));
+    case "alpha":
+      return recent.sort((a, b) => a.title.localeCompare(b.title));
+    case "time":
+      return recent.sort(
+        (a, b) =>
+          (a.total_minutes ?? Number.POSITIVE_INFINITY) -
+          (b.total_minutes ?? Number.POSITIVE_INFINITY),
+      );
+    case "favs":
+      return orderWithFavourites(recent, options.favouritedAt ?? new Map());
+    default:
+      return recent;
+  }
+}

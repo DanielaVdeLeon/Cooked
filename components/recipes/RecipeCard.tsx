@@ -1,15 +1,16 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useState } from "react";
+import Link from "next/link";
 import { RecipePhoto } from "./RecipePhoto";
 import { FavouriteStar } from "./FavouriteStar";
 import { formatAmount, formatMinutes } from "@/lib/format";
 import type { LibraryCard } from "@/lib/library";
 import styles from "./RecipeCard.module.css";
 
-/** Blue construction-paper card. The whole card is the tap target
-    (role=link, keyboard-operable); tag chips and the favourite star stop
-    propagation. `favourite` is null for public visitors — no star at all. */
+/** Blue construction-paper card. An inset Next link makes the whole card a
+    prefetchable, keyboard-operable target; tag chips and the favourite star
+    sit above it. `favourite` is null for public visitors — no star at all. */
 export function RecipeCard({
   recipe,
   favourite = null,
@@ -17,19 +18,8 @@ export function RecipeCard({
   recipe: LibraryCard;
   favourite?: boolean | null;
 }) {
-  const router = useRouter();
   const href = `/recipes/${recipe.slug}`;
-
-  function open() {
-    router.push(href);
-  }
-
-  function onKeyDown(e: React.KeyboardEvent) {
-    if (e.key === "Enter" || e.key === " ") {
-      e.preventDefault();
-      open();
-    }
-  }
+  const [prefetchFullRecipe, setPrefetchFullRecipe] = useState(false);
 
   const timeLabel = [
     `${formatMinutes(recipe.total_minutes)}`,
@@ -39,14 +29,16 @@ export function RecipeCard({
     .join(" · ");
 
   return (
-    <article
-      className={styles.card}
-      role="link"
-      tabIndex={0}
-      aria-label={`Open recipe ${recipe.title}`}
-      onClick={open}
-      onKeyDown={onKeyDown}
-    >
+    <article className={styles.card}>
+      <Link
+        href={href}
+        aria-label={`Open recipe ${recipe.title}`}
+        className={styles.cardLink}
+        prefetch={prefetchFullRecipe ? true : null}
+        onMouseEnter={() => setPrefetchFullRecipe(true)}
+        onFocus={() => setPrefetchFullRecipe(true)}
+        onTouchStart={() => setPrefetchFullRecipe(true)}
+      />
       <div className={styles.polaroid}>
         <RecipePhoto imagePath={recipe.image_path} alt="" ratio="card" />
       </div>
@@ -73,7 +65,11 @@ export function RecipeCard({
                 aria-label={`Filter by tag ${tag.name}`}
                 onClick={(e) => {
                   e.stopPropagation();
-                  router.push(`/?tags=${encodeURIComponent(tag.name)}`);
+                  window.history.pushState(
+                    null,
+                    "",
+                    `/?tags=${encodeURIComponent(tag.name)}`,
+                  );
                 }}
               >
                 {tag.name}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { clearFavouritesAction } from "@/app/recipes/favourite-actions";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
@@ -42,6 +42,13 @@ export function LibraryControls({
   const { showToast } = useToast();
   const favCount = useFavouritesCount();
 
+  useEffect(
+    () => () => {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+    },
+    [],
+  );
+
   const sortOptions = authenticated ? LIBRARY_SORTS_AUTHED : LIBRARY_SORTS;
   // “Clear favourites” appears only while Favourites first is active, the
   // user is authenticated, and they have at least one favourite (AC-FAV-001).
@@ -72,7 +79,7 @@ export function LibraryControls({
     const params = new URLSearchParams(searchParams.toString());
     mutate(params);
     const qs = params.toString();
-    router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
+    window.history.replaceState(null, "", qs ? `${pathname}?${qs}` : pathname);
   }
 
   function onQueryChange(value: string) {
@@ -83,7 +90,7 @@ export function LibraryControls({
         if (value.trim()) p.set("q", value.trim());
         else p.delete("q");
       });
-    }, 250);
+    }, 100);
   }
 
   function setTags(names: string[]) {
