@@ -5,6 +5,16 @@
   align-items: start;
 }
 
+@keyframes cookedCardIn {
+  from {
+    opacity: 0.55;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
 /* Mobile scroll-driven fade-in (no transforms, so press states never fight it) */
 @supports (animation-timeline: view()) {
   @media (max-width: 699px) {
