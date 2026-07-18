@@ -29,22 +29,39 @@ export function RecipeGrid({ children }: { children: React.ReactNode }) {
     if (first || !changed) return;
     if (!gridRef.current || prefersReducedMotion() || !isDesktop()) return;
 
-    const cards = Array.from(gridRef.current.children) as HTMLElement[];
-    cards.forEach((card, i) => {
-      const tilt = i % 2 === 0 ? -2.5 : 2.5;
-      card.animate(
-        [
-          { opacity: 0, transform: `translate(-24px, -16px) rotate(${tilt}deg) scale(0.94)` },
-          { opacity: 1, transform: "translate(0, 0) rotate(0deg) scale(1)" },
-        ],
-        {
-          duration: 460,
-          delay: i * 40,
-          easing: "cubic-bezier(0.2, 0.7, 0.3, 1)",
-          fill: "both",
-        },
-      );
+    const frame = window.requestAnimationFrame(() => {
+      const cards = Array.from(gridRef.current?.children ?? []) as HTMLElement[];
+      if (!cards.length || typeof cards[0].animate !== "function") return;
+
+      const pile = cards[0].getBoundingClientRect();
+      cards.forEach((card, i) => {
+        const position = card.getBoundingClientRect();
+        const dx = pile.left - position.left;
+        const dy = pile.top - position.top;
+        const tilt = (i % 3 - 1) * 2.5;
+
+        card.animate(
+          [
+            {
+              transform: `translate(${dx}px, ${dy}px) rotate(${tilt}deg) scale(0.98)`,
+              boxShadow: "0 2px 3px rgba(0, 0, 0, 0.3)",
+            },
+            {
+              transform: "translate(0, 0) rotate(0deg) scale(1)",
+              boxShadow: "0 4px 4px rgba(0, 0, 0, 0.25)",
+            },
+          ],
+          {
+            duration: 460,
+            delay: Math.min(i * 40, 420),
+            easing: "cubic-bezier(0.25, 0.8, 0.3, 1)",
+            fill: "backwards",
+          },
+        );
+      });
     });
+
+    return () => window.cancelAnimationFrame(frame);
   }, [queryKey]);
 
   return (
