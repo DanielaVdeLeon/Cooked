@@ -24,6 +24,23 @@ describe("recipeSchema (AC-AUTH-008 validation, title/ingredient rules)", () => 
     expect(recipeSchema.safeParse(validRecipe).success).toBe(true);
   });
 
+  it("preserves intentional line breaks inside a recipe step", () => {
+    const text = [
+      "a) Keep your butter in the fridge.",
+      "",
+      "b) Peel and grate the garlic.",
+      "",
+      "c) Heat a drizzle of oil in a saucepan.",
+    ].join("\n");
+    const result = recipeSchema.safeParse({
+      ...validRecipe,
+      instructions: [{ sectionHeading: "", text, timerMinutes: null }],
+    });
+
+    expect(result.success).toBe(true);
+    if (result.success) expect(result.data.instructions[0].text).toBe(text);
+  });
+
   it("requires a title", () => {
     const r = recipeSchema.safeParse({ ...validRecipe, title: "  " });
     expect(r.success).toBe(false);
