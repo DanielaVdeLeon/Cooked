@@ -150,6 +150,11 @@
   color: var(--ink-soft);
 }
 
+.ingredientHeading {
+  font-weight: 700;
+  padding-top: 6px;
+}
+
 .rightColumn {
   flex: 2 1 380px;
   min-width: 280px;

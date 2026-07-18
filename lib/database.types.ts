@@ -43,6 +43,7 @@ export type Database = {
       ingredients: {
         Row: {
           id: string
+          is_heading: boolean
           name: string
           position: number
           quantity: string
@@ -51,6 +52,7 @@ export type Database = {
         }
         Insert: {
           id?: string
+          is_heading?: boolean
           name: string
           position: number
           quantity?: string
@@ -59,6 +61,7 @@ export type Database = {
         }
         Update: {
           id?: string
+          is_heading?: boolean
           name?: string
           position?: number
           quantity?: string
@@ -356,6 +359,15 @@ export type Database = {
     Functions: {
       is_admin: { Args: never; Returns: boolean }
       is_editor: { Args: never; Returns: boolean }
+      save_recipe_children: {
+        Args: {
+          p_ingredients: Json
+          p_instructions: Json
+          p_recipe_id: string
+          p_tags: string[]
+        }
+        Returns: undefined
+      }
       search_recipes: {
         Args: { q?: string; tag_ids?: string[] }
         Returns: {
