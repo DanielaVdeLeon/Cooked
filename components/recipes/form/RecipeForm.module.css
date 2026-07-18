@@ -195,6 +195,13 @@
   margin-bottom: 0;
 }
 
+.fieldHint {
+  margin: 6px 0 0;
+  color: var(--ink-muted);
+  font-size: 12px;
+  line-height: 1.35;
+}
+
 .rows {
   display: flex;
   flex-direction: column;

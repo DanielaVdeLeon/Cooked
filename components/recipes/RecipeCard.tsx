@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { RecipePhoto } from "./RecipePhoto";
 import { FavouriteStar } from "./FavouriteStar";
-import { formatAmount, formatMinutes } from "@/lib/format";
+import { formatAmount, formatMinutes, formatYield } from "@/lib/format";
 import type { LibraryCard } from "@/lib/library";
 import styles from "./RecipeCard.module.css";
 
@@ -23,7 +23,7 @@ export function RecipeCard({
 
   const timeLabel = [
     `${formatMinutes(recipe.total_minutes)}`,
-    recipe.servings || null,
+    formatYield(recipe.servings) || null,
   ]
     .filter(Boolean)
     .join(" · ");

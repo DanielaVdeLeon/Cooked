@@ -264,7 +264,7 @@ export function RecipeForm({
         </section>
 
         <section className={styles.card}>
-          <h2 className={styles.cardTitle}>Timing &amp; servings</h2>
+          <h2 className={styles.cardTitle}>Timing &amp; yield</h2>
           <div className={styles.timingGrid}>
             <div>
               <label htmlFor="f-prep" className={styles.label}>
@@ -296,16 +296,20 @@ export function RecipeForm({
             </div>
             <div>
               <label htmlFor="f-serv" className={styles.label}>
-                Serves
+                Yield
               </label>
               <input
                 id="f-serv"
                 value={draft.servings}
                 maxLength={40}
-                placeholder="4, or ‘Makes 24’"
+                placeholder="2 or Makes 24"
+                aria-describedby="f-serv-hint"
                 onChange={(e) => patch({ servings: e.target.value })}
                 className={styles.input}
               />
+              <p id="f-serv-hint" className={styles.fieldHint}>
+                Numbers default to “Serves”; you can also enter a complete “Makes” phrase.
+              </p>
             </div>
           </div>
         </section>
