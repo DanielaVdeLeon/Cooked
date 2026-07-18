@@ -23,10 +23,17 @@ const rect = (left: number, top: number): DOMRect =>
 
 describe("RecipeGrid motion", () => {
   const animate = vi.fn();
+  const animations: Array<{ cancel: ReturnType<typeof vi.fn> }> = [];
 
   beforeEach(() => {
     navigationState.query = "";
     animate.mockReset();
+    animations.length = 0;
+    animate.mockImplementation(() => {
+      const animation = { cancel: vi.fn() };
+      animations.push(animation);
+      return animation;
+    });
     Object.defineProperty(HTMLElement.prototype, "animate", {
       configurable: true,
       value: animate,
@@ -86,8 +93,13 @@ describe("RecipeGrid motion", () => {
       1,
       [
         {
-          transform: "translate(0px, 0px) rotate(-2.5deg) scale(0.98)",
-          boxShadow: "0 2px 3px rgba(0, 0, 0, 0.3)",
+          transform: "translate(0px, 0px) rotate(-1.6deg) scale(0.975)",
+          boxShadow: "0 2px 3px rgba(0, 0, 0, 0.28)",
+        },
+        {
+          offset: 0.82,
+          transform: "translate(0px, -12px) rotate(0.32deg) scale(1.006)",
+          boxShadow: "0 10px 18px rgba(0, 0, 0, 0.18)",
         },
         {
           transform: "translate(0, 0) rotate(0deg) scale(1)",
@@ -95,19 +107,51 @@ describe("RecipeGrid motion", () => {
         },
       ],
       {
-        duration: 460,
+        duration: 620,
         delay: 0,
-        easing: "cubic-bezier(0.25, 0.8, 0.3, 1)",
+        easing: "cubic-bezier(0.22, 1, 0.36, 1)",
         fill: "backwards",
       },
     );
     expect(animate.mock.calls[1][0][0].transform).toBe(
-      "translate(-350px, 0px) rotate(0deg) scale(0.98)",
+      "translate(-350px, 0px) rotate(0deg) scale(0.975)",
     );
-    expect(animate.mock.calls[1][1]).toMatchObject({ delay: 40 });
+    expect(animate.mock.calls[1][0][1].transform).toBe(
+      "translate(-28px, -12px) rotate(0deg) scale(1.006)",
+    );
+    expect(animate.mock.calls[1][1]).toMatchObject({ delay: 28 });
     expect(animate.mock.calls[2][0][0].transform).toBe(
-      "translate(0px, -400px) rotate(2.5deg) scale(0.98)",
+      "translate(0px, -400px) rotate(1.6deg) scale(0.975)",
     );
-    expect(animate.mock.calls[2][1]).toMatchObject({ delay: 80 });
+    expect(animate.mock.calls[2][0][1].transform).toBe(
+      "translate(0px, -44px) rotate(-0.32deg) scale(1.006)",
+    );
+    expect(animate.mock.calls[2][1]).toMatchObject({ delay: 56 });
+  });
+
+  it("cancels an in-flight deal before starting the next one", () => {
+    const { rerender } = render(
+      <RecipeGrid>
+        <article />
+      </RecipeGrid>,
+    );
+
+    navigationState.query = "sort=alpha";
+    rerender(
+      <RecipeGrid>
+        <article />
+      </RecipeGrid>,
+    );
+    expect(animations).toHaveLength(1);
+
+    navigationState.query = "sort=recent";
+    rerender(
+      <RecipeGrid>
+        <article />
+      </RecipeGrid>,
+    );
+
+    expect(animations[0].cancel).toHaveBeenCalledOnce();
+    expect(animations).toHaveLength(2);
   });
 });

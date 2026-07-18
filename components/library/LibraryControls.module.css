@@ -262,6 +262,9 @@
 
 .doneButton {
   height: var(--tap-target);
+  min-height: var(--tap-target);
+  width: 100%;
+  flex-shrink: 0;
   border: none;
   border-radius: var(--radius-control);
   background: var(--primary);
