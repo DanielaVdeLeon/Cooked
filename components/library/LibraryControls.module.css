@@ -90,6 +90,26 @@
   font-size: 11px;
 }
 
+.sortLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--ink-muted);
+  font-family: inherit;
+}
+
+.sortSelect {
+  height: var(--tap-target);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-control);
+  background: var(--surface);
+  color: var(--ink);
+  padding: 0 10px;
+  font-size: 14px;
+  font-family: inherit;
+}
+
 .scrim {
   position: fixed;
   inset: 0;
@@ -254,6 +274,15 @@
 }
 .doneButton:hover {
   background: var(--primary-hover);
+}
+
+@media (max-width: 699px) {
+  .doneButton {
+    height: 48px;
+    min-height: 48px;
+    flex-shrink: 0;
+    font-size: 16px;
+  }
 }
 
 .clearFavourites {
