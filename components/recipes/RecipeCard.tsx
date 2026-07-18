@@ -2,13 +2,21 @@
 
 import { useRouter } from "next/navigation";
 import { RecipePhoto } from "./RecipePhoto";
+import { FavouriteStar } from "./FavouriteStar";
 import { formatAmount, formatMinutes } from "@/lib/format";
 import type { LibraryCard } from "@/lib/library";
 import styles from "./RecipeCard.module.css";
 
 /** Blue construction-paper card. The whole card is the tap target
-    (role=link, keyboard-operable); tag chips stop propagation and filter. */
-export function RecipeCard({ recipe }: { recipe: LibraryCard }) {
+    (role=link, keyboard-operable); tag chips and the favourite star stop
+    propagation. `favourite` is null for public visitors — no star at all. */
+export function RecipeCard({
+  recipe,
+  favourite = null,
+}: {
+  recipe: LibraryCard;
+  favourite?: boolean | null;
+}) {
   const router = useRouter();
   const href = `/recipes/${recipe.slug}`;
 
@@ -42,6 +50,16 @@ export function RecipeCard({ recipe }: { recipe: LibraryCard }) {
       <div className={styles.polaroid}>
         <RecipePhoto imagePath={recipe.image_path} alt="" ratio="card" />
       </div>
+      {favourite !== null ? (
+        <div className={styles.starWrap}>
+          <FavouriteStar
+            recipeId={recipe.id}
+            recipeTitle={recipe.title}
+            initialFavourited={favourite}
+            size="card"
+          />
+        </div>
+      ) : null}
       <div className={styles.body}>
         <h2 className={styles.title}>{recipe.title}</h2>
         <p className={styles.meta}>{timeLabel}</p>

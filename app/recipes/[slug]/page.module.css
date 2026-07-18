@@ -214,3 +214,8 @@
   color: var(--ink-muted);
   margin: 4px 0 0;
 }
+
+.titleStar {
+  flex-shrink: 0;
+  margin-top: 6px;
+}

@@ -2,13 +2,23 @@
 
 import { useMemo, useRef, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { LIBRARY_SORTS, type TagUsage } from "@/lib/library";
+import { clearFavouritesAction } from "@/app/recipes/favourite-actions";
+import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
+import { useToast } from "@/components/ui/Toast";
+import { useFavouritesCount } from "./FavouritesContext";
+import { LIBRARY_SORTS, LIBRARY_SORTS_AUTHED, type TagUsage } from "@/lib/library";
 import styles from "./LibraryControls.module.css";
 
 /** Search, tag filter (popover on desktop, bottom sheet on mobile), and sort.
     All state lives in the URL (?q=&tags=&sort=) so browsing a recipe and
     returning preserves search, filters, and scroll position. */
-export function LibraryControls({ tags }: { tags: TagUsage[] }) {
+export function LibraryControls({
+  tags,
+  authenticated = false,
+}: {
+  tags: TagUsage[];
+  authenticated?: boolean;
+}) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -27,7 +37,28 @@ export function LibraryControls({ tags }: { tags: TagUsage[] }) {
   const [inputValue, setInputValue] = useState(urlQuery);
   const [filterOpen, setFilterOpen] = useState(false);
   const [tagSearch, setTagSearch] = useState("");
+  const [confirmClear, setConfirmClear] = useState(false);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const { showToast } = useToast();
+  const favCount = useFavouritesCount();
+
+  const sortOptions = authenticated ? LIBRARY_SORTS_AUTHED : LIBRARY_SORTS;
+  // “Clear favourites” appears only while Favourites first is active, the
+  // user is authenticated, and they have at least one favourite (AC-FAV-001).
+  const showClearFavourites =
+    authenticated && sort === "favs" && (favCount?.count ?? 0) > 0;
+
+  async function onClearFavourites() {
+    setConfirmClear(false);
+    const result = await clearFavouritesAction();
+    if (!result.ok) {
+      showToast(result.error ?? "Could not clear favourites", "danger");
+      return;
+    }
+    favCount?.reset();
+    showToast("Favourites cleared", "danger");
+    router.refresh();
+  }
 
   // Re-sync the input when the URL query changes from elsewhere (chip taps,
   // back navigation) — state adjusted during render, not in an effect.
@@ -207,14 +238,37 @@ export function LibraryControls({ tags }: { tags: TagUsage[] }) {
             aria-label="Sort recipes"
             className={styles.sortSelect}
           >
-            {LIBRARY_SORTS.map((s) => (
+            {sortOptions.map((s) => (
               <option key={s.value} value={s.value}>
                 {s.label}
               </option>
             ))}
           </select>
         </label>
+
+        {showClearFavourites ? (
+          <button
+            type="button"
+            onClick={() => setConfirmClear(true)}
+            className={styles.clearFavourites}
+          >
+            Clear favourites
+          </button>
+        ) : null}
       </div>
+
+      <ConfirmDialog
+        open={confirmClear}
+        title="Clear favourites?"
+        message={`This removes ${favCount?.count ?? 0} ${
+          (favCount?.count ?? 0) === 1 ? "favourite" : "favourites"
+        }. The recipes themselves are unaffected.`}
+        confirmLabel="Clear favourites"
+        cancelLabel="Cancel"
+        danger
+        onConfirm={onClearFavourites}
+        onCancel={() => setConfirmClear(false)}
+      />
 
       {selectedNames.length > 0 ? (
         <div className={styles.activeChips}>

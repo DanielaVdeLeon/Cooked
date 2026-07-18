@@ -1,0 +1,54 @@
+.star {
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.card {
+  width: 44px;
+  height: 44px;
+}
+.card .icon {
+  height: 22px;
+}
+
+.page {
+  width: 48px;
+  height: 48px;
+}
+.page .icon {
+  height: 24px;
+}
+
+.icon {
+  display: block;
+}
+
+/* Not favourited: muted star on a translucent white chip */
+.muted {
+  background: rgba(252, 250, 247, 0.85);
+  box-shadow: 1px 2px 2px rgba(0, 0, 0, 0.25);
+  transition: transform 0.12s ease;
+}
+.muted .icon {
+  filter: grayscale(1) opacity(0.4);
+}
+@media (hover: hover) {
+  .muted:hover {
+    transform: scale(1.12) rotate(-6deg);
+  }
+}
+
+/* Favourited: yellow paper chip, 0.4s spin-in pop */
+.favourited {
+  background:
+    linear-gradient(rgba(239, 218, 107, 0.55), rgba(239, 218, 107, 0.55)),
+    url("/assets/cardboard2.jpg") center / 300px auto repeat rgb(239, 218, 107);
+  background-blend-mode: normal, multiply, normal;
+  box-shadow: 1px 2px 2px rgba(0, 0, 0, 0.3);
+  animation: cookedStarPop 0.4s ease;
+}
