@@ -66,14 +66,20 @@ export function RecipeCard({ recipe }: { recipe: LibraryCard }) {
         <div className={styles.ingredients}>
           <p className={styles.eyebrow}>Ingredients</p>
           <div className={styles.ingredientGrid}>
-            {recipe.ingredients.map((ing, i) => (
-              <div key={i} className={styles.ingredientRow}>
-                <span className={styles.amount}>
-                  {formatAmount(ing.quantity, ing.unit)}
+            {recipe.ingredients.map((ing, i) =>
+              ing.is_heading ? (
+                <span key={i} className={styles.ingredientHeading}>
+                  {ing.name}
                 </span>
-                <span>{ing.name}</span>
-              </div>
-            ))}
+              ) : (
+                <div key={i} className={styles.ingredientRow}>
+                  <span className={styles.amount}>
+                    {formatAmount(ing.quantity, ing.unit)}
+                  </span>
+                  <span>{ing.name}</span>
+                </div>
+              ),
+            )}
           </div>
         </div>
       </div>

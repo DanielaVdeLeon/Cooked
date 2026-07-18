@@ -127,3 +127,8 @@
 .amount {
   color: var(--ink-soft);
 }
+
+.ingredientHeading {
+  font-weight: 700;
+  padding-top: 4px;
+}

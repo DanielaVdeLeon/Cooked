@@ -56,7 +56,7 @@ export async function fetchLibrary(opts: {
         .in("recipe_id", ids),
       supabase
         .from("ingredients")
-        .select("recipe_id, quantity, unit, name, position")
+        .select("recipe_id, quantity, unit, name, position, is_heading")
         .in("recipe_id", ids)
         .order("position", { ascending: true }),
     ]);

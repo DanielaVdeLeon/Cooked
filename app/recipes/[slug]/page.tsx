@@ -112,14 +112,20 @@ export default async function RecipePage({ params }: { params: Promise<Params> }
         <section aria-label="Ingredients" className={styles.ingredients}>
           <h2 className={styles.sectionTitle}>Ingredients</h2>
           <div className={styles.ingredientGrid}>
-            {recipe.ingredients.map((ing) => (
-              <div key={ing.id} className={styles.ingredientRow}>
-                <span className={styles.amount}>
-                  {formatAmount(ing.quantity, ing.unit)}
+            {recipe.ingredients.map((ing) =>
+              ing.is_heading ? (
+                <span key={ing.id} className={styles.ingredientHeading}>
+                  {ing.name}
                 </span>
-                <span>{ing.name}</span>
-              </div>
-            ))}
+              ) : (
+                <div key={ing.id} className={styles.ingredientRow}>
+                  <span className={styles.amount}>
+                    {formatAmount(ing.quantity, ing.unit)}
+                  </span>
+                  <span>{ing.name}</span>
+                </div>
+              ),
+            )}
           </div>
         </section>
 

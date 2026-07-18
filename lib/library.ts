@@ -9,7 +9,10 @@ export type NoteRow = Database["public"]["Tables"]["notes"]["Row"];
 
 export type LibraryCard = RecipeRow & {
   tags: { id: string; name: string }[];
-  ingredients: Pick<IngredientRow, "quantity" | "unit" | "name" | "position">[];
+  ingredients: Pick<
+    IngredientRow,
+    "quantity" | "unit" | "name" | "position" | "is_heading"
+  >[];
 };
 
 export type FullRecipe = RecipeRow & {

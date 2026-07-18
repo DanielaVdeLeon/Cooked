@@ -80,6 +80,43 @@
   background: rgba(252, 250, 247, 0.1);
 }
 
+/* Brand-action paper buttons in the header (editors only) */
+.addRecipe,
+.editRecipe {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 16px;
+  border-radius: var(--radius-control);
+  background:
+    linear-gradient(rgba(239, 218, 107, 0.55), rgba(239, 218, 107, 0.55)),
+    url("/assets/cardboard2.jpg") center / 300px auto repeat rgb(239, 218, 107);
+  background-blend-mode: normal, multiply, normal;
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: var(--shadow-paper-btn);
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+.addRecipe {
+  height: var(--tap-target);
+}
+.editRecipe {
+  height: 40px;
+}
+.addRecipe:hover,
+.editRecipe:hover {
+  box-shadow: var(--shadow-paper-btn-hover);
+  transform: translate(-1px, -1px);
+  color: var(--ink);
+  text-decoration: none;
+}
+.addRecipe:active,
+.editRecipe:active {
+  box-shadow: none;
+  transform: translate(1px, 1px);
+}
+
 .accountWrap {
   position: relative;
 }

@@ -48,7 +48,10 @@ export function SiteHeader({ profile }: { profile: HeaderProfile | null }) {
 
   // Recipe pages show a concise “‹ Back” header link (per the prototype) that
   // returns to the library preserving search, filters, and scroll state.
-  const onRecipePage = pathname.startsWith("/recipes/");
+  const onRecipePage =
+    pathname.startsWith("/recipes/") &&
+    pathname !== "/recipes/new" &&
+    !pathname.endsWith("/edit");
 
   function onBack() {
     if (window.history.length > 2) router.back();
@@ -69,6 +72,17 @@ export function SiteHeader({ profile }: { profile: HeaderProfile | null }) {
           </Link>
         )}
         <div className={styles.actions}>
+          {profile?.isEditor ? (
+            onRecipePage ? (
+              <Link href={`${pathname}/edit`} className={styles.editRecipe}>
+                Edit recipe
+              </Link>
+            ) : (
+              <Link href="/recipes/new" className={styles.addRecipe}>
+                + Add recipe
+              </Link>
+            )
+          ) : null}
           {profile ? (
             <div className={styles.accountWrap}>
               <button
