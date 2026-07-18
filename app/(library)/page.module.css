@@ -31,7 +31,9 @@
   color: var(--primary);
   font-size: 14px;
   font-weight: 600;
+  font-family: inherit;
   text-decoration: none;
+  cursor: pointer;
 }
 .clearEverything:hover {
   background: var(--blue-tint);

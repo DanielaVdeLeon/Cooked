@@ -19,7 +19,14 @@ export function RecipePhoto({ imagePath, alt, ratio = "card" }: RecipePhotoProps
       {imagePath ? (
         <>
           {/* eslint-disable-next-line @next/next/no-img-element -- Supabase-hosted photo with CSS filter treatment */}
-          <img src={publicImageUrl(imagePath)} alt={alt} className={styles.photo} />
+          <img
+            src={publicImageUrl(imagePath)}
+            alt={alt}
+            className={styles.photo}
+            loading={ratio === "card" ? "lazy" : "eager"}
+            decoding="async"
+            fetchPriority={ratio === "hero" ? "high" : "auto"}
+          />
           <div aria-hidden="true" className={styles.grunge} />
         </>
       ) : (
