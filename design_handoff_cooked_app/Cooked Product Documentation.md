@@ -263,12 +263,14 @@ The system preserves search, filter, and scroll state when a user opens a recipe
 
 Cards must support loading, missing-image, hover, focus, and touch states.
 
-Card interaction model (see design system “Motion & interactivity”):
+Tactile interaction model (see design system “Motion & interactivity”):
 
 * The whole card is the tap target; tag chips and the favourite star stop propagation.  
-* Desktop hover lifts and tilts the card and underlines the recipe title as a link affordance; mobile uses a subtle press state.  
-* On filter, search, or sort changes, desktop re-deals the cards with a deck-shuffle animation; mobile uses a scroll-driven fade only.  
-* All motion respects reduced-motion preferences.
+* Desktop hover gently lifts and tilts the card as one flat object, while focus and hover underline the recipe title as a link affordance. The image, title, metadata, and ingredients never move independently inside the card. Mobile uses a subtle press state.
+* Recipe cards keep their final grid positions during library motion. On the initial desktop load, cards fade from 0 to full opacity while moving upward 20px over 500ms with a short grid-order stagger.
+* On desktop filter, search, or sort changes, the current grid fades downward 14px and out over 320ms, then the replacement grid uses the same staggered fade-up entrance. Cards never collect in, or travel from, a shared deck position.
+* Mobile retains its scroll-driven fade, and all motion is removed for reduced-motion preferences.
+* Physical buttons and paper chips use a restrained object model: hover lifts by about 1px and deepens the offset shadow; press moves down by about 1px and compresses or removes the shadow. Text-link controls remain flat.
 
 # Recipe page
 
@@ -662,4 +664,3 @@ Scenario
 Given a visitor is logged out or lacks editor permission,  
 when they attempt to create, edit, or delete a recipe or note,  
 then the request is rejected and no content is changed.
-

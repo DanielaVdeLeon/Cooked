@@ -67,9 +67,20 @@
   display: flex;
   align-items: center;
   gap: 8px;
+  box-shadow: var(--shadow-chip);
+  transition:
+    transform 0.12s ease,
+    box-shadow 0.12s ease,
+    background-color 0.12s ease;
 }
 .filterButton:hover {
   background: var(--blue-tint);
+  box-shadow: var(--shadow-paper-btn);
+  transform: translate(-1px, -1px);
+}
+.filterButton:active {
+  box-shadow: none;
+  transform: translate(1px, 1px);
 }
 
 .filterCount {
@@ -268,9 +279,20 @@
   cursor: pointer;
   margin-top: 12px;
   font-family: inherit;
+  box-shadow: var(--shadow-chip);
+  transition:
+    transform 0.12s ease,
+    box-shadow 0.12s ease,
+    background-color 0.12s ease;
 }
 .doneButton:hover {
   background: var(--primary-hover);
+  box-shadow: var(--shadow-paper-btn);
+  transform: translate(-1px, -1px);
+}
+.doneButton:active {
+  box-shadow: none;
+  transform: translate(1px, 1px);
 }
 
 @media (max-width: 699px) {
@@ -293,9 +315,20 @@
   font-weight: 600;
   cursor: pointer;
   font-family: inherit;
+  box-shadow: var(--shadow-chip);
+  transition:
+    transform 0.12s ease,
+    box-shadow 0.12s ease,
+    background-color 0.12s ease;
 }
 .clearFavourites:hover {
   background: var(--danger-bg);
+  box-shadow: var(--shadow-paper-btn);
+  transform: translate(-1px, -1px);
+}
+.clearFavourites:active {
+  box-shadow: none;
+  transform: translate(1px, 1px);
 }
 
 .activeChips {
@@ -323,7 +356,13 @@
   cursor: pointer;
   box-shadow: var(--shadow-chip);
   font-family: inherit;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
 }
 .activeChip:hover {
   box-shadow: 2px 2px 0 rgba(33, 31, 28, 0.3);
+  transform: translate(-1px, -1px);
+}
+.activeChip:active {
+  box-shadow: none;
+  transform: translate(1px, 1px);
 }

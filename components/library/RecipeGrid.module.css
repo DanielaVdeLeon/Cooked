@@ -5,6 +5,10 @@
   align-items: start;
 }
 
+.grid[data-empty="true"] {
+  grid-template-columns: 1fr;
+}
+
 @keyframes cookedCardIn {
   from {
     opacity: 0.55;

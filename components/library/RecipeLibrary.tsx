@@ -78,50 +78,51 @@ export function RecipeLibrary({
 
       <LibraryControls tags={tags} authenticated={authenticated} />
 
-      {visibleRecipes.length === 0 ? (
-        hasActiveSearch ? (
-          <EmptyState
-            illustration="/assets/vieja.svg"
-            title="No recipes match"
-            detail={
-              query.trim()
-                ? `Nothing matches “${query.trim()}”${
-                    selectedTags.length > 0 ? " with those tags" : ""
-                  }. Try fewer words or different tags.`
-                : "Nothing carries all of those tags together. Try removing one."
-            }
-          >
-            <button
-              type="button"
-              className={styles.clearEverything}
-              onClick={clearSearchAndFilters}
+      <RecipeGrid empty={visibleRecipes.length === 0}>
+        {visibleRecipes.length === 0 ? (
+          hasActiveSearch ? (
+            <EmptyState
+              illustration="/assets/vieja.svg"
+              title="No recipes match"
+              detail={
+                query.trim()
+                  ? `Nothing matches “${query.trim()}”${
+                      selectedTags.length > 0 ? " with those tags" : ""
+                    }. Try fewer words or different tags.`
+                  : "Nothing carries all of those tags together. Try removing one."
+              }
             >
-              Clear search and filters
-            </button>
-          </EmptyState>
+              <button
+                type="button"
+                className={styles.clearEverything}
+                onClick={clearSearchAndFilters}
+              >
+                Clear search and filters
+              </button>
+            </EmptyState>
+          ) : (
+            <EmptyState
+              illustration="/assets/chef.svg"
+              title="No recipes yet"
+              detail="The library is empty. Recipes added by editors will appear here for everyone to browse."
+            />
+          )
         ) : (
-          <EmptyState
-            illustration="/assets/chef.svg"
-            title="No recipes yet"
-            detail="The library is empty. Recipes added by editors will appear here for everyone to browse."
-          />
-        )
-      ) : (
-        <>
-          <RecipeGrid>
-            {visibleRecipes.map((recipe) => (
-              <RecipeCard
-                key={recipe.id}
-                recipe={recipe}
-                favourite={authenticated ? favouritedAt.has(recipe.id) : null}
-              />
-            ))}
-          </RecipeGrid>
-          <p role="status" className={styles.endNote}>
-            You’ve reached the end · {countLabel}
-          </p>
-        </>
-      )}
+          visibleRecipes.map((recipe) => (
+            <RecipeCard
+              key={recipe.id}
+              recipe={recipe}
+              favourite={authenticated ? favouritedAt.has(recipe.id) : null}
+            />
+          ))
+        )}
+      </RecipeGrid>
+
+      {visibleRecipes.length > 0 ? (
+        <p role="status" className={styles.endNote}>
+          You’ve reached the end · {countLabel}
+        </p>
+      ) : null}
     </>
   );
 }
