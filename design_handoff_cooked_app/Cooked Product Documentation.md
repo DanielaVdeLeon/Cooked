@@ -266,7 +266,7 @@ Cards must support loading, missing-image, hover, focus, and touch states.
 Tactile interaction model (see design system “Motion & interactivity”):
 
 * The whole card is the tap target; tag chips and the favourite star stop propagation.  
-* Desktop hover gently lifts and tilts the card as one flat object, while focus and hover underline the recipe title as a link affordance. The image, title, metadata, and ingredients never move independently inside the card. Mobile uses a subtle press state.
+* Desktop hover gently lifts the card without tilting it, while focus and hover underline the recipe title as a link affordance. The image, title, metadata, and ingredients never move independently inside the card. Mobile uses a subtle press state.
 * Recipe cards keep their final grid positions during library motion. On the initial desktop load, cards fade from 0 to full opacity while moving upward 20px over 500ms with a short grid-order stagger.
 * On desktop filter, search, or sort changes, the current grid fades downward 14px and out over 320ms, then the replacement grid uses the same staggered fade-up entrance. Cards never collect in, or travel from, a shared deck position.
 * Mobile retains its scroll-driven fade, and all motion is removed for reduced-motion preferences.

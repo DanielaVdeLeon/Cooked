@@ -38,7 +38,7 @@
    affordance. Mobile press: subtle flatten. */
 @media (hover: hover) {
   .card:hover {
-    transform: translateY(-3px) rotate(-0.35deg);
+    transform: translateY(-3px);
     box-shadow: var(--shadow-card-hover);
   }
   .card:hover .title {
