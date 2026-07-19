@@ -12,11 +12,26 @@
   justify-content: center;
   gap: 8px;
   white-space: nowrap;
+  box-shadow: var(--shadow-chip);
+  transition:
+    transform 0.12s ease,
+    box-shadow 0.12s ease,
+    background-color 0.12s ease;
 }
 
 .button:disabled {
   opacity: 0.55;
   cursor: not-allowed;
+}
+
+.button:not(.text):hover:not(:disabled) {
+  box-shadow: var(--shadow-paper-btn);
+  transform: translate(-1px, -1px);
+}
+
+.button:not(.text):active:not(:disabled) {
+  box-shadow: none;
+  transform: translate(1px, 1px);
 }
 
 .block {
@@ -83,6 +98,7 @@
   text-decoration: underline;
   text-underline-offset: 3px;
   padding: 0 8px;
+  box-shadow: none;
 }
 .text:hover:not(:disabled) {
   color: var(--link-hover);

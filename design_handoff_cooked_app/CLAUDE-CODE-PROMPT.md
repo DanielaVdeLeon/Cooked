@@ -26,7 +26,7 @@ I'm building **Cooked**, a public, mobile-first recipe library. This repo contai
    - Notes: public read, editor create/edit/delete scoped to author (post-it presentation)
    - Favourites: per-user star, "Favourites first" sort (most→least recently favourited, order snapshotted when the sort is selected), "Clear favourites" with confirmation
    - Account settings: name/email/password (re-verify current password server-side), delete account with confirmation
-   - Polish: motion (card hover lift + title underline, desktop deck-shuffle re-deal, mobile scroll fade, reduced-motion support), toasts, responsive breakpoints per the boards
+   - Polish: tactile motion (whole-card hover lift + title underline, staggered desktop grid fades for initial/filter/search/sort changes, physical button press states, mobile scroll fade, reduced-motion support), toasts, responsive breakpoints per the boards
 3. Every protected mutation must be authorised **server-side** (RLS + route handlers) — hiding UI is never the security boundary. AC-SEC-001 applies to every endpoint.
 4. Accessibility target is WCAG 2.2 AA: keyboard nav, focus states, labels, 44px touch targets, reduced motion.
 5. Write tests against the acceptance criteria IDs in the product doc (unit for authorisation rules, e2e for AC-E2E-001..003), and check them off as you go.

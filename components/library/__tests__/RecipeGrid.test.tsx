@@ -1,4 +1,4 @@
-import { render } from "@testing-library/react";
+import { act, render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { RecipeGrid } from "../RecipeGrid";
 
@@ -8,31 +8,25 @@ vi.mock("next/navigation", () => ({
   useSearchParams: () => ({ toString: () => navigationState.query }),
 }));
 
-const rect = (left: number, top: number): DOMRect =>
-  ({
-    bottom: top + 200,
-    height: 200,
-    left,
-    right: left + 300,
-    top,
-    width: 300,
-    x: left,
-    y: top,
-    toJSON: () => ({}),
-  }) as DOMRect;
+type FakeAnimation = {
+  cancel: ReturnType<typeof vi.fn>;
+  finished: Promise<void>;
+};
 
 describe("RecipeGrid motion", () => {
   const animate = vi.fn();
-  const animations: Array<{ cancel: ReturnType<typeof vi.fn> }> = [];
+  const animations: FakeAnimation[] = [];
+  let finishedFactory: () => Promise<void>;
 
   beforeEach(() => {
     navigationState.query = "";
     animate.mockReset();
     animations.length = 0;
+    finishedFactory = () => Promise.resolve();
     animate.mockImplementation(() => {
-      const animation = { cancel: vi.fn() };
+      const animation = { cancel: vi.fn(), finished: finishedFactory() };
       animations.push(animation);
-      return animation;
+      return animation as unknown as Animation;
     });
     Object.defineProperty(HTMLElement.prototype, "animate", {
       configurable: true,
@@ -51,11 +45,6 @@ describe("RecipeGrid motion", () => {
         removeListener: vi.fn(),
       })),
     );
-    vi.spyOn(window, "requestAnimationFrame").mockImplementation((callback) => {
-      callback(0);
-      return 1;
-    });
-    vi.spyOn(window, "cancelAnimationFrame").mockImplementation(() => undefined);
   });
 
   afterEach(() => {
@@ -64,27 +53,12 @@ describe("RecipeGrid motion", () => {
     vi.unstubAllGlobals();
   });
 
-  it("re-deals desktop cards from the top-left pile when the query changes", () => {
-    const { container, rerender } = render(
+  it("fades initial desktop cards upward in grid order", () => {
+    render(
       <RecipeGrid>
-        <article />
-        <article />
-        <article />
-      </RecipeGrid>,
-    );
-    const cards = [...container.querySelectorAll("article")];
-    vi.spyOn(cards[0], "getBoundingClientRect").mockReturnValue(rect(10, 20));
-    vi.spyOn(cards[1], "getBoundingClientRect").mockReturnValue(rect(360, 20));
-    vi.spyOn(cards[2], "getBoundingClientRect").mockReturnValue(rect(10, 420));
-
-    expect(animate).not.toHaveBeenCalled();
-
-    navigationState.query = "sort=alpha";
-    rerender(
-      <RecipeGrid>
-        <article />
-        <article />
-        <article />
+        <article>First</article>
+        <article>Second</article>
+        <article>Third</article>
       </RecipeGrid>,
     );
 
@@ -92,66 +66,120 @@ describe("RecipeGrid motion", () => {
     expect(animate).toHaveBeenNthCalledWith(
       1,
       [
-        {
-          transform: "translate(0px, 0px) rotate(-1.6deg) scale(0.975)",
-          boxShadow: "0 2px 3px rgba(0, 0, 0, 0.28)",
-        },
-        {
-          offset: 0.82,
-          transform: "translate(0px, -12px) rotate(0.32deg) scale(1.006)",
-          boxShadow: "0 10px 18px rgba(0, 0, 0, 0.18)",
-        },
-        {
-          transform: "translate(0, 0) rotate(0deg) scale(1)",
-          boxShadow: "0 4px 4px rgba(0, 0, 0, 0.25)",
-        },
+        { opacity: 0, transform: "translateY(20px)" },
+        { opacity: 1, transform: "translateY(0)" },
       ],
       {
-        duration: 620,
+        duration: 500,
         delay: 0,
-        easing: "cubic-bezier(0.22, 1, 0.36, 1)",
+        easing: "cubic-bezier(0, 0, 0.2, 1)",
         fill: "backwards",
       },
     );
-    expect(animate.mock.calls[1][0][0].transform).toBe(
-      "translate(-350px, 0px) rotate(0deg) scale(0.975)",
-    );
-    expect(animate.mock.calls[1][0][1].transform).toBe(
-      "translate(-28px, -12px) rotate(0deg) scale(1.006)",
-    );
-    expect(animate.mock.calls[1][1]).toMatchObject({ delay: 28 });
-    expect(animate.mock.calls[2][0][0].transform).toBe(
-      "translate(0px, -400px) rotate(1.6deg) scale(0.975)",
-    );
-    expect(animate.mock.calls[2][0][1].transform).toBe(
-      "translate(0px, -44px) rotate(-0.32deg) scale(1.006)",
-    );
-    expect(animate.mock.calls[2][1]).toMatchObject({ delay: 56 });
+    expect(animate.mock.calls[1][1]).toMatchObject({ delay: 110 });
+    expect(animate.mock.calls[2][1]).toMatchObject({ delay: 220 });
   });
 
-  it("cancels an in-flight deal before starting the next one", () => {
+  it("fades the old grid out before fading the replacement grid in", async () => {
     const { rerender } = render(
       <RecipeGrid>
-        <article />
+        <article key="old-1">Old one</article>
+        <article key="old-2">Old two</article>
       </RecipeGrid>,
     );
+
+    await act(async () => {
+      navigationState.query = "tags=quick";
+      rerender(
+        <RecipeGrid>
+          <article key="new-1">New one</article>
+          <article key="new-2">New two</article>
+        </RecipeGrid>,
+      );
+      await Promise.resolve();
+      await Promise.resolve();
+    });
+
+    expect(animate).toHaveBeenCalledTimes(6);
+    expect(animate).toHaveBeenNthCalledWith(
+      3,
+      [
+        { opacity: 1, transform: "translateY(0)" },
+        { opacity: 0, transform: "translateY(14px)" },
+      ],
+      {
+        duration: 320,
+        delay: 0,
+        easing: "cubic-bezier(0.4, 0, 1, 1)",
+        fill: "forwards",
+      },
+    );
+    expect(animate.mock.calls[3][1]).toMatchObject({ delay: 45 });
+    expect(animate.mock.calls[4][0]).toEqual([
+      { opacity: 0, transform: "translateY(20px)" },
+      { opacity: 1, transform: "translateY(0)" },
+    ]);
+    expect(screen.getByText("New one")).toBeInTheDocument();
+    expect(screen.queryByText("Old one")).not.toBeInTheDocument();
+  });
+
+  it("keeps the old cards mounted until their exit has completed", async () => {
+    let finishExit = () => {};
+    const exitFinished = new Promise<void>((resolve) => {
+      finishExit = resolve;
+    });
+
+    const { rerender } = render(
+      <RecipeGrid>
+        <article>Old card</article>
+      </RecipeGrid>,
+    );
+    finishedFactory = () => exitFinished;
 
     navigationState.query = "sort=alpha";
     rerender(
       <RecipeGrid>
-        <article />
+        <article>New card</article>
       </RecipeGrid>,
     );
-    expect(animations).toHaveLength(1);
+
+    expect(screen.getByText("Old card")).toBeInTheDocument();
+    expect(screen.queryByText("New card")).not.toBeInTheDocument();
+
+    finishedFactory = () => Promise.resolve();
+    await act(async () => {
+      finishExit();
+      await exitFinished;
+    });
+
+    expect(screen.getByText("New card")).toBeInTheDocument();
+  });
+
+  it("cancels an in-flight fade before starting the next query transition", () => {
+    const neverFinishes = new Promise<void>(() => {});
+    const { rerender } = render(
+      <RecipeGrid>
+        <article>Recipe</article>
+      </RecipeGrid>,
+    );
+
+    finishedFactory = () => neverFinishes;
+    navigationState.query = "sort=alpha";
+    rerender(
+      <RecipeGrid>
+        <article>Recipe</article>
+      </RecipeGrid>,
+    );
+    const firstExit = animations.at(-1);
 
     navigationState.query = "sort=recent";
     rerender(
       <RecipeGrid>
-        <article />
+        <article>Recipe</article>
       </RecipeGrid>,
     );
 
-    expect(animations[0].cancel).toHaveBeenCalledOnce();
-    expect(animations).toHaveLength(2);
+    expect(firstExit?.cancel).toHaveBeenCalledOnce();
+    expect(animations.length).toBeGreaterThanOrEqual(3);
   });
 });
